@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="张原 · 算法实习生（运筹优化方向）简历 - 华南理工大学硕士，数学建模与运筹优化项目经验">
+    <title>张原 · 算法实习生（运筹优化）| 在线简历</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #eef2f5;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            color: #1f2d3d;
+            line-height: 1.5;
+            padding: 2rem 1.5rem;
+        }
+
+        .resume-card {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 28px;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: box-shadow 0.2s ease;
+        }
+
+        .print-toolbar {
+            text-align: right;
+            padding: 1rem 2rem 0 2rem;
+            background: white;
+        }
+
+        .print-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #f0f4f9;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #2c3e66;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .print-btn i {
+            font-size: 0.9rem;
+        }
+
+        .print-btn:hover {
+            background: #e2e8f0;
+            transform: translateY(-1px);
+        }
+
+        .resume-grid {
+            display: grid;
+            grid-template-columns: 34% 66%;
+        }
+
+        /* 左侧样式 */
+        .sidebar {
+            background: #f8fafc;
+            padding: 2rem 1.8rem;
+            border-right: 1px solid #e6edf4;
+        }
+
+        .name-large {
+            font-size: 1.9rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #0f2b3d;
+            margin-bottom: 0.25rem;
+            line-height: 1.2;
+        }
+
+        .job-tagline {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #2c6e9e;
+            background: #e9f0f8;
+            display: inline-block;
+            padding: 0.2rem 0.9rem;
+            border-radius: 30px;
+            margin-bottom: 1.2rem;
+        }
+
+        .profile-text {
+            font-size: 0.85rem;
+            color: #334e68;
+            margin-bottom: 1.8rem;
+            line-height: 1.5;
+            border-left: 3px solid #2c6e9e;
+            padding-left: 1rem;
+        }
+
+        .block {
+            margin-bottom: 2rem;
+        }
+
+        .block-title {
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #1f5e8e;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #dce5ed;
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .contact-list {
+            list-style: none;
+            margin-top: 0.5rem;
+        }
+        .contact-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 0.85rem;
+            margin-bottom: 0.9rem;
+            color: #2c3e50;
+            word-break: break-word;
+        }
+        .contact-list li i {
+            width: 1.3rem;
+            color: #2c6e9e;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: 0.5rem;
+        }
+        .skill-tag {
+            background: white;
+            border: 1px solid #d4e0ea;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #1f4e6e;
+            transition: 0.1s ease;
+        }
+        .skill-tag:hover {
+            background: #e9f0f8;
+            border-color: #98b9d4;
+        }
+
+        .lang-item, .cert-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            margin-bottom: 0.7rem;
+        }
+        .lang-name, .cert-name {
+            font-weight: 500;
+            color: #1f2d3d;
+        }
+        .lang-level, .cert-date {
+            color: #5e7c99;
+        }
+
+        /* 右侧主内容 */
+        .main-content {
+            padding: 2rem 2rem 2rem 1.8rem;
+            background: white;
+        }
+
+        .right-section {
+            margin-bottom: 2rem;
+        }
+
+        .right-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #0f2b3d;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            border-left: 4px solid #2c6e9e;
+            padding-left: 1rem;
+            margin-bottom: 1.2rem;
+        }
+        .right-title i {
+            color: #2c6e9e;
+            font-size: 1.2rem;
+        }
+
+        .exp-item, .edu-item, .project-item {
+            margin-bottom: 1.6rem;
+        }
+        .exp-header, .project-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 0.3rem;
+        }
+        .exp-role, .project-name {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1e3a5f;
+        }
+        .exp-company, .project-stack {
+            font-weight: 500;
+            color: #2c6e9e;
+            font-size: 0.85rem;
+        }
+        .exp-date, .project-date {
+            font-size: 0.75rem;
+            color: #6c86a3;
+            background: #f0f4f9;
+            padding: 0.2rem 0.7rem;
+            border-radius: 20px;
+        }
+        .exp-desc, .project-desc {
+            margin-top: 0.5rem;
+            padding-left: 0.2rem;
+        }
+        .exp-desc ul, .project-desc ul {
+            padding-left: 1.2rem;
+            list-style: none;
+        }
+        .exp-desc li, .project-desc li {
+            font-size: 0.85rem;
+            color: #2d3f55;
+            margin-bottom: 0.4rem;
+            position: relative;
+            padding-left: 1.2rem;
+        }
+        .exp-desc li::before, .project-desc li::before {
+            content: "▹";
+            position: absolute;
+            left: 0;
+            color: #2c6e9e;
+            font-size: 0.8rem;
+        }
+
+        .edu-detail {
+            font-weight: 700;
+            color: #1e3a5f;
+            margin-bottom: 0.2rem;
+        }
+        .edu-meta {
+            font-size: 0.8rem;
+            color: #5e7c99;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 0.4rem;
+        }
+        .course-list {
+            font-size: 0.8rem;
+            color: #3a5670;
+            margin-top: 0.2rem;
+            flex-wrap: wrap;
+            display: inline-flex;
+            gap: 0.5rem;
+        }
+
+        hr {
+            margin: 0.5rem 0 1rem;
+            border: 0;
+            height: 1px;
+            background: #e2e8f0;
+        }
+
+        @media (max-width: 780px) {
+            body { padding: 1rem; }
+            .resume-grid { grid-template-columns: 1fr; }
+            .sidebar { border-right: none; border-bottom: 1px solid #e6edf4; }
+            .main-content { padding: 1.8rem; }
+            .print-toolbar { padding: 1rem 1.5rem 0 1.5rem; }
+        }
+
+        @media print {
+            body { background: white; padding: 0; margin: 0; }
+            .resume-card { box-shadow: none; border-radius: 0; max-width: 100%; }
+            .print-toolbar { display: none; }
+            .sidebar { background: #fafafa; border-right: 1px solid #ccc; print-color-adjust: exact; }
+            .skill-tag { background: #f3f3f3; border: 1px solid #aaa; }
+            .exp-date, .project-date { background: #efefef; }
+            a { text-decoration: none; color: black; }
+            .resume-grid { grid-template-columns: 30% 70%; }
+        }
+    </style>
+</head>
+<body>
+<div class="resume-card">
+    <div class="print-toolbar">
+        <button class="print-btn" id="printResumeBtn">
+            <i class="fas fa-print"></i> 保存为 PDF / 打印
+        </button>
+    </div>
+    <div class="resume-grid">
+        <!-- 左侧栏：个人信息 + 技能 + 语言 + 荣誉奖项 -->
+        <aside class="sidebar">
+            <div class="name-large">张阳</div>
+            <div class="job-tagline">算法实习生（运筹优化方向）</div>
+            <div class="profile-text">
+                华南理工大学工业工程与管理硕士（研一），运筹优化与数据驱动决策背景。拥有离散制造排产、高精度地图调度等多种启发式算法项目经验，数学建模国赛省一、美赛H奖。善于从模糊需求中拆解核心问题，将算法沉淀为可复用模块。
+            </div>
+
+            <div class="block">
+                <div class="block-title"><i class="fas fa-address-card"></i> 联系方式</div>
+                <ul class="contact-list">
+                    <li><i class="fas fa-map-marker-alt"></i> 广东广州 · 天河区</li>
+                    <li><i class="fas fa-phone-alt"></i> 185-2951-5180</li>
+                    <li><i class="fas fa-envelope"></i> zy13819041939@qq.com</li>
+                    <!-- 可补充GitHub/个人主页，若需可自行添加 -->
+                </ul>
+            </div>
+
+            <div class="block">
+                <div class="block-title"><i class="fas fa-code"></i> 技能与工具</div>
+                <div class="skill-tags">
+                    <span class="skill-tag">Python</span>
+					<span class="skill-tag">Pandas / NumPy</span>
+                    <span class="skill-tag">启发式算法 (GA/SA/NSGA-II)</span>
+                    <span class="skill-tag">运筹优化建模</span>
+                    <span class="skill-tag">Gurobi</span>
+                    <span class="skill-tag">AnyLogic / Arena/ Vensim</span>
+                    <span class="skill-tag">SQL / Power BI</span>
+					<span class="skill-tag">Figma</span>
+                    <span class="skill-tag">Flask / ECharts</span>
+                    <span class="skill-tag">C++</span>
+                </div>
+            </div>
+
+            <div class="block">
+                <div class="block-title"><i class="fas fa-trophy"></i> 荣誉奖项</div>
+                <div class="cert-item"><span class="cert-name">清华亮剑案例赛道 高校组三等奖</span><span class="cert-date">2025.12</span></div>
+                <div class="cert-item"><span class="cert-name">保险AI创新黑客松大赛 一等奖(负责人)</span><span class="cert-date">2024.04</span></div>
+                <div class="cert-item"><span class="cert-name">正大杯市调大赛 广东赛区一等奖(编程手)</span><span class="cert-date">2024.04</span></div>
+                <div class="cert-item"><span class="cert-name">美国大学生数学建模 H奖(编程手)</span><span class="cert-date">2024.02</span></div>
+                <div class="cert-item"><span class="cert-name">大湾区金融数学建模 三等奖(编程手)</span><span class="cert-date">2023.12</span></div>
+                <div class="cert-item"><span class="cert-name">高教杯全国大学生数模 广东省一等奖</span><span class="cert-date">2023.09</span></div>
+                <div class="cert-item"><span class="cert-name">校级三等奖、三好学生、优秀学生会干部</span><span class="cert-date">2021-2023</span></div>
+            </div>
+
+            <div class="block">
+                <div class="block-title"><i class="fas fa-language"></i> 语言 & 证书</div>
+                <div class="lang-item"><span class="lang-name">英语 CET-4/6</span><span class="lang-level">读写流利，技术文献阅读</span></div>
+                <div class="lang-item"><span class="lang-name">普通话二甲</span><span class="lang-level">标准</span></div>
+            </div>
+        </aside>
+
+        <!-- 右侧栏：教育、项目经历、实习、校园/个人评价 -->
+        <main class="main-content">
+            <!-- 教育背景 -->
+            <div class="right-section">
+                <div class="right-title">
+                    <i class="fas fa-graduation-cap"></i> 教育背景
+                </div>
+                <div class="edu-item">
+                    <div class="edu-detail">华南理工大学 工商管理学院 · 工业工程与管理 硕士研究生</div>
+                    <div class="edu-meta"><span>2025.09 – 至今</span><span>研究方向：运筹优化、生产调度</span></div>
+                </div>
+                <div class="edu-item">
+                    <div class="edu-detail">华南理工大学 工商管理学院 · 工业工程 学士</div>
+                    <div class="edu-meta"><span>2021.09 – 2025.06 (前两年物流工程)</span><span>GPA 3.6/4.0</span></div>
+                    <div class="course-list"><strong>主修课程：</strong> 运筹学、系统建模与仿真、数据挖掘、Python数据分析、供应链管理、库存管理、质量管理、预测与决策</div>
+                </div>
+            </div>
+
+            <!-- 项目经历 (运筹优化核心) -->
+            <div class="right-section">
+                <div class="right-title">
+                    <i class="fas fa-laptop-code"></i> 项目经历
+                </div>
+                <!-- 1. 离散制造车间排产优化 -->
+                <div class="project-item">
+                    <div class="project-header">
+                        <span class="project-name">离散制造车间排产优化（清华亮剑案例赛）</span>
+                        <span class="project-date">2025.12</span>
+                    </div>
+                    <div class="project-stack">Python · 模拟退火 · 贪心初始化 · 甘特图可视化</div>
+                    <div class="project-desc">
+                        <ul>
+                            <li>针对多品种小批量生产环境，构建最小化总完工时间(Makespan)的排产模型，设计改进模拟退火算法求解。</li>
+                            <li>采用贪心构造初始解，设计邻域搜索与退火调度，不依赖商用求解器输出甘特图、设备利用率等KPI。</li>
+                            <li>对比不同参数收敛效果，获高校组三等奖；将算法框架模块化封装，便于快速迁移至同类调度问题。</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- 2. 高精度地图生产调度优化算法库 -->
+                <div class="project-item">
+                    <div class="project-header">
+                        <span class="project-name">高精度地图生产调度优化算法库</span>
+                        <span class="project-date">2025.09 – 2026.04</span>
+                    </div>
+                    <div class="project-stack">Python, NumPy, GA/SA/NSGA-II, Flask, ECharts, 多资源约束调度</div>
+                    <div class="project-desc">
+                        <ul>
+                            <li>复现并改进遗传算法(GA)，扩展标准与自适应模拟退火(SA)，解决多资源约束、图斑转移时间及空间重叠惩罚的精确调度问题。</li>
+                            <li>设计事件驱动调度模拟器，支持资源冲突矩阵与动态惩罚；自适应SA加入停滞检测与回火机制，提升解的质量与稳定性。</li>
+                            <li>搭建Flask可视化平台，展示收敛曲线、甘特图及箱线图对比。改进GA相比传统GA最优工期缩短20.8%，平均工期降低23.9%，稳定性提升88.1%。</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- 3. AI保险规划助手（黑客松） -->
+                <div class="project-item">
+                    <div class="project-header">
+                        <span class="project-name">AI保险规划助手（保险AI黑客松）</span>
+                        <span class="project-date">2024.04</span>
+                    </div>
+                    <div class="project-stack">Flask, 通义千问, RAG, HTML/CSS/JS, 阿里云Codeup</div>
+                    <div class="project-desc">
+                        <ul>
+                            <li>担任团队负责人，打造以Z世代为目标的游戏化AI保险顾问，集成大模型与保险知识库，实现趣味问答与智能推荐。</li>
+                            <li>制定45天迭代计划并协调4人开发团队，完成产品设计、后端开发、本地部署验证，最终项目获一等奖。</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- 4. 陈皮消费特征分析（市场调查） -->
+                <div class="project-item">
+                    <div class="project-header">
+                        <span class="project-name">陈皮消费特征分析（正大杯市调）</span>
+                        <span class="project-date">2024.04</span>
+                    </div>
+                    <div class="project-stack">Python(requests, selenium, jieba), Octopus, ROSTCM6</div>
+                    <div class="project-desc">
+                        <ul>
+                            <li>爬取京东/淘宝等多平台陈皮店铺数据及用户评论，完成销量与价格分布分析；利用中文分词和情感分析挖掘消费者关注点。</li>
+                            <li>输出分析报告辅助问卷设计，形成标准化爬虫→清洗→可视化SOP，提升同类任务效率。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 实习经历 -->
+            <div class="right-section">
+                <div class="right-title">
+                    <i class="fas fa-briefcase"></i> 实习经历
+                </div>
+                <!-- 广州星火教育 - 产品经理实习生 -->
+                <div class="exp-item">
+                    <div class="exp-header">
+                        <span class="exp-role">产品经理实习生</span>
+                        <span class="exp-date">2025.03 – 2025.07</span>
+                    </div>
+                    <div class="exp-company">广州星火教育</div>
+                    <div class="exp-desc">
+                        <ul>
+                            <li>基于Dify平台打造“AI中考志愿填报”小程序：独立完成广州市中考政策、历年分数线等知识库搭建，优化Prompt与模型参数，解决检索偏差与政策解读问题，输出精准“冲稳保”志愿方案。</li>
+                            <li>处理商城订单数据，输出每日周报；梳理售后流程，使用Figma设计管理端/用户端原型，明确物流状态与权限，输出完整需求文档。</li>
+                            <li>优化商品上架SOP、客服操作Q&A及退货退款流程，降低培训成本；调研多快递发货功能，用Python绘制区域聚类图表支撑决策。</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- 富卫保险 FWD - AI产品实习生 -->
+                <div class="exp-item">
+                    <div class="exp-header">
+                        <span class="exp-role">AI产品实习生</span>
+                        <span class="exp-date">2024.03 – 2024.05</span>
+                    </div>
+                    <div class="exp-company">富卫保险 FWD</div>
+                    <div class="exp-desc">
+                        <ul>
+                            <li>主导“AI未来保险”创新产品落地，定位Z世代痛点，集成通义千问API与RAG知识库，实现游戏化交互与智能保险咨询。</li>
+                            <li>协调前后端开发（2+2人）完成功能设计、本地部署验证，项目按期交付并获黑客松一等奖。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 校园经历 & 个人评价合并 -->
+            <div class="right-section">
+                <div class="right-title">
+                    <i class="fas fa-users"></i> 校园经历
+                </div>
+                <div class="exp-item">
+                    <div class="exp-header">
+                        <span class="exp-role">电子商务系学生会生活权益部 · 部长</span>
+                        <span class="exp-date">2022.09 – 2023.06</span>
+                    </div>
+                    <div class="exp-desc">
+                        <ul>
+                            <li>统筹200人规模学生代表大会，协调场地、物资与志愿者资源；将宿舍卫生评比流程从纸质转为线上表单，形成标准化操作手册，提升效率并降低交接成本。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 个人评价 / 自我驱动 -->
+            <div class="right-section">
+                <div class="right-title">
+                    <i class="fas fa-medal"></i> 个人优势
+                </div>
+                <div style="font-size: 0.85rem; color: #2d3f55; line-height: 1.5;">
+                    <ul style="list-style: none; padding-left: 0;">
+                        <li style="margin-bottom: 0.4rem;">✓ 善于从模糊需求中快速拆解核心问题，用数据+工具验证解决方案。</li>
+                        <li style="margin-bottom: 0.4rem;">✓ 习惯将每个项目沉淀为可复用的知识模块，已封装运筹优化算法框架。</li>
+                        <li style="margin-bottom: 0.4rem;">✓ 具备短周期项目闭环经验（黑客松/竞赛），能主动识别风险并动态调整计划。</li>
+                        <li style="margin-bottom: 0.4rem;">✓ 目标驱动，讨厌内耗，喜欢与逻辑清晰、目标一致的团队协作。</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script>
+    const printBtn = document.getElementById('printResumeBtn');
+    if (printBtn) {
+        printBtn.addEventListener('click', () => {
+            window.print();
+        });
+    }
+</script>
+
+<div style="max-width: 1100px; margin: 1rem auto 0; font-size: 0.7rem; color: #6f8fae; text-align: center; padding: 0 1rem;">
+    <i class="fas fa-chart-line"></i> 张原 · 算法实习生（运筹优化方向） | 线上简历 | 点击打印可生成PDF
+</div>
+</body>
+</html>
