@@ -130,6 +130,93 @@
     .status-card { font-size: 0.75rem; min-width: 130px; }
     button, select, .toggle-switch { font-size: 0.7rem; padding: 4px 12px; }
   }
+/* ========== 新增：手机与网页响应式布局优化 ========== */
+/* 确保 canvas 在所有屏幕上平滑缩放 */
+canvas {
+  width: 100%;
+  height: auto;
+  max-width: 540px;
+  aspect-ratio: 1 / 1;  /* 保持正方形 */
+}
+
+/* 游戏容器自适应内边距 */
+.game-container {
+  width: fit-content;
+  max-width: 96vw;
+  margin: 0 auto;
+  padding: 12px 16px 20px;
+}
+
+/* 控制栏在手机端自动换行且居中 */
+.controls-panel {
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 12px;
+}
+
+/* 状态卡片文字可缩小 */
+.status-card {
+  font-size: 0.85rem;
+  min-width: 140px;
+  white-space: nowrap;
+  overflow-x: auto;
+}
+
+/* 按钮触摸区域加大 */
+button, .toggle-switch, select {
+  min-height: 40px;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+}
+
+/* 手机窄屏优化 */
+@media (max-width: 560px) {
+  .game-container {
+    padding: 10px 12px 16px;
+    border-radius: 32px;
+  }
+  .controls-panel {
+    gap: 8px;
+    padding: 8px 10px;
+  }
+  .status-card {
+    font-size: 0.7rem;
+    min-width: 120px;
+    padding: 5px 10px;
+  }
+  button, .toggle-switch, select {
+    font-size: 0.7rem;
+    padding: 5px 12px;
+    min-height: 36px;
+  }
+  /* 手数文字在手机上稍小 */
+  canvas + .step-num {
+    font-size: 9px;
+  }
+}
+
+/* 防止手机长按菜单和滚动穿透（增强触摸体验） */
+canvas {
+  touch-action: none;   /* 禁止触摸滚动/缩放 */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 移除canvas点击时的默认高亮 */
+canvas:focus {
+  outline: none;
+}
+
+/* 平板横屏或桌面端保持优雅居中 */
+@media (min-width: 1024px) {
+  .game-container {
+    transform: scale(1);
+    box-shadow: 0 30px 40px rgba(0,0,0,0.4);
+  }
+  .controls-panel {
+    gap: 16px;
+  }
+}
 </style>
 </head>
 <body>
