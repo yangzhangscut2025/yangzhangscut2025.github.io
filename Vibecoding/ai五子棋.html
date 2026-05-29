@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI五子棋</title>
+<style>
+* {margin: 0; padding: 0; box-sizing: border-box; font-family: "微软雅黑", sans-serif;}
+body {display: flex; flex-direction: column; align-items: center; background: #f6f6f6; padding: 20px;}
+h1 {margin-bottom: 16px; color: #222;}
+#board {display: grid; grid-template-columns: repeat(15, 30px); grid-template-rows: repeat(15, 30px); gap: 1px; background: #e6c088; padding: 6px; border: 8px solid #b88750; border-radius: 4px;}
+.cell {width: 30px; height: 30px; position: relative; cursor: pointer;}
+.cell::before {content: ""; position: absolute; left: 50%; top: 0; width: 1px; height: 100%; background: #333;}
+.cell::after {content: ""; position: absolute; left: 0; top: 50%; width: 100%; height: 1px; background: #333;}
+.cell.no-left::before {width: 0;}
+.cell.no-top::after {height: 0;}
+.piece {position: absolute; width: 26px; height: 26px; border-radius: 50%; left: 2px; top: 2px; box-shadow: 1px 1px 4px #0006;}
+.black {background: #000;}
+.white {background: #fff; border: 1px solid #ddd;}
+.step-num {position: absolute; right: 1px; bottom: 1px; font-size: 9px; font-weight: bold; color: red; z-index: 20;}
+.controls {margin-top: 16px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center;}
+button, select, .switch {padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;}
+#status {min-width: 220px; font-weight: bold; color: #333; text-align: center;}
+#undo {background: #42a5f5; color: white;}
+#restart {background: #66bb6a; color: white;}
+#undo:disabled, #restart:disabled {background: #ccc;}
+.switch {display: flex; align-items: center; gap: 6px; background: #f1f1f1;}
+.switch input {width: 16px; height: 16px;}
+</style>
+</head>
+<body>
+<h1>AI五子棋（稳定音效版）</h1>
+<div id="board"></div>
+<div class="controls">
+  <div id="status">游戏开始 · 你执黑先行</div>
+  <select id="diff">
+    <option value="easy">新手</option>
+    <option value="medium" selected>进阶</option>
+    <option value="hard">高手</option>
+  </select>
+  <label class="switch">
+    <input type="checkbox" id="soundToggle" checked> 音效
+  </label>
+  <label class="switch">
+    <input type="checkbox" id="stepToggle" checked> 显示手数
+  </label>
+  <button id="undo">悔棋</button>
+  <button id="restart">重新开始</button>
+</div>
+
+<script>
+const SIZE = 15, EMPTY = 0, BLACK = 1, WHITE = 2;
+let board = [], history = [], over = false, turn = BLACK, diff = "medium";
+let stepCount = 0;
+let soundEnabled = true, stepEnabled = true;
+
+const boardEl = document.getElementById("board");
+const statusEl = document.getElementById("status");
+const undoBtn = document.getElementById("undo");
+const restartBtn = document.getElementById("restart");
+const diffEl = document.getElementById("diff");
+const soundToggle = document.getElementById("soundToggle");
+const stepToggle = document.getElementById("stepToggle");
+
+// 稳定短音效（Base64 内嵌，不依赖网络，必播放）
+const audioDrop = new Audio("data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmImBze5u+wVRwASe7UAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=");
+const audioWin = new Audio("data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmImBze5u+wVRwASe7UAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=");
+
+function init() {
+  boardEl.innerHTML = "";
+  board = Array(SIZE).fill().map(() => Array(SIZE).fill(EMPTY));
+  history = [];
+  over = false;
+  turn = BLACK;
+  stepCount = 0;
+  diff = diffEl.value;
+  soundEnabled = soundToggle.checked;
+  stepEnabled = stepToggle.checked;
+  statusEl.textContent = "游戏开始 · 你执黑先行";
+  undoBtn.disabled = restartBtn.disabled = false;
+  for (let y = 0; y < SIZE; y++) {
+    for (let x = 0; x < SIZE; x++) {
+      const div = document.createElement("div");
+      div.className = "cell" + (x === 0 ? " no-left" : "") + (y === 0 ? " no-top" : "");
+      div.dataset.x = x;
+      div.dataset.y = y;
+      div.onclick = clickCell;
+      boardEl.appendChild(div);
+    }
+  }
+}
+
+function clickCell(e) {
+  if (over || turn !== BLACK) return;
+  const x = +e.target.dataset.x, y = +e.target.dataset.y;
+  if (board[y][x] !== EMPTY) return;
+
+  addPiece(x, y, BLACK);
+  playSound(audioDrop);
+
+  if (checkWin(x, y, BLACK)) {
+    statusEl.textContent = "🎉 你赢了！";
+    playSound(audioWin);
+    over = true; undoBtn.disabled = true; return;
+  }
+  if (isFull()) { statusEl.textContent = "🤝 平局"; over = true; undoBtn.disabled = true; return; }
+
+  statusEl.textContent = "AI 思考中…";
+  turn = WHITE; undoBtn.disabled = true;
+  setTimeout(aiMove, 500);
+}
+
+function playSound(audio) {
+  if (!soundEnabled) return;
+  try {
+    audio.currentTime = 0;
+    audio.play();
+  } catch (e) {}
+}
+
+function addPiece(x, y, color) {
+  board[y][x] = color;
+  const cell = document.querySelector(`.cell[data-x="${x}"][data-y="${y}"]`);
+  cell.innerHTML = "";
+  const p = document.createElement("div");
+  p.className = "piece " + (color === BLACK ? "black" : "white");
+  cell.appendChild(p);
+
+  stepCount++;
+  history.push({x, y, color, step: stepCount});
+
+  if (stepEnabled) {
+    const s = document.createElement("div");
+    s.className = "step-num";
+    s.textContent = stepCount;
+    cell.appendChild(s);
+  }
+}
+
+function aiMove() {
+  let best = null;
+  if (diff === "easy" && Math.random() < 0.3) best = randomPos();
+  else if (diff === "medium" && Math.random() < 0.1) best = randomPos();
+  else best = bestPos(diff === "hard");
+  if (!best) best = randomPos();
+
+  addPiece(best.x, best.y, WHITE);
+  playSound(audioDrop);
+
+  if (checkWin(best.x, best.y, WHITE)) {
+    statusEl.textContent = "💻 AI 赢了！";
+    playSound(audioWin);
+    over = true; undoBtn.disabled = true; return;
+  }
+  if (isFull()) { statusEl.textContent = "🤝 平局"; over = true; undoBtn.disabled = true; return; }
+
+  turn = BLACK;
+  statusEl.textContent = "请落子";
+  undoBtn.disabled = false;
+}
+
+function bestPos(hard = false) {
+  let max = -1, move = null;
+  for (let y = 0; y < SIZE; y++) {
+    for (let x = 0; x < SIZE; x++) {
+      if (board[y][x] !== EMPTY) continue;
+      let s = 0;
+      board[y][x] = WHITE; if (checkWin(x, y, WHITE)) s += 10000; board[y][x] = EMPTY;
+      board[y][x] = BLACK; if (checkWin(x, y, BLACK)) s += 9000; board[y][x] = EMPTY;
+      s += score(x, y, WHITE) * (hard ? 2 : 1);
+      s += score(x, y, BLACK) * (hard ? 1.5 : 1);
+      s += 100 / (1 + Math.hypot(x - 7, y - 7));
+      if (s > max) { max = s; move = {x, y}; }
+    }
+  }
+  return move;
+}
+
+function score(x, y, c) {
+  let sum = 0, d = [[1,0],[0,1],[1,1],[1,-1]];
+  for (let [dx, dy] of d) {
+    let n = 1;
+    for (let i=1;i<5;i++){let nx=x+dx*i,ny=y+dy*i;if(nx<0||nx>=SIZE||ny<0||ny>=SIZE||board[ny][nx]!=c)break;n++;}
+    for (let i=1;i<5;i++){let nx=x-dx*i,ny=y-dy*i;if(nx<0||nx>=SIZE||ny<0||ny>=SIZE||board[ny][nx]!=c)break;n++;}
+    if(n>=5)sum+=10000;else if(n==4)sum+=1000;else if(n==3)sum+=100;else if(n==2)sum+=10;
+  }
+  return sum;
+}
+
+function randomPos() {
+  let arr = [];
+  for (let y=0;y<SIZE;y++)for(let x=0;x<SIZE;x++)if(board[y][x]==EMPTY)arr.push({x,y});
+  return arr[Math.random()*arr.length|0];
+}
+
+function checkWin(x,y,c){
+  let d=[[1,0],[0,1],[1,1],[1,-1]];
+  for(let [dx,dy]of d){
+    let n=1;
+    for(let i=1;i<5;i++){let nx=x+dx*i,ny=y+dy*i;if(nx<0||nx>=SIZE||ny<0||ny>=SIZE||board[ny][nx]!=c)break;n++;}
+    for(let i=1;i<5;i++){let nx=x-dx*i,ny=y-dy*i;if(nx<0||nx>=SIZE||ny<0||ny>=SIZE||board[ny][nx]!=c)break;n++;}
+    if(n>=5)return true;
+  }
+  return false;
+}
+
+function isFull() {
+  for(let y=0;y<SIZE;y++)for(let x=0;x<SIZE;x++)if(board[y][x]==EMPTY)return false;
+  return true;
+}
+
+function undo() {
+  if(over||turn!==BLACK||history.length<1)return;
+  while(history.length>0){
+    const last=history.pop();
+    board[last.y][last.x]=EMPTY;
+    const cell=document.querySelector(`.cell[data-x="${last.x}"][data-y="${last.y}"]`);
+    cell.innerHTML="";
+    stepCount=last.step-1;
+    if(last.color===BLACK)break;
+  }
+  statusEl.textContent="已悔棋，请落子";
+  undoBtn.disabled=false;
+}
+
+restartBtn.onclick=init;
+undoBtn.onclick=undo;
+diffEl.onchange=()=>{diff=diffEl.value;if(!over)statusEl.textContent="已切换难度";};
+soundToggle.onchange=()=>{soundEnabled=soundToggle.checked;};
+stepToggle.onchange=()=>{
+  stepEnabled=stepToggle.checked;
+  document.querySelectorAll(".step-num").forEach(e=>e.style.display=stepEnabled?"block":"none");
+};
+
+window.onload=init;
+</script>
+</body>
+</html>
