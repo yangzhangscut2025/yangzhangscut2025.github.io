@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="green-purple" data-mode="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>大模型基础认知笔记（数据/AI 工程方向） · Kyra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'var(--primary)',secondary:'var(--secondary)',bg:'var(--bg)',card:'var(--card)',text:'var(--text)','text-soft':'var(--text-soft)',border:'var(--border)',hover:'var(--hover)'},borderRadius:{DEFAULT:'8px'},fontFamily:{sans:['Inter','Noto Sans SC','system-ui','sans-serif']}}}}</script>
+<link rel="stylesheet" href="/assets/css/base.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<style>.scroll-top-btn{opacity:0;pointer-events:none;transition:opacity .3s}@media(max-width:767px){.mobile-hidden{display:none}}</style>
+
+</head>
+<body data-page="blog" class="min-h-screen flex flex-col">
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[var(--bg)]/90 backdrop-blur-md border-b border-[var(--border)]">
+<div class="max-w-6xl mx-auto flex items-center justify-between px-6 py-3">
+<a href="/" class="text-lg font-bold text-[var(--text)] hover:text-[var(--primary)] transition-colors">Kyra</a>
+<div class="hidden md:flex items-center gap-6 text-sm font-medium">
+<a href="/" class="nav-link" data-nav="home">首页</a>
+<a href="/about/" class="nav-link" data-nav="about">关于我</a>
+<a href="/resume/" class="nav-link" data-nav="resume">简历</a>
+<a href="/works/" class="nav-link" data-nav="works">作品集</a>
+<a href="/blog/" class="nav-link" data-nav="blog">博客</a>
+<a href="/contact/" class="nav-link" data-nav="contact">联系我</a>
+</div>
+<div class="flex items-center gap-3 text-sm">
+<button id="langToggle" class="px-2 py-1 rounded-md border border-[var(--border)] text-[var(--text-soft)] hover:text-[var(--text)] bg-[var(--card)] text-xs font-medium" data-i18n="lang.label">EN</button>
+<button id="modeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Toggle dark mode">🌙</button>
+<div class="relative">
+<button id="themeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Switch theme">🎨</button>
+<div id="themePopover" class="hidden absolute right-0 top-10 bg-[var(--card)] border border-[var(--border)] rounded-lg shadow-md p-3 z-50" style="min-width:160px">
+<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)] mb-1" data-theme="green-purple">🟢🟣 绿紫</button>
+<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)]" data-theme="blue-yellow">🔵🟡 蓝黄</button>
+</div></div>
+<button id="hamburger" class="md:hidden text-xl text-[var(--text)]">☰</button>
+</div></div>
+<div id="mobileMenu" class="hidden md:hidden border-t border-[var(--border)] bg-[var(--card)] px-6 py-3 space-y-2">
+<a href="/" class="block py-2 nav-link" data-nav="home">首页</a>
+<a href="/about/" class="block py-2 nav-link" data-nav="about">关于我</a>
+<a href="/resume/" class="block py-2 nav-link" data-nav="resume">简历</a>
+<a href="/works/" class="block py-2 nav-link" data-nav="works">作品集</a>
+<a href="/blog/" class="block py-2 nav-link" data-nav="blog">博客</a>
+<a href="/contact/" class="block py-2 nav-link" data-nav="contact">联系我</a>
+</div></nav>
+
+
+<main class="flex-1 pt-24 pb-16">
+<div class="max-w-3xl mx-auto px-6">
+
+  
+  <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--text-soft)] hover:text-[var(--primary)] transition-colors mb-8">← 返回博客首页</a>
+
+  
+  <header class="mb-10">
+    <h1 class="text-2xl md:text-3xl font-bold text-[var(--text)] mb-4">大模型基础认知笔记（数据/AI 工程方向）</h1>
+    <div class="flex flex-wrap items-center gap-4 text-sm text-[var(--text-soft)]">
+      <span>2026-06-07</span>
+      <span>·</span>
+      <span>预计阅读 9 分钟</span>
+      
+      <span class="px-2 py-0.5 rounded-full bg-[var(--primary-soft)] text-[var(--primary)] text-xs">AI学习</span>
+      
+    </div>
+  </header>
+
+  
+  <article class="prose prose-slate max-w-none text-[var(--text)] leading-relaxed
+    [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:mt-10 [&_h2]:mb-4
+    [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3
+    [&_p]:mb-5 [&_p]:leading-relaxed
+    [&_ul]:mb-5 [&_ol]:mb-5 [&_li]:mb-2
+    [&_code]:bg-[var(--hover)] [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-sm
+    [&_pre]:bg-[var(--hover)] [&_pre]:p-4 [&_pre]:rounded-lg [&_pre]:overflow-x-auto [&_pre]:mb-5
+    [&_pre_code]:bg-transparent [&_pre_code]:p-0
+    [&_table]:w-full [&_table]:border-collapse [&_table]:mb-5
+    [&_th]:border [&_th]:border-[var(--border)] [&_th]:p-2 [&_th]:bg-[var(--hover)] [&_th]:text-sm [&_th]:font-semibold
+    [&_td]:border [&_td]:border-[var(--border)] [&_td]:p-2 [&_td]:text-sm
+    [&_img]:rounded-lg [&_img]:max-w-full [&_img]:h-auto [&_img]:my-4
+    [&_blockquote]:border-l-4 [&_blockquote]:border-[var(--primary)] [&_blockquote]:pl-4 [&_blockquote]:text-[var(--text-soft)] [&_blockquote]:italic [&_blockquote]:mb-5
+    [&_a]:text-[var(--primary)] [&_a]:underline
+  ">
+    <h2 id="大模型基础认知笔记适配数据ai工程方向">大模型基础认知笔记（适配数据/AI工程方向）</h2>
+<p>定位：侧重<strong>工程落地、数据流转、运行机制、运维相关</strong>，弱化纯算法推导，聚焦工程岗必懂概念、术语、链路、常见问题。</p>
+<h3 id="一核心概念与基础定义">一、核心概念与基础定义</h3>
+<h4 id="1-大语言模型llm概述">1. 大语言模型（LLM）概述</h4>
+<ul>
+<li>定义：基于<strong>Transformer架构</strong>训练的大规模预训练语言模型，依托海量文本数据学习语言规律、知识与逻辑，实现理解、生成、推理、问答等能力。</li>
+<li>核心特点：参数规模大（数十亿~万亿级）、依赖海量数据、上下文感知、生成式输出。</li>
+<li>主流分类
+<ol>
+<li><strong>基座模型</strong>：未经过指令微调、对齐，能力偏向续写文本，不适合直接面向终端用户；多用于二次开发、微调底座。</li>
+<li><strong>对话模型</strong>：在基座模型基础上做指令微调、人类对齐，适配多轮对话、问答场景，可直接对外服务。</li>
+</ol>
+</li>
+</ul>
+<h4 id="2-token工程核心术语">2. Token（工程核心术语）</h4>
+<ul>
+<li>含义：模型处理文本的<strong>最小单位</strong>，英文多为单词/子词，中文多为单字/词组。</li>
+<li>作用：文本先被分词转成Token序列，模型只识别Token，输出也以Token形式解码为文字。</li>
+<li>工程关键指标
+<ul>
+<li><strong>上下文窗口（Context Window）</strong>：模型单次能接收+处理的最大Token总数（输入+输出合计）。超出部分会被截断，是长文本处理、RAG设计的核心限制。</li>
+<li><strong>Token计费/算力成本</strong>：输入Token、输出Token分开统计，直接关联调用成本、带宽、推理耗时。</li>
+<li><strong>分词器（Tokenizer）</strong>：独立组件，负责文本↔Token互转；<strong>模型与分词器必须配套</strong>，混用会导致解析异常、效果暴跌。</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-主流能力区分工程数据岗必辨">3. 主流能力区分（工程/数据岗必辨）</h4>
+<table>
+  <thead>
+      <tr>
+          <th>能力类型</th>
+          <th>说明</th>
+          <th>工程落地场景</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>原生生成</td>
+          <td>模型预训练自带能力，知识、文案、简单问答</td>
+          <td>基础对话、文案生成</td>
+      </tr>
+      <tr>
+          <td>检索增强（RAG）</td>
+          <td>外接知识库补充外部实时/私有数据，弥补模型知识滞后</td>
+          <td>企业知识库、文档问答</td>
+      </tr>
+      <tr>
+          <td>工具调用（Function Call）</td>
+          <td>模型识别意图，调用外部接口/工具完成任务</td>
+          <td>数据查询、工单处理、外部系统联动</td>
+      </tr>
+      <tr>
+          <td>智能体（Agent）</td>
+          <td>结合规划、记忆、工具，自主完成复杂多步骤任务</td>
+          <td>自动化办公、流程机器人</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="二大模型完整技术链路数据ai工程核心主线">二、大模型完整技术链路（数据/AI工程核心主线）</h3>
+<p>全链路：<strong>数据生产 → 预训练 → 微调对齐 → 部署推理 → 运维迭代</strong></p>
+<h4 id="1-数据层数据工程核心">1. 数据层（数据工程核心）</h4>
+<p>大模型效果上限由数据决定，也是数据治理、数据流水线的主要工作域。</p>
+<ol>
+<li><strong>预训练数据</strong>
+<ul>
+<li>来源：全网文本、书籍、文献、网页等通用语料。</li>
+<li>数据要求：体量巨大、覆盖领域广、低噪音；核心工作：<strong>数据采集、清洗、去重、脱敏、格式统一、质量校验</strong>。</li>
+</ul>
+</li>
+<li><strong>微调数据</strong>
+<ul>
+<li>指令数据集：用于指令微调，格式多为 <code>指令+输入+输出</code>，让模型学会按人类指令执行任务。</li>
+<li>对话数据集：多轮问答语料，用于优化多轮对话逻辑。</li>
+<li>工程要点：数据集格式标准化、划分训练/验证/测试集、数据版本管理、标注规范落地。</li>
+</ul>
+</li>
+<li><strong>对齐数据</strong>
+<ul>
+<li>用于RLHF/DPO等对齐方案，优化模型价值观、拒绝有害内容、提升回答合规性。</li>
+<li>常见工作：人工标注偏好数据、正负样本区分。</li>
+</ul>
+</li>
+</ol>
+<h4 id="2-训练层ai工程算力运维重点">2. 训练层（AI工程/算力运维重点）</h4>
+<h5 id="1预训练">（1）预训练</h5>
+<ul>
+<li>目标：让模型学习通用语言、常识、知识。</li>
+<li>工程特征：<strong>算力消耗极大、训练周期长、多卡/多集群分布式训练</strong>。</li>
+<li>运维关注点：GPU利用率、显存占用、集群通信、断点续训、任务调度。</li>
+</ul>
+<h5 id="2微调fine-tune">（2）微调（Fine-tune）</h5>
+<p>分为全量微调和<strong>轻量化微调</strong>（工程主流）</p>
+<ul>
+<li>全量微调：更新模型所有参数，算力、数据成本高，企业极少使用。</li>
+<li>轻量化微调：LoRA、QLoRA、Prefix Tuning 等
+<ul>
+<li>优势：仅训练少量参数、显存占用低、单卡即可运行、迭代快。</li>
+<li>落地场景：行业定制、私有场景适配，是工业界主流方案。</li>
+</ul>
+</li>
+</ul>
+<h5 id="3对齐alignment">（3）对齐（Alignment）</h5>
+<ul>
+<li>主流方案：RLHF（基于强化学习人类反馈）、DPO（直接偏好优化，工程实现更简单）。</li>
+<li>作用：约束模型输出，保证合规、安全、符合人类习惯。</li>
+</ul>
+<h4 id="3-推理部署层ai工程落地核心">3. 推理部署层（AI工程落地核心）</h4>
+<p>训练完成的模型转为在线服务，对外提供调用能力。</p>
+<ol>
+<li><strong>推理模式</strong>
+<ul>
+<li>离线推理：批量处理数据（如批量文档摘要、数据清洗），多用于数据流水线。</li>
+<li>在线推理：实时接口调用（对话、问答），面向用户/业务系统，关注延迟、并发。</li>
+</ul>
+</li>
+<li><strong>模型优化（工程必学）</strong>
+<ul>
+<li>量化：INT8/INT4/GGUF 等，压缩模型体积、降低显存占用、提升推理速度，<strong>牺牲极小精度换工程可用性</strong>。</li>
+<li>剪枝、蒸馏：进一步轻量化，适配低算力设备。</li>
+</ul>
+</li>
+<li><strong>部署形态</strong>
+<ul>
+<li>本地部署：单机GPU/CPU运行，适合内部测试、私有场景。</li>
+<li>容器部署：Docker 打包模型服务，标准化环境、方便迁移、集群调度。</li>
+<li>API服务：基于FastAPI/Flask封装HTTP接口，供前后端、业务系统调用。</li>
+<li>云托管：使用云端模型服务平台，无需自建算力。</li>
+</ul>
+</li>
+</ol>
+<h4 id="4-运维与迭代层">4. 运维与迭代层</h4>
+<ul>
+<li>监控指标：接口响应延迟、QPS（每秒请求数）、错误率、GPU负载、显存、Token吞吐量。</li>
+<li>日志体系：请求日志、输入输出日志、异常日志，用于问题排查、数据回流。</li>
+<li>数据回流：线上真实用户对话/任务数据，筛选后回流至数据集，实现模型迭代优化（闭环流水线）。</li>
+</ul>
+<h3 id="三关键工程模块详解贴合数据ai工程岗位">三、关键工程模块详解（贴合数据/AI工程岗位）</h3>
+<h4 id="1-向量数据库rag-配套组件">1. 向量数据库（RAG 配套组件）</h4>
+<ul>
+<li>定位：专门存储、检索<strong>向量数据</strong>的数据库，是大模型外接知识库的核心中间件。</li>
+<li>工作流程：文档 → 文本分块 → 向量化（Embedding模型）→ 存入向量库；用户提问 → 问题向量化 → 相似度召回 → 拼接上下文送入LLM。</li>
+<li>工程关注点：入库效率、检索速度、数据持久化、分片扩容、数据更新同步。</li>
+<li>常用组件：FAISS（轻量本地）、Chroma、Milvus、Qdrant。</li>
+</ul>
+<h4 id="2-数据流水线核心工作场景">2. 数据流水线（核心工作场景）</h4>
+<p>针对大模型的自动化数据链路，典型流程：
+<code>原始数据采集 → 清洗过滤 → 格式转换 → 标注/校验 → 版本归档 → 供给训练/微调</code></p>
+<ul>
+<li>配套工具：Airflow（任务调度）、DVC（数据版本管理）、LabelStudio（AI数据标注）。</li>
+<li>核心要求：自动化、可追溯、数据隔离、权限管控、异常告警。</li>
+</ul>
+<h4 id="3-算力与集群基础">3. 算力与集群基础</h4>
+<ol>
+<li><strong>硬件基础</strong>
+<ul>
+<li>GPU：大模型训练/推理核心，关键参数：显存大小、算力（FP16/INT8算力）、卡间互联。</li>
+<li>显存瓶颈：大模型运行最常见问题，参数规模越大、上下文越长，显存占用越高。</li>
+</ul>
+</li>
+<li><strong>分布式算力</strong>
+<ul>
+<li>多卡训练/推理：单卡显存不足时，拆分模型/数据到多张GPU。</li>
+<li>集群调度：多服务器组成算力集群，统一分配任务、排队、资源隔离。</li>
+</ul>
+</li>
+<li><strong>日常运维操作</strong>
+<ul>
+<li>状态监控：显卡利用率、显存、进程、网络带宽。</li>
+<li>任务管理：启停训练/推理任务、优先级设置、故障重启。</li>
+</ul>
+</li>
+</ol>
+<h4 id="4-安全与合规工程落地红线">4. 安全与合规（工程落地红线）</h4>
+<ul>
+<li>数据脱敏：手机号、身份证、企业机密等隐私数据必须脱敏，禁止流入训练/线上数据。</li>
+<li>内容安全：模型输出风控、输入内容过滤，拦截违规请求与内容。</li>
+<li>权限管理：模型服务、数据集、算力集群分级权限，防止越权访问。</li>
+</ul>
+<h3 id="四常见术语速查面试日常沟通专用">四、常见术语速查（面试/日常沟通专用）</h3>
+<ol>
+<li><strong>LLM</strong>：大语言模型</li>
+<li><strong>Embedding</strong>：嵌入模型，将文本转为多维向量，用于检索、相似度计算</li>
+<li><strong>LoRA/QLoRA</strong>：轻量化微调方案，工程主流</li>
+<li><strong>RLHF/DPO</strong>：模型对齐方案</li>
+<li><strong>QPS</strong>：每秒请求数，衡量服务并发能力</li>
+<li><strong>Latency</strong>：推理延迟，用户感知的响应速度</li>
+<li><strong>Batch Inference</strong>：批量推理，数据流水线常用</li>
+<li><strong>KV Cache</strong>：推理缓存技术，大幅提升长对话、重复请求的速度，显存占用会上升</li>
+<li><strong>量化(Quantization)</strong>：模型压缩优化手段</li>
+<li><strong>Epoch</strong>：训练轮数，训练过程基础参数</li>
+</ol>
+<h3 id="五数据ai工程岗-重点关注点总结笔记提炼">五、数据/AI工程岗 重点关注点总结（笔记提炼）</h3>
+<ol>
+<li><strong>数据侧</strong>：数据质量、格式规范、标注体系、数据版本、脱敏与治理、自动化流水线搭建。</li>
+<li><strong>训练侧</strong>：算力资源分配、分布式任务、显存/算力监控、断点续训、轻量化微调落地。</li>
+<li><strong>推理侧</strong>：模型量化优化、容器化部署、接口服务、并发与延迟、KV Cache调优。</li>
+<li><strong>中间件</strong>：向量库使用与运维、消息队列、缓存组件协同。</li>
+<li><strong>运维侧</strong>：全链路监控、日志、异常排查、安全合规、数据回流迭代。</li>
+</ol>
+
+  </article>
+
+  
+  <div class="mt-12 pt-8 border-t border-[var(--border)]">
+    <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--text-soft)] hover:text-[var(--primary)] transition-colors">← 返回博客首页</a>
+  </div>
+
+</div>
+</main>
+
+<button id="scrollTopBtn" class="scroll-top-btn fixed bottom-6 right-6 w-10 h-10 rounded-full bg-[var(--primary)] text-white shadow-md flex items-center justify-center text-lg z-40 hover:opacity-90" data-i18n-aria="back.top" aria-label="回到顶部">↑</button>
+<script src="/assets/js/theme.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/shared.js"></script>
+
+
+</body>
+</html>

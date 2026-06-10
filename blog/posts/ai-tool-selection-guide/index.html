@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="green-purple" data-mode="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AI 工具全场景实战体验与选型 · Kyra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'var(--primary)',secondary:'var(--secondary)',bg:'var(--bg)',card:'var(--card)',text:'var(--text)','text-soft':'var(--text-soft)',border:'var(--border)',hover:'var(--hover)'},borderRadius:{DEFAULT:'8px'},fontFamily:{sans:['Inter','Noto Sans SC','system-ui','sans-serif']}}}}</script>
+<link rel="stylesheet" href="/assets/css/base.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<style>.scroll-top-btn{opacity:0;pointer-events:none;transition:opacity .3s}@media(max-width:767px){.mobile-hidden{display:none}}</style>
+
+</head>
+<body data-page="blog" class="min-h-screen flex flex-col">
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[var(--bg)]/90 backdrop-blur-md border-b border-[var(--border)]">
+<div class="max-w-6xl mx-auto flex items-center justify-between px-6 py-3">
+<a href="/" class="text-lg font-bold text-[var(--text)] hover:text-[var(--primary)] transition-colors">Kyra</a>
+<div class="hidden md:flex items-center gap-6 text-sm font-medium">
+<a href="/" class="nav-link" data-nav="home">首页</a>
+<a href="/about/" class="nav-link" data-nav="about">关于我</a>
+<a href="/resume/" class="nav-link" data-nav="resume">简历</a>
+<a href="/works/" class="nav-link" data-nav="works">作品集</a>
+<a href="/blog/" class="nav-link" data-nav="blog">博客</a>
+<a href="/contact/" class="nav-link" data-nav="contact">联系我</a>
+</div>
+<div class="flex items-center gap-3 text-sm">
+<button id="langToggle" class="px-2 py-1 rounded-md border border-[var(--border)] text-[var(--text-soft)] hover:text-[var(--text)] bg-[var(--card)] text-xs font-medium" data-i18n="lang.label">EN</button>
+<button id="modeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Toggle dark mode">🌙</button>
+<div class="relative">
+<button id="themeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Switch theme">🎨</button>
+<div id="themePopover" class="hidden absolute right-0 top-10 bg-[var(--card)] border border-[var(--border)] rounded-lg shadow-md p-3 z-50" style="min-width:160px">
+<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)] mb-1" data-theme="green-purple">🟢🟣 绿紫</button>
+<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)]" data-theme="blue-yellow">🔵🟡 蓝黄</button>
+</div></div>
+<button id="hamburger" class="md:hidden text-xl text-[var(--text)]">☰</button>
+</div></div>
+<div id="mobileMenu" class="hidden md:hidden border-t border-[var(--border)] bg-[var(--card)] px-6 py-3 space-y-2">
+<a href="/" class="block py-2 nav-link" data-nav="home">首页</a>
+<a href="/about/" class="block py-2 nav-link" data-nav="about">关于我</a>
+<a href="/resume/" class="block py-2 nav-link" data-nav="resume">简历</a>
+<a href="/works/" class="block py-2 nav-link" data-nav="works">作品集</a>
+<a href="/blog/" class="block py-2 nav-link" data-nav="blog">博客</a>
+<a href="/contact/" class="block py-2 nav-link" data-nav="contact">联系我</a>
+</div></nav>
+
+
+<main class="flex-1 pt-24 pb-16">
+<div class="max-w-3xl mx-auto px-6">
+
+  
+  <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--text-soft)] hover:text-[var(--primary)] transition-colors mb-8">← 返回博客首页</a>
+
+  
+  <header class="mb-10">
+    <h1 class="text-2xl md:text-3xl font-bold text-[var(--text)] mb-4">AI 工具全场景实战体验与选型</h1>
+    <div class="flex flex-wrap items-center gap-4 text-sm text-[var(--text-soft)]">
+      <span>2026-06-07</span>
+      <span>·</span>
+      <span>预计阅读 7 分钟</span>
+      
+      <span class="px-2 py-0.5 rounded-full bg-[var(--primary-soft)] text-[var(--primary)] text-xs">AI学习</span>
+      
+    </div>
+  </header>
+
+  
+  <article class="prose prose-slate max-w-none text-[var(--text)] leading-relaxed
+    [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:mt-10 [&_h2]:mb-4
+    [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3
+    [&_p]:mb-5 [&_p]:leading-relaxed
+    [&_ul]:mb-5 [&_ol]:mb-5 [&_li]:mb-2
+    [&_code]:bg-[var(--hover)] [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-sm
+    [&_pre]:bg-[var(--hover)] [&_pre]:p-4 [&_pre]:rounded-lg [&_pre]:overflow-x-auto [&_pre]:mb-5
+    [&_pre_code]:bg-transparent [&_pre_code]:p-0
+    [&_table]:w-full [&_table]:border-collapse [&_table]:mb-5
+    [&_th]:border [&_th]:border-[var(--border)] [&_th]:p-2 [&_th]:bg-[var(--hover)] [&_th]:text-sm [&_th]:font-semibold
+    [&_td]:border [&_td]:border-[var(--border)] [&_td]:p-2 [&_td]:text-sm
+    [&_img]:rounded-lg [&_img]:max-w-full [&_img]:h-auto [&_img]:my-4
+    [&_blockquote]:border-l-4 [&_blockquote]:border-[var(--primary)] [&_blockquote]:pl-4 [&_blockquote]:text-[var(--text-soft)] [&_blockquote]:italic [&_blockquote]:mb-5
+    [&_a]:text-[var(--primary)] [&_a]:underline
+  ">
+    <p><strong>笔记定位</strong>：本篇为独立个人实战总结，基于日常学习、工程开发、学术研究、企业项目实操经历，系统梳理全品类AI工具使用体验、优劣适配、选型逻辑，同时结合自身设备硬件条件，总结当前可落地的AI开发边界与实操局限，适配学习复盘、项目总结、面试场景作答。</p>
+<h2 id="一全场景ai工具个人实战体验">一、全场景AI工具个人实战体验</h2>
+<h3 id="11-日常c端使用豆包">1.1 日常C端使用：豆包</h3>
+<p><strong>使用体验</strong>：适用于日常智能交互、常识答疑、基础文案改写、简易问题纠错。平台交互流畅、响应迅速、免费额度充足，多模态生成与生活化场景适配性优异，可全覆盖个人碎片化日常使用需求。</p>
+<p><strong>短板适配</strong>：针对复杂工程逻辑、深度代码推理、严谨学术论证的能力较弱，因此仅作为日常辅助工具，不参与核心代码开发与科研分析工作。</p>
+<h3 id="12-学术长文档科研场景kimi">1.2 学术/长文档科研场景：Kimi</h3>
+<p><strong>使用体验</strong>：是学术调研、论文精读、长文献解析、大批量资料汇总梳理的最优工具。支持超大体积文件上传与百万级长文本无损解析，可精准梳理文献逻辑、提炼核心观点、完成全文总结，高度适配学术研究、文献复盘、专业资料整理场景。</p>
+<p><strong>核心优势</strong>：长文本上下文处理能力优于多数通用大模型，文档解析完整性高、无内容碎片化丢失，学术内容严谨性更强，是个人学术研究的核心辅助工具。</p>
+<h3 id="13-编程工具迭代与替换历程">1.3 编程工具迭代与替换历程</h3>
+<p><strong>初期工具：Cursor</strong>：AI原生IDE体验优异，支持多文件联动、项目级代码重构与全局逻辑理解，调试排错与项目开发效率极高。</p>
+<p><strong>弃用原因</strong>：核心高阶功能付费门槛较高，个人长期学习成本偏高、性价比不足，因此替换为免费、高性能的工程工具组合方案。</p>
+<p><strong>曾用工具：Trea</strong>：编程辅助能力良好，代码生成与智能补全能力贴合开发需求，但核心功能存在额度限制与付费门槛，不适用于长期学习迭代，最终予以替换。</p>
+<h3 id="14-现阶段主力编程工作流">1.4 现阶段主力编程工作流</h3>
+<h4 id="141-整体工作流架构">1.4.1 整体工作流架构</h4>
+<p>以 <strong>VS Code为基础开发载体</strong> ，搭配 <strong>Claude Code终端插件对接DeepSeek Coder API</strong> ，搭建免费、高效、适配个人学习的全流程工程开发工作流，完全平替各类付费AI编程IDE。</p>
+<h4 id="142-claude-code-能力定位">1.4.2 Claude Code 能力定位</h4>
+<p><strong>使用体验</strong>：依托百万级超长上下文优势，主要负责项目整体架构梳理、多文件全局分析、代码重构、深层Bug排查与工程结构优化，擅长大型项目阅读与整体逻辑迭代，免费生态完善，适配个人学习与中小型工程实战场景。</p>
+<h4 id="143-deepseek-coder-能力定位">1.4.3 DeepSeek Coder 能力定位</h4>
+<p><strong>核心优势（个人实测）</strong>：DeepSeek Coder API的代码生成质量、逻辑推理精度、算法严谨度与工程规范性，显著优于豆包等通用大模型。产出代码整洁、可直接运行、BUG率低，适配Python工程、AI数据脚本、数据处理、模型微调脚本、部署脚本、AI流水线开发等全场景。结合Claude Code全局分析能力，形成「全局架构梳理+精准代码落地」的高效开发闭环。</p>
+<p><strong>性价比优势</strong>：DeepSeek API调用成本极低、免费额度充足，零成本实现专业级AI编码辅助，是个人AI工程学习者的最优高性价比编码方案。</p>
+<p><strong>短板说明</strong>：DeepSeek模型专精代码编写与逻辑推理，多模态能力薄弱，无法高效处理图片解析、视频生成、图文创作等多媒体场景。因此采用工具互补策略，编码场景专注DeepSeek，多模态场景依托豆包补足，实现场景全覆盖。</p>
+<h2 id="二低代码ai平台实战经历">二、低代码AI平台实战经历</h2>
+<h3 id="21-coze-扣子个人实操">2.1 Coze 扣子（个人实操）</h3>
+<p><strong>使用体验</strong>：个人阶段深度体验Coze无代码AI开发平台，熟练掌握知识库创建、插件配置、工作流编排、对话机器人搭建全流程。经过实战验证，Coze核心定位为C端轻量化快速演示与原型验证，无私有化部署能力、无精细化工程运维体系。</p>
+<p><strong>场景局限</strong>：无法适配正式企业业务、私有化项目与生产级落地场景，仅适用于个人快速试错与Demo展示，不用于正式项目迭代。</p>
+<h3 id="22-dify企业实战">2.2 Dify（企业实战）</h3>
+<p><strong>实战经历</strong>：具备企业级Dify落地实操经验，熟悉其工程化、私有化、生产级落地能力。实际参与<strong>AI小程序知识库搭建与功能测试</strong>完整项目流程，涵盖文档解析、知识库入库、检索规则配置、对话调试、功能测试、问题复盘等全链路工作，具备基础的企业AI知识库落地与运维认知。</p>
+<p><strong>场景定位</strong>：适配企业私有化部署、AI小程序开发、业务知识库搭建、生产级AI应用落地，是AI工程岗位主流实操工具，相较于Coze具备完整的工程落地与运维能力。</p>
+<h2 id="三个人硬件条件与ai开发落地边界">三、个人硬件条件与AI开发落地边界</h2>
+<h3 id="31-现有设备硬件现状">3.1 现有设备硬件现状</h3>
+<p>个人日常使用设备为 <strong>轻薄本</strong> ，设备特性为：显卡性能有限、内存容量较小、无高性能算力支撑，硬件配置偏向日常办公与轻量化开发，不具备专业算力设备的部署条件。</p>
+<h3 id="32-硬件带来的开发局限">3.2 硬件带来的开发局限</h3>
+<p>受限于轻薄本的显卡、内存硬件瓶颈，现阶段<strong>无法完成大参数开源模型本地部署、本地全量微调、大规模向量库本地搭建、高并发推理服务部署</strong>等重型AI工程任务。本地运行大模型易出现内存溢出、算力不足、运行卡顿、推理速度极慢等问题，难以支撑复杂本地化AI项目迭代。</p>
+<h3 id="33-适配硬件的最优解决方案">3.3 适配硬件的最优解决方案</h3>
+<p>结合自身硬件短板，针对性优化个人开发工作流，规避本地算力不足的问题：</p>
+<ul>
+<li><strong>放弃本地大模型部署</strong>：不强行本地运行Llama、Mistral等大参数模型，避免设备过载、运行失败</li>
+<li><strong>优先API云端调用</strong>：全程采用DeepSeek、Claude等优质模型API进行代码开发、逻辑推理、工程落地，用云端算力替代本地算力</li>
+<li><strong>轻量化实操落地</strong>：专注 Prompt工程、RAG应用搭建、Agent工作流编排、知识库搭建、功能测试、代码脚本开发等<strong>轻量化、无高算力依赖</strong>的AI工程实操</li>
+<li><strong>聚焦工程应用层</strong>：侧重AI应用落地、业务流程搭建、工具整合、项目调试等上层工程能力，避开底层模型训练、本地部署等高算力需求场景</li>
+</ul>
+<h2 id="四个人最终工具选型体系与总结">四、个人最终工具选型体系与总结</h2>
+<h3 id="41-全场景工具分工精准适配个人条件">4.1 全场景工具分工（精准适配个人条件）</h3>
+<ul>
+<li><strong>日常交互、多模态生成、生活提效</strong>：豆包</li>
+<li><strong>学术科研、论文精读、长文档梳理</strong>：Kimi</li>
+<li><strong>核心代码开发、工程脚本、算法调试</strong>：VS Code + Claude Code + DeepSeek Coder API</li>
+<li><strong>个人原型验证、快速Demo试错</strong>：Coze</li>
+<li><strong>企业生产级知识库、AI小程序落地</strong>：Dify</li>
+</ul>
+<h3 id="42-整体复盘总结">4.2 整体复盘总结</h3>
+<p>受限于轻薄本硬件条件，现阶段重点深耕<strong>AI应用工程、RAG落地、Agent工作流、低代码AI平台搭建、工程代码开发</strong>等轻量化、高性价比、无高算力依赖的核心能力。通过「云端API算力+上层工程实操」的模式，完全规避本地硬件短板，依托免费优质工具组合，全覆盖学习、科研、开发、项目落地场景，形成适配个人设备、贴合AI工程岗位需求的完整技术体系。</p>
+
+  </article>
+
+  
+  <div class="mt-12 pt-8 border-t border-[var(--border)]">
+    <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--text-soft)] hover:text-[var(--primary)] transition-colors">← 返回博客首页</a>
+  </div>
+
+</div>
+</main>
+
+<button id="scrollTopBtn" class="scroll-top-btn fixed bottom-6 right-6 w-10 h-10 rounded-full bg-[var(--primary)] text-white shadow-md flex items-center justify-center text-lg z-40 hover:opacity-90" data-i18n-aria="back.top" aria-label="回到顶部">↑</button>
+<script src="/assets/js/theme.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/shared.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,356 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #eef2f5;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    color: #1f2d3d;
+    line-height: 1.5;
+    padding: 2rem 1.5rem;
+}
+
+.resume-card {
+    max-width: 1100px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 28px;
+    box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: box-shadow 0.2s ease;
+}
+
+.print-toolbar {
+    text-align: right;
+    padding: 1rem 2rem 0 2rem;
+    background: white;
+}
+
+.print-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #f0f4f9;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    border-radius: 40px;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #2c3e66;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.print-btn i {
+    font-size: 0.9rem;
+}
+
+.print-btn:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+}
+
+.resume-grid {
+    display: grid;
+    grid-template-columns: 34% 66%;
+}
+
+/* 左侧样式 */
+.sidebar {
+    background: #f8fafc;
+    padding: 2rem 1.8rem;
+    border-right: 1px solid #e6edf4;
+}
+
+.name-large {
+    font-size: 1.9rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #0f2b3d;
+    margin-bottom: 0.25rem;
+    line-height: 1.2;
+}
+
+.job-tagline {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #2c6e9e;
+    background: #e9f0f8;
+    display: inline-block;
+    padding: 0.2rem 0.9rem;
+    border-radius: 30px;
+    margin-bottom: 1.2rem;
+}
+
+.profile-text {
+    font-size: 0.85rem;
+    color: #334e68;
+    margin-bottom: 1.8rem;
+    line-height: 1.5;
+    border-left: 3px solid #2c6e9e;
+    padding-left: 1rem;
+}
+
+.block {
+    margin-bottom: 2rem;
+}
+
+.block-title {
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #1f5e8e;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #dce5ed;
+    padding-bottom: 0.5rem;
+    display: inline-block;
+}
+
+.contact-list {
+    list-style: none;
+    margin-top: 0.5rem;
+}
+.contact-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 0.85rem;
+    margin-bottom: 0.9rem;
+    color: #2c3e50;
+    word-break: break-word;
+}
+.contact-list li i {
+    width: 1.3rem;
+    color: #2c6e9e;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 0.5rem;
+}
+.skill-tag {
+    background: white;
+    border: 1px solid #d4e0ea;
+    padding: 0.3rem 1rem;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #1f4e6e;
+    transition: 0.1s ease;
+}
+.skill-tag:hover {
+    background: #e9f0f8;
+    border-color: #98b9d4;
+}
+
+.lang-item, .cert-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    margin-bottom: 0.7rem;
+}
+.lang-name, .cert-name {
+    font-weight: 500;
+    color: #1f2d3d;
+}
+.lang-level, .cert-date {
+    color: #5e7c99;
+}
+
+/* 右侧主内容 */
+.main-content {
+    padding: 2rem 2rem 2rem 1.8rem;
+    background: white;
+}
+
+.right-section {
+    margin-bottom: 2rem;
+}
+
+.right-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #0f2b3d;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    border-left: 4px solid #2c6e9e;
+    padding-left: 1rem;
+    margin-bottom: 1.2rem;
+}
+.right-title i {
+    color: #2c6e9e;
+    font-size: 1.2rem;
+}
+
+.exp-item, .edu-item, .project-item {
+    margin-bottom: 1.6rem;
+}
+.exp-header, .project-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.3rem;
+}
+.exp-role, .project-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1e3a5f;
+}
+.exp-company, .project-stack {
+    font-weight: 500;
+    color: #2c6e9e;
+    font-size: 0.85rem;
+}
+.exp-date, .project-date {
+    font-size: 0.75rem;
+    color: #6c86a3;
+    background: #f0f4f9;
+    padding: 0.2rem 0.7rem;
+    border-radius: 20px;
+}
+.exp-desc, .project-desc {
+    margin-top: 0.5rem;
+    padding-left: 0.2rem;
+}
+.exp-desc ul, .project-desc ul {
+    padding-left: 1.2rem;
+    list-style: none;
+}
+.exp-desc li, .project-desc li {
+    font-size: 0.85rem;
+    color: #2d3f55;
+    margin-bottom: 0.4rem;
+    position: relative;
+    padding-left: 1.2rem;
+}
+.exp-desc li::before, .project-desc li::before {
+    content: "▹";
+    position: absolute;
+    left: 0;
+    color: #2c6e9e;
+    font-size: 0.8rem;
+}
+
+.edu-detail {
+    font-weight: 700;
+    color: #1e3a5f;
+    margin-bottom: 0.2rem;
+}
+.edu-meta {
+    font-size: 0.8rem;
+    color: #5e7c99;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 0.4rem;
+}
+.course-list {
+    font-size: 0.8rem;
+    color: #3a5670;
+    margin-top: 0.2rem;
+    flex-wrap: wrap;
+    display: inline-flex;
+    gap: 0.5rem;
+}
+
+/* 作品集卡片 */
+.portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+.portfolio-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background: #f8fafc;
+    border: 1px solid #e6edf4;
+    border-radius: 14px;
+    padding: 1.2rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+.portfolio-card:hover {
+    background: #e9f0f8;
+    border-color: #98b9d4;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+.portfolio-card i {
+    font-size: 1.5rem;
+    color: #2c6e9e;
+    margin-bottom: 0.6rem;
+}
+.portfolio-card .portfolio-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1e3a5f;
+    margin-bottom: 0.3rem;
+}
+.portfolio-card .portfolio-tag {
+    font-size: 0.7rem;
+    color: #5e7c99;
+    background: #eef2f5;
+    padding: 0.15rem 0.6rem;
+    border-radius: 20px;
+}
+
+/* 实习经历中的视频展示 */
+.exp-videos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+    margin-top: 1rem;
+}
+.exp-video-item {
+    flex: 1;
+    min-width: 260px;
+}
+.exp-video-item p {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #2c6e9e;
+    margin-bottom: 0.5rem;
+}
+.exp-video-item video {
+    width: 100%;
+    border-radius: 10px;
+    background: #f0f4f9;
+}
+
+hr {
+    margin: 0.5rem 0 1rem;
+    border: 0;
+    height: 1px;
+    background: #e2e8f0;
+}
+
+@media (max-width: 780px) {
+    body { padding: 1rem; }
+    .resume-grid { grid-template-columns: 1fr; }
+    .sidebar { border-right: none; border-bottom: 1px solid #e6edf4; }
+    .main-content { padding: 1.8rem; }
+    .print-toolbar { padding: 1rem 1.5rem 0 1.5rem; }
+}
+
+@media print {
+    body { background: white; padding: 0; margin: 0; }
+    .resume-card { box-shadow: none; border-radius: 0; max-width: 100%; }
+    .print-toolbar { display: none; }
+    .sidebar { background: #fafafa; border-right: 1px solid #ccc; print-color-adjust: exact; }
+    .skill-tag { background: #f3f3f3; border: 1px solid #aaa; }
+    .exp-date, .project-date { background: #efefef; }
+    a { text-decoration: none; color: black; }
+    .resume-grid { grid-template-columns: 30% 70%; }
+}

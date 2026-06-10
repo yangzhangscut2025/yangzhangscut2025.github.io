@@ -1,0 +1,93 @@
+/* ============================================================
+   Base — CSS Variables · Dual Theme · Dark Mode · Global Reset
+   ============================================================ */
+
+/* ---------- Light: Theme 1 (default) Green-Purple ---------- */
+:root,
+[data-theme="green-purple"] {
+  --primary:        #74B999;
+  --primary-soft:   #e8f5ee;
+  --secondary:      #B4A7D6;
+  --secondary-soft: #f3f0fa;
+  --bg:             #FAFBFE;
+  --card:           #ffffff;
+  --text:           #2C333A;
+  --text-soft:      #6E7781;
+  --border:         #e2e8f0;
+  --hover:          #f1f5f9;
+  --shadow-sm:      0 1px 2px rgba(0,0,0,0.04);
+  --shadow:         0 1px 3px rgba(0,0,0,0.07),0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md:      0 4px 12px rgba(0,0,0,0.06),0 2px 4px rgba(0,0,0,0.04);
+  --radius:         8px;
+}
+
+/* ---------- Light: Theme 2 Blue-Yellow ---------- */
+[data-theme="blue-yellow"] {
+  --primary:        #94C7F4;
+  --primary-soft:   #eaf4fd;
+  --secondary:      #FFEAA7;
+  --secondary-soft: #fffcf0;
+}
+
+/* ---------- Dark Mode ---------- */
+[data-mode="dark"] {
+  --bg:             #23282E;
+  --card:           #2a3038;
+  --text:           #E9EDF2;
+  --text-soft:      #9ca3af;
+  --border:         #3a4048;
+  --hover:          #323840;
+  --shadow-sm:      0 1px 2px rgba(0,0,0,0.2);
+  --shadow:         0 2px 6px rgba(0,0,0,0.25),0 1px 3px rgba(0,0,0,0.15);
+  --shadow-md:      0 6px 16px rgba(0,0,0,0.3),0 3px 6px rgba(0,0,0,0.2);
+}
+
+/* ---------- Global Reset ---------- */
+*,*::before,*::after{box-sizing:border-box}
+html{
+  scroll-behavior:smooth;
+  -webkit-text-size-adjust:100%;
+}
+body{
+  margin:0;
+  font-family:'Inter','Noto Sans SC',system-ui,-apple-system,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.65;
+  transition:background 0.3s,color 0.3s;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- Links ---------- */
+a{
+  color:var(--primary);
+  text-decoration:none;
+  transition:color 0.2s;
+}
+a:hover{opacity:0.8}
+
+/* ---------- Selection ---------- */
+::selection{
+  background:var(--primary-soft);
+  color:var(--text);
+}
+
+/* ---------- Focus ---------- */
+:focus-visible{
+  outline:2px solid var(--primary);
+  outline-offset:2px;
+  border-radius:2px;
+}
+
+/* ---------- Scrollbar ---------- */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--text-soft)}
+
+/* ---------- Print ---------- */
+@media print{
+  nav,.no-print,.scroll-top-btn{display:none!important}
+  body{background:#fff!important;color:#000!important}
+  a{color:#000!important}
+}

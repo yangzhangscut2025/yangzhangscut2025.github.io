@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>HD地图生产调度｜四种优化算法复现与对比</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background: #f8fafc;
+            color: #0f172a;
+            line-height: 1.5;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);
+            overflow: hidden;
+            padding: 2rem 2rem 3rem;
+        }
+
+        /* 标题区域 */
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+            border-bottom: 2px solid #eef2ff;
+            padding-bottom: 2rem;
+        }
+        .hero h1 {
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, #0f172a, #3b82f6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+        }
+        .hero p {
+            color: #475569;
+            font-size: 1rem;
+        }
+
+        /* 章节标题 */
+        .section-title {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin: 2rem 0 1rem 0;
+            padding-left: 0.5rem;
+            border-left: 5px solid #3b82f6;
+        }
+        .subsection-title {
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin: 1.5rem 0 0.75rem 0;
+            color: #1e293b;
+        }
+
+        /* 卡片网格 */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.8rem;
+            margin: 1.5rem 0;
+        }
+        .card {
+            background: #ffffff;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05), 0 1px 2px 0 rgba(0,0,0,0.03);
+            transition: all 0.25s ease;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+            border-color: #cbd5e1;
+        }
+        .card-header {
+            padding: 1.2rem 1.5rem 0.8rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .badge {
+            display: inline-block;
+            background: #e2e8f0;
+            padding: 0.2rem 0.8rem;
+            border-radius: 2rem;
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #334155;
+        }
+        .card-content {
+            padding: 1.2rem 1.5rem 1.5rem;
+        }
+        .code-block {
+            background: #f1f5f9;
+            border-radius: 1rem;
+            padding: 0.8rem 1rem;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.75rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            border: 1px solid #e2e8f0;
+        }
+        .param-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            margin: 1rem 0;
+        }
+        .param-table td {
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+        .param-table td:first-child {
+            font-weight: 600;
+            width: 38%;
+            color: #334155;
+        }
+        .feature-list, .custom-list {
+            margin: 1rem 0 0.5rem 1.5rem;
+        }
+        .feature-list li, .custom-list li {
+            margin: 0.5rem 0;
+        }
+        hr {
+            margin: 1.8rem 0;
+            border: none;
+            border-top: 2px solid #eef2ff;
+        }
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e2e8f0;
+            color: #64748b;
+            font-size: 0.8rem;
+        }
+        .highlight {
+            background: #fef3c7;
+            padding: 0.1rem 0.3rem;
+            border-radius: 0.4rem;
+            font-weight: 500;
+            color: #b45309;
+        }
+        .info-box {
+            background: #f0f9ff;
+            border-left: 4px solid #3b82f6;
+            padding: 1rem 1.5rem;
+            border-radius: 1rem;
+            margin: 1.5rem 0;
+        }
+        .table-compare {
+            width: 100%;
+            border-collapse: collapse;
+            background: #ffffff;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .table-compare th {
+            background: #f1f5f9;
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+        .table-compare td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        @media (max-width: 640px) {
+            body { padding: 1rem; }
+            .container { padding: 1.5rem; }
+            .hero h1 { font-size: 1.6rem; }
+            .section-title { font-size: 1.4rem; }
+        }
+        .icon-em {
+            font-size: 1.4rem;
+            vertical-align: middle;
+        }
+        .btn-scroll {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 3rem;
+            padding: 0.6rem 1.2rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: 0.2s;
+            z-index: 100;
+        }
+        .btn-scroll:hover {
+            background: #2563eb;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="hero">
+        <h1>🗺️ 基于改进遗传算法的HD地图数据生产调度<br>复现、修正与拓展工作说明</h1>
+        <p>完整复现论文算法 | 修正甘特图错误 | 拓展SA算法族 | 前后端可视化系统</p>
+    </div>
+
+    <!-- 一、原文缺陷 -->
+    <div class="section-title">🔍 一、原文缺陷与问题分析</div>
+    <div class="info-box">
+        <ul class="feature-list" style="margin-top:0">
+            <li><span class="highlight">甘特图与问题规模严重不匹配</span>：原文设定为<strong>4个图斑、3道工序、2名工人、4台设备</strong>（总工序数12），但甘特图出现15道工序、3名工人、5台设备，资源编号超出约束，结果无效。</li>
+            <li><span class="highlight">关键数据缺失</span>：未提供图斑转移时间矩阵、空间重叠比率矩阵。</li>
+            <li><span class="highlight">无开源代码</span>：算法实现未公开，难以复现验证。</li>
+        </ul>
+    </div>
+
+    <!-- 二、复现工作 -->
+    <div class="section-title">📌 二、复现工作内容</div>
+    <ul class="feature-list">
+        <li>严格使用原文提供的<strong>工序加工时间矩阵</strong>，构建正确的<strong>资源冲突矩阵</strong>。</li>
+        <li>补全<strong>图斑转移时间与空间重叠比率矩阵</strong>。</li>
+        <li>重构图斑‑工序‑工人‑设备四维调度仿真引擎，支持约束计算与工期仿真。</li>
+        <li>完整复现<strong>传统遗传算法</strong>与<strong>改进遗传算法</strong>。</li>
+    </ul>
+
+    <!-- 三、拓展工作 -->
+    <div class="section-title">🚀 三、拓展工作内容</div>
+	    <div class="subsection-title">📊 （1）可视化展示系统拓展（重要拓展）</div>
+    <ul class="feature-list">
+        <li>搭建前后端一体化调度展示系统，实现：前端界面一键运行算法，实时查看迭代收敛曲线；</li>
+        <li>自动生成规范、无错误、符合约束的调度甘特图；</li>
+        <li>20次运行结果自动生成箱线图，直观展示算法鲁棒性；</li>
+        <li>自动生成关键指标对比表格与优化幅度。</li>
+    </ul>
+    <div class="subsection-title">📐 （2）算法体系拓展</div>
+    <p>在原文仅提供遗传算法的基础上，新增两种智能优化算法形成对比：<strong>标准模拟退火算法（SA）</strong> + <strong>自适应模拟退火算法（Adaptive SA）</strong>。<br>最终形成<strong>传统GA、改进GA、标准SA、自适应SA</strong>四算法对比体系。</p>
+    <div class="subsection-title">⚙️ （3）实验能力拓展</div>
+    <ul class="feature-list">
+        <li>支持手动标准数据与<strong>自动生成大规模数据</strong>。</li>
+        <li>支持<strong>20次独立重复运行</strong>，自动统计最优工期、平均工期、标准差、运行时间等指标。</li>
+    </ul>
+
+
+    <!-- 四、整体成果 -->
+    <div class="section-title">✅ 四、整体工作成果</div>
+    <ul class="feature-list">
+        <li>修正原文甘特图错误，输出<strong>合法、可复现、可验证</strong>的调度方案。</li>
+        <li>完整复现并重构改进遗传算法，保证实验可追溯。</li>
+        <li>拓展模拟退火系列算法，丰富调度优化方案。</li>
+        <li>搭建可视化实验平台，大幅提升实验展示与对比能力。</li>
+        <li>形成一套可直接用于论文实验的生产调度完整代码框架。</li>
+    </ul>
+
+    <!-- 分割线，开始算法介绍 -->
+    <hr>
+
+    <div class="hero" style="margin-bottom:1rem; padding-bottom:0;">
+        <h1 style="font-size:1.8rem;">🧠 HD地图数据生产调度算法库</h1>
+        <div style="color:#475569;">四种优化算法原理、参数与代码特性对比</div>
+    </div>
+
+    <div class="grid">
+        <!-- 传统遗传算法 -->
+        <div class="card">
+            <div class="card-header">
+                <h2><span class="icon-em">🔵</span> 传统遗传算法</h2>
+                <div class="badge">TraditionalGA</div>
+            </div>
+            <div class="card-content">
+                <p><strong>核心思想</strong>：基于自然选择的进化优化，通过编码、选择、交叉、变异搜索最优调度。</p>
+                <div class="code-block">
+                    <strong>编码方式</strong><br>
+                    g1: 图斑首次加工顺序 (长度 = 图斑数)<br>
+                    g2: 每个工序的资源索引 (长度 = 总操作数)
+                </div>
+                <table class="param-table">
+                    <tr><td>选择策略</td><td>轮盘赌选择</td></tr>
+                    <tr><td>交叉算子</td><td>OX交叉(g1) + 两点交叉(g2)</td></tr>
+                    <tr><td>变异算子</td><td>交换变异(g1) + 随机重置(g2)</td></tr>
+                    <tr><td>精英保留</td><td>❌ 无</td></tr>
+                    <tr><td>调度模拟</td><td>仅资源冲突，无转移时间/空间重叠</td></tr>
+                </table>
+                <p><strong>✅ 优点</strong>：实现简单，计算快速，适合快速基线对比。<br>
+                <strong>⚠️ 局限</strong>：忽略实际测绘中的地理转移和空域冲突，工期估计偏乐观。</p>
+            </div>
+        </div>
+
+        <!-- 改进遗传算法 -->
+        <div class="card">
+            <div class="card-header">
+                <h2><span class="icon-em">🟢</span> 改进遗传算法</h2>
+                <div class="badge">ImprovedGA</div>
+            </div>
+            <div class="card-content">
+                <p><strong>核心改进</strong>：双基因编码 + 概率初始化 + 精确调度模拟（转移时间+空间重叠惩罚）。</p>
+                <div class="code-block">
+                    <strong>编码方式</strong><br>
+                    g1: 每道工序的图斑执行顺序 (长度 = 工序数 × 图斑数)<br>
+                    g2: 每个工序的资源索引 (按概率选择，避免长耗时组合)
+                </div>
+                <table class="param-table">
+                    <tr><td>选择策略</td><td>锦标赛选择 (tournament_size=3)</td></tr>
+                    <tr><td>交叉算子</td><td>分段OX交叉 + 两点交叉</td></tr>
+                    <tr><td>变异算子</td><td>段内交换 + 按概率重置资源</td></tr>
+                    <tr><td>精英保留</td><td>✅ 是 (比例可调)</td></tr>
+                    <tr><td>调度模拟</td><td>资源冲突 + 图斑间转移时间 + 空间重叠惩罚</td></tr>
+                </table>
+                <p><strong>✅ 优点</strong>：贴近真实测绘环境，解质量显著优于传统GA。<br>
+                <strong>📌 关键参数</strong>：变异率(0.12~0.2)、精英比例(0.05~0.1)、种群规模(150~300)。</p>
+            </div>
+        </div>
+
+        <!-- 标准模拟退火 -->
+        <div class="card">
+            <div class="card-header">
+                <h2><span class="icon-em">🟠</span> 标准模拟退火</h2>
+                <div class="badge">SimulatedAnnealing</div>
+            </div>
+            <div class="card-content">
+                <p><strong>核心思想</strong>：模拟金属退火过程，以一定概率接受劣质解，避免局部最优。</p>
+                <div class="code-block">
+                    <strong>编码与邻域</strong><br>
+                    个体格式同改进GA。<br>
+                    邻域操作：随机交换工序顺序 / 随机改变资源 / 两者组合。
+                </div>
+                <table class="param-table">
+                    <tr><td>初始温度</td><td>1000</td></tr>
+                    <tr><td>降温速率</td><td>0.95 (指数降温)</td></tr>
+                    <tr><td>每温度迭代次数</td><td>100~200</td></tr>
+                    <tr><td>停止温度</td><td>0.1</td></tr>
+                </table>
+                <p><strong>✅ 优点</strong>：单点搜索，内存占用小，易于实现。<br>
+                <strong>⚠️ 局限</strong>：参数敏感，容易早熟，对复杂问题效果不稳定。</p>
+            </div>
+        </div>
+
+        <!-- 自适应模拟退火 -->
+        <div class="card">
+            <div class="card-header">
+                <h2><span class="icon-em">🔴</span> 自适应模拟退火</h2>
+                <div class="badge">AdaptiveSA</div>
+            </div>
+            <div class="card-content">
+                <p><strong>核心改进</strong>：停滞检测 + 动态降温 + 回火机制，自动调整搜索行为。</p>
+                <div class="code-block">
+                    <strong>自适应策略</strong><br>
+                    • 连续无改进时减慢降温 (cooling_rate → 0.995)<br>
+                    • 回火：温度过低且停滞时，温和升温 (×1.4)，最多2次<br>
+                    • 固定每温度迭代次数，避免动态调整导致不收敛
+                </div>
+                <table class="param-table">
+                    <tr><td>初始温度</td><td>1200</td></tr>
+                    <tr><td>基础降温率</td><td>0.97</td></tr>
+                    <tr><td>每温度迭代</td><td>300 (固定)</td></tr>
+                    <tr><td>停滞阈值</td><td>8次无改进触发慢降温</td></tr>
+                    <tr><td>回火因子</td><td>1.6，最大2次</td></tr>
+                </table>
+                <p><strong>✅ 优点</strong>：对参数不敏感，能跳出局部最优，解质量优于标准SA。<br>
+                <strong>📌 适用场景</strong>：复杂调度问题，且希望减少手动调参。</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 统一调度模拟核心 -->
+    <div style="background: #fefce8; border-radius: 1.5rem; margin: 2rem 0; padding: 1.5rem 2rem;">
+        <h3 style="margin-top:0; display:flex; align-items:center; gap:0.5rem;">⚙️ 统一调度模拟核心 (所有算法共用)</h3>
+        <ul class="feature-list">
+            <li><strong>资源冲突矩阵</strong>：同一工人不同设备冲突 + 同一设备不同工人冲突 → 确保资源互斥正确。</li>
+            <li><strong>转移时间矩阵</strong>：图斑间地理移动耗时 (基于距离/速度)。</li>
+            <li><strong>空间重叠惩罚</strong>：当两个图斑的工序时间区间重叠时，增加额外耗时 (重叠比率 × 加工时间)。</li>
+            <li><strong>事件驱动模拟</strong>：按工序顺序调度，动态更新资源释放时间，计算精确完工时间。</li>
+        </ul>
+        <div class="code-block" style="background:#fef3c7;">
+            <strong>伪代码示意</strong><br>
+            for each 工序 in 工序顺序:<br>
+            &nbsp;&nbsp; 选择资源，找出冲突资源集<br>
+            &nbsp;&nbsp; 开始时间 = max(资源释放时间, 转移时间, 前序工序完成时间)<br>
+            &nbsp;&nbsp; 迭代计算重叠惩罚，得到实际加工时间<br>
+            &nbsp;&nbsp; 更新资源释放时间，记录完工时间<br>
+            end<br>
+            makespan = max(所有图斑最后工序的完工时间)
+        </div>
+    </div>
+
+    <!-- 参数推荐与对比 -->
+    <div style="background: white; border-radius: 1.5rem; margin: 1.5rem 0; padding: 1.5rem 2rem; border: 1px solid #e2e8f0;">
+        <h3>📊 算法选择与参数建议</h3>
+        <table class="table-compare">
+            <thead>
+                <tr><th>算法</th><th>推荐规模</th><th>主要参数</th><th>预期工期(相对)</th> </tr>
+            </thead>
+            <tbody>
+                <tr><td>传统GA</td><td>小规模(图斑≤10)</td><td>种群100, 迭代150</td><td>高(串行下界)</td></tr>
+                <tr><td>改进GA</td><td>任意规模</td><td>种群200, 变异0.15, 精英0.1</td><td>中低(接近最优)</td></tr>
+                <tr><td>标准SA</td><td>小规模快速验证</td><td>初始温度1000, 降温0.95</td><td>中(参数敏感)</td></tr>
+                <tr><td>自适应SA</td><td>大规模复杂问题</td><td>初始温度1200, 每温度300次</td><td>低(鲁棒性强)</td></tr>
+            </tbody>
+        </table>
+        <hr style="margin:1rem 0">
+        <p><strong>💡 实践结论</strong>：改进GA在中等规模问题上表现均衡；自适应SA在大规模且地形复杂时能获得更优解，且无需精细调参。建议对比实验时固定随机种子，确保可比性。</p>
+    </div>
+
+</div>
+<button class="btn-scroll" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ 返回顶部</button>
+</body>
+</html>

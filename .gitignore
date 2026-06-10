@@ -1,0 +1,13 @@
+# Hugo source (local only, not committed)
+hugo-blog/
+
+# Local project notes (not for public repo)
+项目迭代记录.md
+
+# Local tools & config
+.claude/
+hugo.zip
+
+# OS
+.DS_Store
+Thumbs.db

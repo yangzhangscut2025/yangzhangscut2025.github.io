@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>六月计划看板 · 莫兰迪色系</title>
+    <!-- Chart.js 轻量图表 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #ebe6de;  /* 暖灰基底 */
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, 'Roboto', sans-serif;
+            padding: 28px 24px;
+            color: #2d3a3a;
+        }
+
+        /* 柔和莫兰迪主容器 */
+        .dashboard {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: #f6f3ef;   /* 米白纸色 */
+            border-radius: 28px;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.02);
+            overflow: hidden;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            backdrop-filter: blur(0px);
+            border: 1px solid #e2dbd0;
+        }
+
+        /* 左侧表格区 */
+        .task-table-section {
+            flex: 2.6;
+            min-width: 0;
+            background: #fefcf9;
+            border-right: 1px solid #e3dcd2;
+            padding: 20px 0 24px 20px;
+        }
+
+        /* 右侧面板 */
+        .stats-section {
+            flex: 1.2;
+            background: #faf8f4;
+            padding: 24px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 26px;
+        }
+
+        /* 头部 */
+        .month-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            padding-right: 20px;
+            gap: 14px;
+        }
+
+        .month-title {
+            font-size: 1.7rem;
+            font-weight: 500;
+            letter-spacing: -0.3px;
+            color: #4a5b5b;
+            background: none;
+            -webkit-background-clip: unset;
+            background: none;
+            color: #526868;
+            border-left: 4px solid #b3b8a2;
+            padding-left: 16px;
+            font-weight: 480;
+        }
+
+        .add-task-bar {
+            display: flex;
+            gap: 10px;
+            background: #efebe5;
+            padding: 5px 12px 5px 8px;
+            border-radius: 60px;
+            box-shadow: inset 0 0 0 1px #e9e2d9, 0 1px 2px rgba(0,0,0,0.02);
+        }
+
+        .add-task-bar input {
+            border: none;
+            background: #fffdf9;
+            border-radius: 40px;
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            width: 170px;
+            outline: none;
+            font-family: inherit;
+            color: #3c4a4a;
+            box-shadow: 0 1px 1px rgba(0,0,0,0.02);
+            border: 1px solid #dbd2c7;
+        }
+
+        .add-task-bar input:focus {
+            border-color: #b2b99a;
+            box-shadow: 0 0 0 2px rgba(150, 150, 120, 0.15);
+        }
+
+        .btn-sm {
+            background: #b7bfa3;
+            border: none;
+            color: #2f3e3e;
+            padding: 6px 20px;
+            border-radius: 40px;
+            font-weight: 470;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            letter-spacing: 0.2px;
+            box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+        }
+
+        .btn-sm:hover {
+            background: #a3ad8b;
+            color: #1e2c2c;
+            transform: translateY(-0.5px);
+        }
+
+        /* 顶部每日圆环区域 - 柔和 */
+        .daily-rings-container {
+            background: #fefbf7;
+            border-radius: 24px;
+            margin-bottom: 20px;
+            padding: 12px 6px 10px 6px;
+            border: 1px solid #e6dfd5;
+            overflow-x: auto;
+            white-space: nowrap;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.01), 0 1px 1px rgba(0,0,0,0.02);
+        }
+
+        .daily-rings-wrapper {
+            display: inline-flex;
+            gap: 14px;
+            padding: 0 12px;
+        }
+
+        .daily-ring-item {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            width: 62px;
+            flex-shrink: 0;
+        }
+
+        .daily-ring-canvas {
+            width: 48px;
+            height: 48px;
+            display: block;
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.05));
+        }
+
+        .daily-ring-label {
+            font-size: 0.7rem;
+            font-weight: 470;
+            margin-top: 8px;
+            color: #5a6b6b;
+            text-align: center;
+            background: #f1ede7;
+            padding: 2px 6px;
+            border-radius: 40px;
+            width: fit-content;
+        }
+
+        .daily-ring-label small {
+            font-size: 0.6rem;
+            color: #8b9a8e;
+            display: inline;
+            margin-left: 2px;
+        }
+
+        /* 表格外层 */
+        .table-wrapper {
+            border-radius: 22px;
+            border: 1px solid #e2dbcf;
+            overflow: auto;
+            max-height: 62vh;
+            background: #fffdfa;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+
+        .task-grid {
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 0.8rem;
+            min-width: 1000px;
+        }
+
+        .task-grid th,
+        .task-grid td {
+            border-bottom: 1px solid #ece4db;
+            border-right: 1px solid #ece4db;
+            padding: 12px 8px;
+            text-align: center;
+            vertical-align: middle;
+            background-color: #fffdfa;
+        }
+
+        .task-grid th {
+            background: #f6f1ea;
+            font-weight: 500;
+            color: #4c5e5e;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            border-bottom: 1px solid #e2d8ce;
+            font-size: 0.75rem;
+            letter-spacing: 0.3px;
+        }
+
+        /* 固定首列 */
+        .task-grid th:first-child,
+        .task-grid td:first-child {
+            position: sticky;
+            left: 0;
+            background-color: #fffdfa;
+            z-index: 10;
+            box-shadow: 2px 0 6px -4px rgba(0, 0, 0, 0.03);
+            min-width: 270px;
+        }
+
+        .task-grid th:first-child {
+            z-index: 30;
+            background: #f6f1ea;
+        }
+
+        .date-cell {
+            font-weight: 470;
+            font-size: 0.75rem;
+            line-height: 1.3;
+        }
+
+        .weekday {
+            font-size: 0.68rem;
+            color: #7e8b82;
+            font-weight: normal;
+        }
+
+        /* 复选框轻柔色 */
+        .checker {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #b1ba9b;
+            transform: scale(1);
+            filter: grayscale(0.1);
+        }
+
+        /* 任务左侧布局 */
+        .task-left-cell {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .task-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 2;
+        }
+
+        .mini-ring {
+            width: 44px;
+            height: 44px;
+            flex-shrink: 0;
+        }
+
+        .mini-ring canvas {
+            width: 44px;
+            height: 44px;
+            display: block;
+        }
+
+        .task-name {
+            font-weight: 490;
+            font-size: 0.88rem;
+            color: #3d4f4f;
+            letter-spacing: -0.2px;
+            word-break: break-word;
+            max-width: 140px;
+        }
+
+        .del-btn {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #b7ab99;
+            padding: 4px 6px;
+            border-radius: 30px;
+            transition: 0.2s;
+        }
+
+        .del-btn:hover {
+            color: #bb8877;
+            background: #f4ede5;
+        }
+
+        /* 右侧卡片静雅 */
+        .stat-card {
+            background: #fffcf8;
+            border-radius: 24px;
+            padding: 18px 18px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02), 0 0 0 1px #ece3db;
+            transition: all 0.1s ease;
+        }
+
+        .stat-title {
+            font-size: 0.95rem;
+            font-weight: 480;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #5f716b;
+            border-left: 3px solid #c7cdb3;
+            padding-left: 12px;
+            letter-spacing: 0.2px;
+        }
+
+        .percentage-big {
+            font-size: 2rem;
+            font-weight: 460;
+            color: #70877c;
+            text-align: center;
+            margin-top: 4px;
+            font-feature-settings: "tnum";
+        }
+
+        .chart-container {
+            position: relative;
+            height: 165px;
+            margin: 4px 0;
+        }
+
+        .daily-chart-container {
+            height: 210px;
+            margin-top: 6px;
+        }
+
+        .summary-text {
+            font-size: 0.7rem;
+            color: #879388;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        footer {
+            font-size: 0.68rem;
+            text-align: center;
+            padding-top: 12px;
+            color: #9eaa97;
+            border-top: 1px solid #e7dfd5;
+            margin-top: 6px;
+        }
+
+        @media (max-width: 900px) {
+            .dashboard {
+                flex-direction: column;
+            }
+            .task-table-section {
+                border-right: none;
+                padding-right: 20px;
+            }
+            body {
+                padding: 16px;
+            }
+        }
+
+        /* 滚动条柔化 */
+        .table-wrapper::-webkit-scrollbar, .daily-rings-container::-webkit-scrollbar {
+            height: 6px;
+            width: 6px;
+        }
+        .table-wrapper::-webkit-scrollbar-track {
+            background: #ede6de;
+            border-radius: 8px;
+        }
+        .table-wrapper::-webkit-scrollbar-thumb {
+            background: #cbc2b5;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard">
+    <div class="task-table-section">
+        <div class="month-header">
+            <div class="month-title">📅 2026年6月 · 日常锚点</div>
+            <div class="add-task-bar">
+                <input type="text" id="newTaskName" placeholder="如: 散步20分钟" maxlength="28">
+                <button class="btn-sm" id="addTaskBtn">+ 添加任务</button>
+            </div>
+        </div>
+
+        <!-- 顶部每日完成任务圆环 (30天) -->
+        <div class="daily-rings-container">
+            <div class="daily-rings-wrapper" id="dailyRingsWrapper"></div>
+        </div>
+
+        <div class="table-wrapper">
+            <table class="task-grid" id="taskTable">
+                <thead id="tableHeader"></thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+        <div class="summary-text" style="margin-top: 14px; text-align: left; padding-left: 8px; color:#8d9b8a;">
+            ✧ 点击方格打卡 · 所有进度自动留存 ✧
+        </div>
+    </div>
+
+    <div class="stats-section">
+        <div class="stat-card">
+            <div class="stat-title">𓂀 整体完成度</div>
+            <div class="chart-container">
+                <canvas id="donutChart" width="200" height="160" style="max-height: 160px; width: 100%"></canvas>
+            </div>
+            <div class="percentage-big" id="totalPercentDisplay">0%</div>
+            <div class="summary-text" id="totalStatsDetail">已完成 0 / 总计 0 项打卡</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-title">ᯓ 每日进度趋势 (完成数)</div>
+            <div class="daily-chart-container">
+                <canvas id="barChart" width="500" height="200" style="width:100%; height:200px"></canvas>
+            </div>
+            <div class="summary-text">横轴: 6月1日 → 6月30日 &nbsp;|&nbsp; 每日完成的任务个数</div>
+        </div>
+        <footer>⚬ 数据存储于本地 · 刷新不丢失 ⚬</footer>
+    </div>
+</div>
+
+<script>
+    // ---------- 全局数据 ----------
+    let tasks = [];            // { id, name, completions: [30 booleans] }
+    let days = [];            // [{ display, weekday }]
+    let donutChart = null;
+    let barChart = null;
+    const STORAGE_KEY = 'june_planner_morandi';
+
+    // 生成6月日期
+    function generateDays() {
+        const year = 2026, month = 5;
+        const arr = [];
+        for (let d = 1; d <= 30; d++) {
+            const date = new Date(year, month, d);
+            const weekMap = ['日', '一', '二', '三', '四', '五', '六'];
+            arr.push({ display: `${month+1}/${d}`, weekday: weekMap[date.getDay()] });
+        }
+        return arr;
+    }
+
+    // 总体统计
+    function calcOverallStats() {
+        let totalCompleted = 0, totalPossible = 0;
+        tasks.forEach(t => {
+            totalPossible += t.completions.length;
+            t.completions.forEach(v => { if (v) totalCompleted++; });
+        });
+        const percent = totalPossible === 0 ? 0 : (totalCompleted / totalPossible) * 100;
+        return { totalCompleted, totalPossible, percent };
+    }
+
+    // 每日完成数量
+    function calcDailyCompleted() {
+        const daily = new Array(30).fill(0);
+        tasks.forEach(t => {
+            t.completions.forEach((val, idx) => { if (val) daily[idx]++; });
+        });
+        return daily;
+    }
+
+    // 每天完成百分比 (0-100)
+    function getDailyPercent() {
+        const totalTasks = tasks.length;
+        if (totalTasks === 0) return new Array(30).fill(0);
+        const dailyCounts = calcDailyCompleted();
+        return dailyCounts.map(count => (count / totalTasks) * 100);
+    }
+
+    function getTaskPercent(task) {
+        const total = task.completions.length;
+        const done = task.completions.filter(v => v === true).length;
+        return total === 0 ? 0 : (done / total) * 100;
+    }
+
+    function saveToLocal() {
+        const store = tasks.map(t => ({ id: t.id, name: t.name, completions: [...t.completions] }));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+    }
+
+    function loadTasks() {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+            try {
+                const parsed = JSON.parse(stored);
+                if (Array.isArray(parsed)) {
+                    tasks = parsed.map(t => ({
+                        id: t.id,
+                        name: t.name,
+                        completions: Array.isArray(t.completions) && t.completions.length === 30 ? t.completions : new Array(30).fill(false)
+                    }));
+                    return;
+                }
+            } catch(e) {}
+        }
+        // 默认任务：柔和演示打卡
+        const c1 = new Array(30).fill(false);
+        const c2 = new Array(30).fill(false);
+        for (let i = 0; i < 5; i++) c1[i] = true;
+        c1[7] = true; c1[14] = true;
+        c2[0] = true; c2[2] = true; c2[4] = true; c2[6] = true; c2[9] = true; c2[12] = true;
+        tasks = [
+            { id: 'default_1', name: '⛅ 牛客网刷题', completions: c1 },
+            { id: 'default_2', name: '🌿 看10个单词', completions: c2 }
+        ];
+    }
+
+    // 绘制圆环（通用，莫兰迪配色）
+    function drawRing(canvasElem, percent, size = 44) {
+        if (!canvasElem) return;
+        canvasElem.width = size;
+        canvasElem.height = size;
+        const ctx = canvasElem.getContext('2d');
+        const radius = size/2 - 3;
+        const centerX = size/2;
+        const centerY = size/2;
+        const startAngle = -0.5 * Math.PI;
+        const endAngle = startAngle + (Math.PI * 2 * (percent / 100));
+        ctx.clearRect(0, 0, size, size);
+        // 背景环 浅灰褐
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+        ctx.strokeStyle = "#dfd6cb";
+        ctx.lineWidth = 3.2;
+        ctx.stroke();
+        // 进度环 低饱和鼠尾草绿
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+        ctx.strokeStyle = "#92a78e";
+        ctx.lineWidth = 3.5;
+        ctx.stroke();
+        ctx.font = `500 ${size * 0.28}px "Inter", system-ui`;
+        ctx.fillStyle = "#5b6e63";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(`${Math.round(percent)}%`, centerX, centerY);
+    }
+
+    // 渲染顶部每日圆环 (30个)
+    function renderDailyRings() {
+        const wrapper = document.getElementById('dailyRingsWrapper');
+        if (!wrapper) return;
+        const dailyPercent = getDailyPercent();
+        let html = '';
+        for (let i = 0; i < days.length; i++) {
+            const day = days[i];
+            html += `
+                <div class="daily-ring-item">
+                    <canvas class="daily-ring-canvas" data-day-index="${i}" width="48" height="48" style="width:48px;height:48px;"></canvas>
+                    <div class="daily-ring-label">${day.display}<small>${day.weekday}</small></div>
+                </div>
+            `;
+        }
+        wrapper.innerHTML = html;
+        const canvases = document.querySelectorAll('.daily-ring-canvas');
+        canvases.forEach(canvas => {
+            const idx = parseInt(canvas.getAttribute('data-day-index'), 10);
+            if (!isNaN(idx)) {
+                drawRing(canvas, dailyPercent[idx], 48);
+            }
+        });
+    }
+
+    function renderTaskRings() {
+        const canvases = document.querySelectorAll('.task-ring-canvas');
+        canvases.forEach(canvas => {
+            const tid = canvas.getAttribute('data-task-id');
+            const task = tasks.find(t => t.id === tid);
+            if (task) {
+                drawRing(canvas, getTaskPercent(task), 44);
+            }
+        });
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    function renderTable() {
+        const thead = document.getElementById('tableHeader');
+        const tbody = document.getElementById('tableBody');
+        if (!thead || !tbody) return;
+        let headerHtml = '<tr><th style="min-width: 270px;">✧ 任务 · 个人圆环</th>';
+        days.forEach(day => {
+            headerHtml += `<th class="date-cell">${day.display}<span class="weekday"><br>${day.weekday}</span></th>`;
+        });
+        headerHtml += '</tr>';
+        thead.innerHTML = headerHtml;
+
+        if (tasks.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="31" style="text-align:center; padding:40px; color:#9baa95;">✧ 添加任务，开启六月轨迹 ✧</td></tr>`;
+            return;
+        }
+
+        let bodyHtml = '';
+        tasks.forEach(task => {
+            bodyHtml += `<tr data-task-id="${task.id}">`;
+            bodyHtml += `<td style="text-align: left;">
+                            <div class="task-left-cell">
+                                <div class="task-info">
+                                    <div class="mini-ring">
+                                        <canvas class="task-ring-canvas" data-task-id="${task.id}" width="44" height="44" style="width:44px;height:44px;"></canvas>
+                                    </div>
+                                    <span class="task-name">${escapeHtml(task.name)}</span>
+                                </div>
+                                <button class="del-btn" data-task-id="${task.id}" title="删除任务">🗑️</button>
+                            </div>
+                           </td>`;
+            for (let dayIdx = 0; dayIdx < 30; dayIdx++) {
+                const checked = task.completions[dayIdx];
+                bodyHtml += `<td><input type="checkbox" class="checker" data-task-id="${task.id}" data-day-idx="${dayIdx}" ${checked ? 'checked' : ''}></td>`;
+            }
+            bodyHtml += `</tr>`;
+        });
+        tbody.innerHTML = bodyHtml;
+        renderTaskRings();
+    }
+
+    // 全局图表更新 (总体圆环 + 柱状图) 使用莫兰迪色
+    function updateGlobalCharts() {
+        if (!donutChart || !barChart) return;
+        const { totalCompleted, totalPossible, percent } = calcOverallStats();
+        const daily = calcDailyCompleted();
+        donutChart.data.datasets[0].data = [percent, 100 - percent];
+        donutChart.update();
+        document.getElementById('totalPercentDisplay').innerText = `${Math.round(percent)}%`;
+        document.getElementById('totalStatsDetail').innerHTML = `✓ 已完成 ${totalCompleted} / 总计 ${totalPossible} 项打卡`;
+        
+        const barLabels = days.map(d => `${d.display}\n${d.weekday}`);
+        barChart.data.labels = barLabels;
+        barChart.data.datasets[0].data = daily;
+        barChart.update();
+    }
+
+    function refreshFullUI() {
+        renderTable();
+        renderDailyRings();
+        updateGlobalCharts();
+        saveToLocal();
+    }
+
+    function updateTaskCompletion(taskId, dayIdx, checked) {
+        const task = tasks.find(t => t.id === taskId);
+        if (task && dayIdx >= 0 && dayIdx < 30) {
+            task.completions[dayIdx] = checked;
+        }
+    }
+
+    function addTask(taskName) {
+        const name = taskName.trim();
+        if (name === "") { alert("请填写任务内容"); return false; }
+        const newId = Date.now() + '-' + Math.random().toString(36).substr(2, 8);
+        tasks.push({ id: newId, name: name, completions: new Array(30).fill(false) });
+        return true;
+    }
+
+    function deleteTaskById(taskId) {
+        const idx = tasks.findIndex(t => t.id === taskId);
+        if (idx !== -1) { tasks.splice(idx, 1); return true; }
+        return false;
+    }
+
+    function bindEvents() {
+        const wrapper = document.querySelector('.table-wrapper');
+        if (!wrapper) return;
+        wrapper.addEventListener('change', (e) => {
+            const cb = e.target;
+            if (cb.classList && cb.classList.contains('checker')) {
+                const taskId = cb.getAttribute('data-task-id');
+                const dayIdx = parseInt(cb.getAttribute('data-day-idx'), 10);
+                const isChecked = cb.checked;
+                if (taskId && !isNaN(dayIdx)) {
+                    updateTaskCompletion(taskId, dayIdx, isChecked);
+                    refreshFullUI();
+                }
+            }
+        });
+        wrapper.addEventListener('click', (e) => {
+            const delBtn = e.target.closest('.del-btn');
+            if (delBtn && delBtn.getAttribute('data-task-id')) {
+                e.preventDefault();
+                const taskId = delBtn.getAttribute('data-task-id');
+                const task = tasks.find(t => t.id === taskId);
+                if (confirm(`删除任务「${task?.name}」？打卡记录会消失`)) {
+                    deleteTaskById(taskId);
+                    refreshFullUI();
+                }
+            }
+        });
+    }
+
+    function bindAddButton() {
+        const addBtn = document.getElementById('addTaskBtn');
+        const input = document.getElementById('newTaskName');
+        addBtn.addEventListener('click', () => {
+            if (addTask(input.value)) {
+                input.value = '';
+                refreshFullUI();
+            }
+        });
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') { e.preventDefault(); addBtn.click(); }
+        });
+    }
+
+    function initCharts() {
+        const ctxDonut = document.getElementById('donutChart').getContext('2d');
+        const ctxBar = document.getElementById('barChart').getContext('2d');
+        donutChart = new Chart(ctxDonut, {
+            type: 'doughnut',
+            data: { datasets: [{ data: [0, 100], backgroundColor: ['#9eb098', '#e6ded4'], borderWidth: 0, cutout: '68%' }] },
+            options: { responsive: true, plugins: { tooltip: { callbacks: { label: (ctx) => `${ctx.raw.toFixed(1)}%` } }, legend: { display: false } } }
+        });
+        barChart = new Chart(ctxBar, {
+            type: 'bar',
+            data: { labels: days.map(d => `${d.display}\n${d.weekday}`), datasets: [{ label: '完成的任务数', data: new Array(30).fill(0), backgroundColor: '#c1cfb2', borderRadius: 5, hoverBackgroundColor: '#afbf9d' }] },
+            options: {
+                responsive: true,
+                plugins: { legend: { position: 'top', labels: { boxWidth: 10, color: '#748277' } }, tooltip: { callbacks: { label: (ctx) => `${ctx.raw} 个任务` } } },
+                scales: { y: { beginAtZero: true, title: { display: true, text: '任务个数', color: '#8a9a89' }, grid: { color: '#e4dbd0' } }, x: { ticks: { autoSkip: true, maxRotation: 45, color: '#7d8f83' } } }
+            }
+        });
+        updateGlobalCharts();
+    }
+
+    function init() {
+        days = generateDays();
+        loadTasks();
+        renderTable();
+        renderDailyRings();
+        initCharts();
+        bindEvents();
+        bindAddButton();
+    }
+    window.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

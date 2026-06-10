@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="green-purple" data-mode="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AI 大模型与工具生态名录 · Kyra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'var(--primary)',secondary:'var(--secondary)',bg:'var(--bg)',card:'var(--card)',text:'var(--text)','text-soft':'var(--text-soft)',border:'var(--border)',hover:'var(--hover)'},borderRadius:{DEFAULT:'8px'},fontFamily:{sans:['Inter','Noto Sans SC','system-ui','sans-serif']}}}}</script>
+<link rel="stylesheet" href="/assets/css/base.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<style>.scroll-top-btn{opacity:0;pointer-events:none;transition:opacity .3s}@media(max-width:767px){.mobile-hidden{display:none}}</style>
+
+</head>
+<body data-page="blog" class="min-h-screen flex flex-col">
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[var(--bg)]/90 backdrop-blur-md border-b border-[var(--border)]">
+<div class="max-w-6xl mx-auto flex items-center justify-between px-6 py-3">
+<a href="/" class="text-lg font-bold text-[var(--text)] hover:text-[var(--primary)] transition-colors">Kyra</a>
+<div class="hidden md:flex items-center gap-6 text-sm font-medium">
+<a href="/" class="nav-link" data-nav="home">首页</a>
+<a href="/about/" class="nav-link" data-nav="about">关于我</a>
+<a href="/resume/" class="nav-link" data-nav="resume">简历</a>
+<a href="/works/" class="nav-link" data-nav="works">作品集</a>
+<a href="/blog/" class="nav-link" data-nav="blog">博客</a>
+<a href="/contact/" class="nav-link" data-nav="contact">联系我</a>
+</div>
+<div class="flex items-center gap-3 text-sm">
+<button id="langToggle" class="px-2 py-1 rounded-md border border-[var(--border)] text-[var(--text-soft)] hover:text-[var(--text)] bg-[var(--card)] text-xs font-medium" data-i18n="lang.label">EN</button>
+<button id="modeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Toggle dark mode">🌙</button>
+<div class="relative">
+<button id="themeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Switch theme">🎨</button>
+<div id="themePopover" class="hidden absolute right-0 top-10 bg-[var(--card)] border border-[var(--border)] rounded-lg shadow-md p-3 z-50" style="min-width:160px">
+<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)] mb-1" data-theme="green-purple">🟢🟣 绿紫</button>
+<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)]" data-theme="blue-yellow">🔵🟡 蓝黄</button>
+</div></div>
+<button id="hamburger" class="md:hidden text-xl text-[var(--text)]">☰</button>
+</div></div>
+<div id="mobileMenu" class="hidden md:hidden border-t border-[var(--border)] bg-[var(--card)] px-6 py-3 space-y-2">
+<a href="/" class="block py-2 nav-link" data-nav="home">首页</a>
+<a href="/about/" class="block py-2 nav-link" data-nav="about">关于我</a>
+<a href="/resume/" class="block py-2 nav-link" data-nav="resume">简历</a>
+<a href="/works/" class="block py-2 nav-link" data-nav="works">作品集</a>
+<a href="/blog/" class="block py-2 nav-link" data-nav="blog">博客</a>
+<a href="/contact/" class="block py-2 nav-link" data-nav="contact">联系我</a>
+</div></nav>
+
+
+<main class="flex-1 pt-24 pb-16">
+<div class="max-w-3xl mx-auto px-6">
+
+  
+  <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--text-soft)] hover:text-[var(--primary)] transition-colors mb-8">← 返回博客首页</a>
+
+  
+  <header class="mb-10">
+    <h1 class="text-2xl md:text-3xl font-bold text-[var(--text)] mb-4">AI 大模型与工具生态名录</h1>
+    <div class="flex flex-wrap items-center gap-4 text-sm text-[var(--text-soft)]">
+      <span>2026-06-07</span>
+      <span>·</span>
+      <span>预计阅读 14 分钟</span>
+      
+      <span class="px-2 py-0.5 rounded-full bg-[var(--primary-soft)] text-[var(--primary)] text-xs">AI学习</span>
+      
+    </div>
+  </header>
+
+  
+  <article class="prose prose-slate max-w-none text-[var(--text)] leading-relaxed
+    [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:mt-10 [&_h2]:mb-4
+    [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3
+    [&_p]:mb-5 [&_p]:leading-relaxed
+    [&_ul]:mb-5 [&_ol]:mb-5 [&_li]:mb-2
+    [&_code]:bg-[var(--hover)] [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-sm
+    [&_pre]:bg-[var(--hover)] [&_pre]:p-4 [&_pre]:rounded-lg [&_pre]:overflow-x-auto [&_pre]:mb-5
+    [&_pre_code]:bg-transparent [&_pre_code]:p-0
+    [&_table]:w-full [&_table]:border-collapse [&_table]:mb-5
+    [&_th]:border [&_th]:border-[var(--border)] [&_th]:p-2 [&_th]:bg-[var(--hover)] [&_th]:text-sm [&_th]:font-semibold
+    [&_td]:border [&_td]:border-[var(--border)] [&_td]:p-2 [&_td]:text-sm
+    [&_img]:rounded-lg [&_img]:max-w-full [&_img]:h-auto [&_img]:my-4
+    [&_blockquote]:border-l-4 [&_blockquote]:border-[var(--primary)] [&_blockquote]:pl-4 [&_blockquote]:text-[var(--text-soft)] [&_blockquote]:italic [&_blockquote]:mb-5
+    [&_a]:text-[var(--primary)] [&_a]:underline
+  ">
+    <p><strong>笔记简介</strong>：本文为2026年AI工程体系系统化学习笔记，聚焦<strong>数据/AI工程、大模型落地、Agent应用搭建</strong>核心领域，剔除基础通识概念，精准收录业界主流大模型、工程实操工具、低代码开发平台及AI工程核心术语。全文统一采用「通俗释义+工程定位+落地场景」的撰写规范，明确区分开源与闭源、云端与私有化、原型验证与生产级工具的差异化定位，覆盖AI学习、项目实战、面试备考、产业落地全场景，可作为系统化掌握AI应用工程、数据流水线、智能体落地的专业工具书。</p>
+<h2 id="一主流ai大模型名录">一、主流AI大模型名录</h2>
+<h3 id="11-海外闭源商用大模型工业级能力api调用为主">1.1 海外闭源商用大模型（工业级能力，API调用为主）</h3>
+<ul>
+<li><strong>GPT-4o / GPT-4 Turbo</strong>：OpenAI旗舰级通用大模型，在多模态理解、逻辑推理、工具调用能力上处于业界领先水平，适用于各类复杂通用落地场景。</li>
+<li><strong>Claude 3.5/4 Sonnet/Opus</strong>：Anthropic推出的商用大模型，具备超长上下文窗口、优异的代码解析能力与低幻觉特性，是企业级知识库、长文档处理场景的优选模型。</li>
+<li><strong>Gemini 1.5/2.5 Pro/Ultra</strong>：Google原生多模态大模型，支持超长音视频、文本多类型数据解析，多模态融合能力突出，适配复杂多媒体综合处理场景。</li>
+<li><strong>Grok-3/4</strong>：xAI推出的通用大模型，具备较强的实时信息适配能力，社区生态活跃，多用于轻量化AI场景开发与原型验证。</li>
+</ul>
+<h3 id="12-海外开源大模型可本地部署微调私有化工程核心">1.2 海外开源大模型（可本地部署、微调、私有化，工程核心）</h3>
+<ul>
+<li><strong>Llama 3/4（Meta）</strong>：业界开源大模型标杆，生态体系最为完善，广泛适配模型微调、推理部署、二次开发场景，是AI工程通用基础底座。</li>
+<li><strong>Mistral/Mixtral</strong>：轻量化高性能开源模型，采用MoE混合专家架构，具备推理速度快、显存占用低的优势，是工程部署场景的优选模型。</li>
+<li><strong>Falcon</strong>：商用友好型开源大模型，运行稳定性强，适配企业私有化部署与轻量化定制场景。</li>
+<li><strong>Phi-3/4（微软）</strong>：轻量小型开源模型，代码编写与逻辑推理能力优异，适配端侧设备与低算力本地部署场景。</li>
+</ul>
+<h3 id="13-国产主流大模型中文优化合规落地政企场景专用">1.3 国产主流大模型（中文优化、合规落地、政企场景专用）</h3>
+<ul>
+<li><strong>通义千问Qwen 2.5/3.5（阿里）</strong>：国产主流大模型，支持超长上下文，同时提供开源与商用版本，中文理解能力均衡，广泛适配RAG知识库构建、模型微调等场景。</li>
+<li><strong>文心一言4.0（百度）</strong>：具备强知识增强能力，适配搜索联动、企业知识库搭建、政企数字化落地等场景。</li>
+<li><strong>讯飞星火V3.5（科大讯飞）</strong>：兼具语音与文本双维度处理优势，深耕教育、医疗、政企服务等垂直落地场景。</li>
+<li><strong>豆包（字节）</strong>：主流C端通用大模型，交互体验流畅，多模态与语音交互能力成熟，适用于轻量化AI应用与日常智能交互场景。</li>
+<li><strong>Kimi（月之暗面）</strong>：长文本解析标杆模型，支持超大体积文件上传与百万级字符文档无损解析，适用于文献梳理、资料汇总、长文档问答场景。</li>
+<li><strong>DeepSeek LLM/Coder（深度求索）</strong>：代码能力突出的开源大模型，生态开放友好，专注适配AI编程、工程脚本开发、算法落地等技术场景。</li>
+<li><strong>智谱清言GLM-4/5</strong>：学术推理与逻辑分析能力优异，企业级服务与私有化部署方案成熟，适配专业领域落地场景。</li>
+<li><strong>华为云盘古大模型</strong>：主打行业定制化能力，深度适配工业、政务、气象等垂直领域的智能化落地需求。</li>
+</ul>
+<h2 id="二主流ai工具软件名录">二、主流AI工具/软件名录</h2>
+<h3 id="21-ai编程ide工具开发工程调试核心">2.1 AI编程IDE工具（开发、工程调试核心）</h3>
+<ul>
+<li><strong>Cursor</strong>：主流AI原生IDE，基于VS Code二次开发，支持多文件联动编辑、项目级代码生成、调试与重构，是开发者高效编码工具。</li>
+<li><strong>GitHub Copilot</strong>：VS Code主流AI插件，提供实时代码补全、语法纠错与规范优化，用于日常开发提效。</li>
+<li><strong>Claude Code</strong>：终端轻量化AI编程助手，具备百万级超长上下文能力，擅长大型代码库解析、全局逻辑梳理与项目重构。</li>
+<li><strong>Codeium</strong>：免费跨语言AI编程工具，支持离线使用与私有化部署，适配多场景开发提效。</li>
+<li><strong>通义灵码</strong>：国产免费AI代码助手，深度适配国内主流开发语言与项目架构，适配本土化开发场景。</li>
+</ul>
+<h3 id="22-llm应用开发框架ragagent工程核心">2.2 LLM应用开发框架（RAG/Agent工程核心）</h3>
+<ul>
+<li><strong>LangChain</strong>：业界通用LLM应用开发框架，支持链式调用、智能体构建、记忆管理与RAG知识库开发，覆盖全场景AI应用搭建需求。</li>
+<li><strong>LlamaIndex</strong>：专注数据接入与检索优化的LLM框架，对私有数据适配性强，是私有化RAG落地的优选工具。</li>
+<li><strong>LangGraph</strong>：LangChain进阶框架，支持复杂智能体工作流编排、状态持久化与循环任务调度，适配高阶Agent工程开发。</li>
+<li><strong>Dify</strong>：开源、支持私有化部署的 <strong>生产级低代码AI应用框架</strong> 。具备完善的工程化能力，支持自定义RAG知识库、复杂Agent工作流、权限管控、日志审计、API对接与监控告警。面向开发者与企业AI工程场景，适用于搭建可运维、可迭代的正式企业AI服务，是私有化AI落地的主流平台。</li>
+<li><strong>Coze 扣子（字节）</strong>：云端 <strong>无代码快速AI应用搭建平台</strong> 。主打极速原型验证与轻量化场景落地，开箱即用，内置插件市场、知识库配置、多轮工作流与第三方集成能力。无需服务器部署，适用于个人开发、业务快速试错与C端机器人展示， <strong>不支持私有化部署，不具备深度工程定制与生产运维能力</strong> 。</li>
+<li><strong>RAGFlow</strong>：开源、可私有化部署的 <strong>专业级深度文档RAG引擎</strong> 。核心优势为复杂非结构化文档高精度解析，可有效识别PDF版式、表格、图表等复杂内容，解决传统RAG文档乱码、结构丢失、表格失效等痛点。内置精细化分块、知识图谱、多路召回、重排优化与完整权限API体系，部署与资源要求较高，适用于金融、法律、工业、政务等高精准、高合规要求的生产级RAG场景，是开源领域高精度RAG落地标杆工具。</li>
+<li><strong>AnythingLLM</strong>：轻量化、低门槛的 <strong>个人与小型团队私有化RAG平台</strong> 。主打开箱即用、多模型兼容、多格式文档导入与本地私有化部署能力，配置简单、上手成本低，可快速搭建轻量化私有问答服务。适用于个人学习、项目原型验证、小型内网知识库场景， <strong>工程定制能力有限，不适用于复杂企业级业务落地</strong> 。</li>
+</ul>
+<h3 id="23-模型推理部署工具ai工程算力运维专用">2.3 模型推理/部署工具（AI工程、算力运维专用）</h3>
+<ul>
+<li><strong>vLLM</strong>：工业级高性能大模型推理引擎，具备高吞吐、低延迟特性，是线上模型服务生产部署的主流选型。</li>
+<li><strong>llama.cpp / GGUF</strong>：轻量化模型推理工具，支持CPU、GPU混合推理与本地私有化部署，适配低算力设备的大模型运行场景。</li>
+<li><strong>FastGPT</strong>：可视化RAG部署平台，支持快速构建私有知识库与对话服务，降低AI知识库落地代码门槛。</li>
+<li><strong>Triton Inference Server</strong>：英伟达开源生产级推理服务框架，支持多模型统一托管、高并发调度与推理优化，适配企业级模型部署运维。</li>
+</ul>
+<h3 id="24-数据工程ai流水线工具核心方向">2.4 数据工程/AI流水线工具（核心方向）</h3>
+<ul>
+<li><strong>LabelStudio</strong>：开源全能数据标注平台，支持文本、图像、语音多模态标注，是AI数据集构建、数据治理的核心工具。</li>
+<li><strong>Airflow</strong>：开源工作流调度工具，用于搭建自动化AI数据流水线，实现数据处理全流程定时调度与自动化执行。</li>
+<li><strong>MLflow</strong>：AI全生命周期管理工具，涵盖实验记录、模型版本管控、训练日志追踪，保障AI实验可追溯、结果可复现。</li>
+<li><strong>DVC</strong>：开源数据版本管理工具，对标Git代码版本管理逻辑，专门用于数据集版本管控、迭代追溯，解决AI数据迭代混乱、无法回滚的问题。</li>
+</ul>
+<h2 id="三agent工程核心概念">三、Agent工程核心概念</h2>
+<h3 id="31-harnessai驾驭工程模型脚手架">3.1 Harness（AI驾驭工程/模型脚手架）</h3>
+<p><strong>通俗定义</strong>：大模型运行的「管控脚手架与规则约束系统」。</p>
+<p><strong>核心逻辑</strong>：大模型负责逻辑推理与内容生成，Harness负责保障服务<strong>稳定、精</strong> <strong>准、可控、可落地</strong> 。</p>
+<p><strong>核心能力</strong>：上下文截断管理、工具调用容错重试、任务异常兜底、安全风控、权限管控、缓存调度、运行异常处理。</p>
+<p><strong>工程价值</strong>：解决大模型天生不稳定、易产生幻觉、工具调用异常、上下文溢出等线上问题，是企业级AI服务稳定运行的核心底座。</p>
+<h3 id="32-skillagent标准化技能包">3.2 Skill（Agent标准化技能包）</h3>
+<p><strong>通俗定义</strong>：智能体可复用的 <strong>标准化封装业务能力模块</strong> 。</p>
+<p><strong>与Tool（工具）的区别</strong>：</p>
+<ul>
+<li>Tool：单一原始能力（单纯调用一个API、查询一个接口）</li>
+<li>Skill：封装后的完整业务流程（鉴权→调用工具→数据处理→格式输出→异常兜底）</li>
+</ul>
+<p><strong>典型<strong><strong>Skill</strong></strong>落地</strong> <strong>案例</strong>：客户工单查询、企业文档智能总结、设备运行数据统计、自动化报表生成等标准化业务流程。</p>
+<h3 id="33-prompt提示词">3.3 Prompt（提示词）</h3>
+<p><strong>通俗定义</strong>：约束大模型输出逻辑与格式的标准化指令规范，是引导模型精准输出目标结果的核心输入。</p>
+<p><strong>工程定位</strong>：成本最低、落地最高效的模型调优方式，无需修改模型参数与权重，仅通过文本规则约束模型行为、统一输出规范。</p>
+<p><strong>工程分类</strong>：</p>
+<ul>
+<li><strong>基础Prompt</strong>：单轮简单指令，用于文案生成、基础问答；结构简单、无上下文依赖。</li>
+<li><strong>结构化Prompt</strong>：包含角色、规则、约束、输出格式、禁止项，用于标准化业务输出。</li>
+<li><strong>Few-shot Prompt</strong>：附带样例示范，让模型模仿固定格式、固定逻辑输出，大幅降低随机性。</li>
+<li><strong>CoT Prompt（思维链）</strong>：引导模型分步推理，解决数学、逻辑、数据分析等复杂问题。</li>
+</ul>
+<p><strong>工程落地价值</strong>：统一模型输出格式、抑制模型幻觉、适配业务合规规范，降低后续数据微调与模型迭代成本，是AI应用落地的基础核心环节。</p>
+<h3 id="34-agent智能体">3.4 Agent（智能体）</h3>
+<p><strong>通俗定义</strong>：具备自主<strong>思考规划、工具调用、任务执行、记忆存储、异常纠错</strong>能力的自动化AI任务主体，可独立完成多步骤复杂业务任务，区别于单纯对话模型。</p>
+<p><strong>核心架构公式</strong>：Agent = LLM（大脑推理） + Skill（业务技能） + Harness（运行管控） + Memory（记忆） + Workflow（任务编排）</p>
+<p><strong>核心能力拆解（工程重点）</strong>：</p>
+<ul>
+<li><strong>意图识别</strong>：读懂用户复杂需求，区分单一任务/复合任务。</li>
+<li><strong>任务规划</strong>：将复杂需求拆解为多步可执行子任务。</li>
+<li><strong>技能调度</strong>：自主选择对应Skill/Tool完成任务，无需人工干预。</li>
+<li><strong>记忆管理</strong>：短期对话记忆+长期业务记忆，避免重复提问。</li>
+<li><strong>容错重试</strong>：工具调用失败、参数错误、结果异常时自动重试、兜底。</li>
+</ul>
+<p><strong>工程落地场景</strong>：自动化办公、智能工单流转、批量数据处理、企业知识库智能问答、设备运维分析、自定义业务流程自动化。</p>
+<h3 id="35-workflow智能体工作流">3.5 Workflow（智能体工作流）</h3>
+<p><strong>通俗定义</strong>：将多类Skill、工具能力、推理逻辑、分支判断规则编排为 <strong>标准化、固定化的任务流水线</strong> ，约束AI按照既定流程稳定执行复杂任务。</p>
+<p><strong>核心作用</strong>：规避智能体自主规划的随机性与不稳定性，通过固定流程约束业务逻辑，大幅提升任务执行准确率与业务稳定性。</p>
+<p><strong>工程特点</strong>：可配置、可复用、可监控、可追溯，完全适配生产环境标准化落地。</p>
+<p><strong>落地案例</strong>：企业文档处理流水线（文件上传→解析分块→清洗去重→向量化入库→智能问答返回）、设备数据报表生成流水线（数据拉取→统计分析→异常筛查→报表排版→结果导出）。</p>
+<h3 id="36-rag检索增强生成">3.6 RAG（检索增强生成）</h3>
+<p><strong>通俗定义</strong>：大模型外部知识增强方案，通过检索私有、实时外部资料辅助生成答案，规避模型静态知识滞后、凭空编造的问题，从根源降低幻觉风险。</p>
+<p><strong>工程定位</strong>：企业AI落地最主流、最高频的工程方案，相较于模型微调，具备低成本、迭代快、数据安全、实时更新的优势，是产业落地首选。</p>
+<p><strong>核心架构公式</strong>：RAG = 文档数据治理 + 文本分块 + Embedding向量化 + 向量库存储 + 相似度检索 + 上下文拼接 + LLM生成</p>
+<p><strong>完整工程链路（数据/AI工程核心）</strong>：</p>
+<ul>
+<li><strong>数据预处理</strong>：PDF/Word/Excel/网页原始文档解析、清洗、去重、脱敏、去除无效格式内容</li>
+<li><strong>文本分块（Chunk）</strong>：将长文本切分为固定长度、语义完整的小块，解决上下文限制、提升检索精准度</li>
+<li><strong>Embedding向量化</strong>：用嵌入模型将文本块转为高维向量，让机器可以计算文本相似度</li>
+<li><strong>向量库入库</strong>：向量+原文持久化存储（Milvus/Chroma/Qdrant/FAISS），支持快速检索</li>
+<li><strong>查询召回</strong>：用户问题向量化 → 向量库相似度匹配 → 召回Top-N相关文本块</li>
+<li><strong>上下文增强</strong>：将召回的真实资料拼接进Prompt，约束模型基于已知资料回答</li>
+<li><strong>结果生成</strong>：LLM结合用户问题+检索资料，输出精准、合规、无幻觉答案</li>
+</ul>
+<p><strong>工程核心优势（企业优先选用RAG而非微调的核心原因）</strong>：</p>
+<ul>
+<li>实时更新：知识库可随时新增/修改/删除，无需重新训练模型</li>
+<li>低成本：无需大量标注数据、无需GPU算力训练，落地门槛极低</li>
+<li>可追溯：回答有据可查，支持溯源引文，适合政企合规场景</li>
+<li>防幻觉：彻底解决模型“编造数据、编造文档”的核心问题</li>
+</ul>
+<p><strong>工程分级</strong>：</p>
+<ul>
+<li><strong>基础RAG</strong>：简单分块+向量召回+直接拼接，适合简单知识库问答</li>
+<li><strong>进阶RAG</strong>：重排、query改写、上下文压缩、多路召回、权限隔离，提升准确率</li>
+<li><strong>生产级RAG</strong>：数据流水线自动化、版本管理、监控告警、增量更新、日志溯源</li>
+</ul>
+<p><strong>落地场景</strong>：企业私有知识库问答、智能客服问答、行业文档检索、设备运维手册查询、企业内部资料答疑、长文本数据分析与总结。</p>
+
+  </article>
+
+  
+  <div class="mt-12 pt-8 border-t border-[var(--border)]">
+    <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--text-soft)] hover:text-[var(--primary)] transition-colors">← 返回博客首页</a>
+  </div>
+
+</div>
+</main>
+
+<button id="scrollTopBtn" class="scroll-top-btn fixed bottom-6 right-6 w-10 h-10 rounded-full bg-[var(--primary)] text-white shadow-md flex items-center justify-center text-lg z-40 hover:opacity-90" data-i18n-aria="back.top" aria-label="回到顶部">↑</button>
+<script src="/assets/js/theme.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/shared.js"></script>
+
+
+</body>
+</html>

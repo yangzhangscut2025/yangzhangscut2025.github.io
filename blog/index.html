@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="green-purple" data-mode="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>博客 · Kyra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'var(--primary)',secondary:'var(--secondary)',bg:'var(--bg)',card:'var(--card)',text:'var(--text)','text-soft':'var(--text-soft)',border:'var(--border)',hover:'var(--hover)'},borderRadius:{DEFAULT:'8px'},fontFamily:{sans:['Inter','Noto Sans SC','system-ui','sans-serif']}}}}</script>
+<link rel="stylesheet" href="/assets/css/base.css">
+
+<style>.scroll-top-btn{opacity:0;pointer-events:none;transition:opacity .3s}@media(max-width:767px){.mobile-hidden{display:none}}</style>
+</head>
+<body data-page="blog" class="min-h-screen flex flex-col">
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[var(--bg)]/90 backdrop-blur-md border-b border-[var(--border)]">
+<div class="max-w-6xl mx-auto flex items-center justify-between px-6 py-3">
+<a href="/" class="text-lg font-bold text-[var(--text)] hover:text-[var(--primary)] transition-colors">Kyra</a>
+<div class="hidden md:flex items-center gap-6 text-sm font-medium">
+<a href="/" class="nav-link" data-nav="home">首页</a>
+<a href="/about/" class="nav-link" data-nav="about">关于我</a>
+<a href="/resume/" class="nav-link" data-nav="resume">简历</a>
+<a href="/works/" class="nav-link" data-nav="works">作品集</a>
+<a href="/blog/" class="nav-link" data-nav="blog">博客</a>
+<a href="/contact/" class="nav-link" data-nav="contact">联系我</a>
+</div>
+<div class="flex items-center gap-3 text-sm">
+<button id="langToggle" class="px-2 py-1 rounded-md border border-[var(--border)] text-[var(--text-soft)] hover:text-[var(--text)] bg-[var(--card)] text-xs font-medium" data-i18n="lang.label">EN</button>
+<button id="modeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Toggle dark mode">🌙</button>
+<div class="relative">
+<button id="themeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Switch theme">🎨</button>
+<div id="themePopover" class="hidden absolute right-0 top-10 bg-[var(--card)] border border-[var(--border)] rounded-lg shadow-md p-3 z-50" style="min-width:160px">
+<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)] mb-1" data-theme="green-purple">🟢🟣 绿紫</button>
+<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)]" data-theme="blue-yellow">🔵🟡 蓝黄</button>
+</div></div>
+<button id="hamburger" class="md:hidden text-xl text-[var(--text)]">☰</button>
+</div></div>
+<div id="mobileMenu" class="hidden md:hidden border-t border-[var(--border)] bg-[var(--card)] px-6 py-3 space-y-2">
+<a href="/" class="block py-2 nav-link" data-nav="home">首页</a>
+<a href="/about/" class="block py-2 nav-link" data-nav="about">关于我</a>
+<a href="/resume/" class="block py-2 nav-link" data-nav="resume">简历</a>
+<a href="/works/" class="block py-2 nav-link" data-nav="works">作品集</a>
+<a href="/blog/" class="block py-2 nav-link" data-nav="blog">博客</a>
+<a href="/contact/" class="block py-2 nav-link" data-nav="contact">联系我</a>
+</div></nav>
+<main class="flex-1 pt-24 pb-16"><div class="max-w-6xl mx-auto px-6">
+<h1 class="text-3xl font-bold text-[var(--text)] mb-10">博客</h1>
+<div class="flex flex-col md:flex-row gap-8">
+<!-- Left sidebar: categories -->
+<aside class="md:w-52 shrink-0">
+<div class="md:sticky md:top-24 space-y-1">
+<h3 class="text-xs font-semibold text-[var(--text-soft)] uppercase tracking-wider mb-3">分类</h3>
+<a href="#" class="block px-3 py-2 rounded-md text-sm font-medium bg-[var(--primary-soft)] text-[var(--primary)]">AI学习</a>
+<a href="#" class="block px-3 py-2 rounded-md text-sm text-[var(--text-soft)] hover:bg-[var(--hover)] transition-colors">运筹优化</a>
+<a href="#" class="block px-3 py-2 rounded-md text-sm text-[var(--text-soft)] hover:bg-[var(--hover)] transition-colors">数学建模</a>
+<a href="#" class="block px-3 py-2 rounded-md text-sm text-[var(--text-soft)] hover:bg-[var(--hover)] transition-colors">数据分析</a>
+<a href="#" class="block px-3 py-2 rounded-md text-sm text-[var(--text-soft)] hover:bg-[var(--hover)] transition-colors">工业工程</a>
+<a href="#" class="block px-3 py-2 rounded-md text-sm text-[var(--text-soft)] hover:bg-[var(--hover)] transition-colors">读书笔记</a>
+</div>
+</aside>
+<!-- Right: content -->
+<div class="flex-1 min-w-0">
+<div class="space-y-8">
+<article class="pb-8 border-b border-[var(--border)]"><h2 class="text-lg font-semibold text-[var(--text)] mb-2 hover:text-[var(--primary)] transition-colors"><a href="/blog/posts/ai-learning-roadmap/">AI 整体学习路线图（附进度标记）</a></h2><p class="text-sm text-[var(--text-soft)] mb-3">从数学基础到大模型应用工程：传统机器学习、深度学习、RAG/Agent 的完整学习路径，附个人进度勾选。</p><div class="flex items-center gap-4 text-xs text-[var(--text-soft)]"><span>2026.06</span><span>·</span><span>预计阅读 4 分钟</span><span class="px-2 py-0.5 rounded-full bg-[var(--primary-soft)] text-[var(--primary)]">AI学习</span></div></article>
+<article class="pb-8 border-b border-[var(--border)]"><h2 class="text-lg font-semibold text-[var(--text)] mb-2 hover:text-[var(--primary)] transition-colors"><a href="/blog/posts/llm-fundamentals-engineering/">大模型基础认知笔记（数据/AI 工程方向）</a></h2><p class="text-sm text-[var(--text-soft)] mb-3">大模型完整技术链路详解：Token、上下文窗口、预训练→微调对齐→部署推理→运维迭代，面向工程岗必懂概念。</p><div class="flex items-center gap-4 text-xs text-[var(--text-soft)]"><span>2026.06</span><span>·</span><span>预计阅读 9 分钟</span><span class="px-2 py-0.5 rounded-full bg-[var(--primary-soft)] text-[var(--primary)]">AI学习</span></div></article>
+<article class="pb-8 border-b border-[var(--border)]"><h2 class="text-lg font-semibold text-[var(--text)] mb-2 hover:text-[var(--primary)] transition-colors"><a href="/blog/posts/ai-llm-tool-ecosystem/">AI 大模型与工具生态名录</a></h2><p class="text-sm text-[var(--text-soft)] mb-3">主流大模型、LLM 开发框架、RAG/Agent 工具、数据流水线平台系统化名录，区分开源/闭源、云端/私有化、原型验证/生产级。</p><div class="flex items-center gap-4 text-xs text-[var(--text-soft)]"><span>2026.06</span><span>·</span><span>预计阅读 14 分钟</span><span class="px-2 py-0.5 rounded-full bg-[var(--primary-soft)] text-[var(--primary)]">AI学习</span></div></article>
+<article class="pb-8 border-b border-[var(--border)]"><h2 class="text-lg font-semibold text-[var(--text)] mb-2 hover:text-[var(--primary)] transition-colors"><a href="/blog/posts/ai-tool-selection-guide/">AI 工具全场景实战体验与选型</a></h2><p class="text-sm text-[var(--text-soft)] mb-3">全品类 AI 工具横评：豆包、Kimi、Cursor、Claude Code + DeepSeek 实际体验，结合轻薄本硬件条件总结最优选型与开发边界。</p><div class="flex items-center gap-4 text-xs text-[var(--text-soft)]"><span>2026.06</span><span>·</span><span>预计阅读 7 分钟</span><span class="px-2 py-0.5 rounded-full bg-[var(--primary-soft)] text-[var(--primary)]">AI学习</span></div></article>
+<article class="pb-8 border-b border-[var(--border)]"><h2 class="text-lg font-semibold text-[var(--text)] mb-2 hover:text-[var(--primary)] transition-colors"><a href="/blog/posts/ai-career-directions/">AI 职业方向探索：应用开发·数据工程·产品</a></h2><p class="text-sm text-[var(--text-soft)] mb-3">系统梳理 AI 应用开发、数据/AI 工程、AI 产品三大方向的技能栈、学习路线与组合方案，适配个人职业规划。</p><div class="flex items-center gap-4 text-xs text-[var(--text-soft)]"><span>2026.06</span><span>·</span><span>预计阅读 8 分钟</span><span class="px-2 py-0.5 rounded-full bg-[var(--primary-soft)] text-[var(--primary)]">AI学习</span></div></article>
+<article class="pb-8 border-b border-[var(--border)]"><h2 class="text-lg font-semibold text-[var(--text)] mb-2 hover:text-[var(--primary)] transition-colors"><a href="/blog/posts/claude-code-deepseek-vscode/">Claude Code + DeepSeek + VS Code 配置流程</a></h2><p class="text-sm text-[var(--text-soft)] mb-3">从零搭建 Claude Code 开发环境：安装 Git/Node.js、配置 DeepSeek API、VS Code 插件集成，含常见报错解决。</p><div class="flex items-center gap-4 text-xs text-[var(--text-soft)]"><span>2026.06</span><span>·</span><span>预计阅读 12 分钟</span><span class="px-2 py-0.5 rounded-full bg-[var(--primary-soft)] text-[var(--primary)]">AI学习</span></div></article>
+<article class="pb-8 border-b border-[var(--border)]"><h2 class="text-lg font-semibold text-[var(--text)] mb-2 hover:text-[var(--primary)] transition-colors"><a href="/blog/posts/gurobi-intro/">Gurobi 基础建模入门笔记</a></h2><p class="text-sm text-[var(--text-soft)] mb-3">线性规划与整数规划的基础建模方法，Gurobi Python API 常用操作示例与求解流程。</p><div class="flex items-center gap-4 text-xs text-[var(--text-soft)]"><span>2025.12</span><span>·</span><span>预计阅读 10 分钟</span><span class="px-2 py-0.5 rounded-full bg-[var(--primary-soft)] text-[var(--primary)]">运筹优化</span></div></article>
+</div>
+</div>
+</div>
+</div></main>
+
+<button id="scrollTopBtn" class="scroll-top-btn fixed bottom-6 right-6 w-10 h-10 rounded-full bg-[var(--primary)] text-white shadow-md flex items-center justify-center text-lg z-40 hover:opacity-90" data-i18n-aria="back.top" aria-label="回到顶部">↑</button>
+<script src="/assets/js/theme.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/shared.js"></script>
+</body></html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="green-purple" data-mode="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Gurobi 基础建模入门笔记 · Kyra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'var(--primary)',secondary:'var(--secondary)',bg:'var(--bg)',card:'var(--card)',text:'var(--text)','text-soft':'var(--text-soft)',border:'var(--border)',hover:'var(--hover)'},borderRadius:{DEFAULT:'8px'},fontFamily:{sans:['Inter','Noto Sans SC','system-ui','sans-serif']}}}}</script>
+<link rel="stylesheet" href="/assets/css/base.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<style>.scroll-top-btn{opacity:0;pointer-events:none;transition:opacity .3s}@media(max-width:767px){.mobile-hidden{display:none}}</style>
+
+</head>
+<body data-page="blog" class="min-h-screen flex flex-col">
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[var(--bg)]/90 backdrop-blur-md border-b border-[var(--border)]">
+<div class="max-w-6xl mx-auto flex items-center justify-between px-6 py-3">
+<a href="/" class="text-lg font-bold text-[var(--text)] hover:text-[var(--primary)] transition-colors">Kyra</a>
+<div class="hidden md:flex items-center gap-6 text-sm font-medium">
+<a href="/" class="nav-link" data-nav="home">首页</a>
+<a href="/about/" class="nav-link" data-nav="about">关于我</a>
+<a href="/resume/" class="nav-link" data-nav="resume">简历</a>
+<a href="/works/" class="nav-link" data-nav="works">作品集</a>
+<a href="/blog/" class="nav-link" data-nav="blog">博客</a>
+<a href="/contact/" class="nav-link" data-nav="contact">联系我</a>
+</div>
+<div class="flex items-center gap-3 text-sm">
+<button id="langToggle" class="px-2 py-1 rounded-md border border-[var(--border)] text-[var(--text-soft)] hover:text-[var(--text)] bg-[var(--card)] text-xs font-medium" data-i18n="lang.label">EN</button>
+<button id="modeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Toggle dark mode">🌙</button>
+<div class="relative">
+<button id="themeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Switch theme">🎨</button>
+<div id="themePopover" class="hidden absolute right-0 top-10 bg-[var(--card)] border border-[var(--border)] rounded-lg shadow-md p-3 z-50" style="min-width:160px">
+<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)] mb-1" data-theme="green-purple">🟢🟣 绿紫</button>
+<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)]" data-theme="blue-yellow">🔵🟡 蓝黄</button>
+</div></div>
+<button id="hamburger" class="md:hidden text-xl text-[var(--text)]">☰</button>
+</div></div>
+<div id="mobileMenu" class="hidden md:hidden border-t border-[var(--border)] bg-[var(--card)] px-6 py-3 space-y-2">
+<a href="/" class="block py-2 nav-link" data-nav="home">首页</a>
+<a href="/about/" class="block py-2 nav-link" data-nav="about">关于我</a>
+<a href="/resume/" class="block py-2 nav-link" data-nav="resume">简历</a>
+<a href="/works/" class="block py-2 nav-link" data-nav="works">作品集</a>
+<a href="/blog/" class="block py-2 nav-link" data-nav="blog">博客</a>
+<a href="/contact/" class="block py-2 nav-link" data-nav="contact">联系我</a>
+</div></nav>
+
+
+<main class="flex-1 pt-24 pb-16">
+<div class="max-w-3xl mx-auto px-6">
+
+  
+  <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--text-soft)] hover:text-[var(--primary)] transition-colors mb-8">← 返回博客首页</a>
+
+  
+  <header class="mb-10">
+    <h1 class="text-2xl md:text-3xl font-bold text-[var(--text)] mb-4">Gurobi 基础建模入门笔记</h1>
+    <div class="flex flex-wrap items-center gap-4 text-sm text-[var(--text-soft)]">
+      <span>2025-12-15</span>
+      <span>·</span>
+      <span>预计阅读 10 分钟</span>
+      
+      <span class="px-2 py-0.5 rounded-full bg-[var(--primary-soft)] text-[var(--primary)] text-xs">运筹优化</span>
+      
+    </div>
+  </header>
+
+  
+  <article class="prose prose-slate max-w-none text-[var(--text)] leading-relaxed
+    [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:mt-10 [&_h2]:mb-4
+    [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3
+    [&_p]:mb-5 [&_p]:leading-relaxed
+    [&_ul]:mb-5 [&_ol]:mb-5 [&_li]:mb-2
+    [&_code]:bg-[var(--hover)] [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-sm
+    [&_pre]:bg-[var(--hover)] [&_pre]:p-4 [&_pre]:rounded-lg [&_pre]:overflow-x-auto [&_pre]:mb-5
+    [&_pre_code]:bg-transparent [&_pre_code]:p-0
+    [&_table]:w-full [&_table]:border-collapse [&_table]:mb-5
+    [&_th]:border [&_th]:border-[var(--border)] [&_th]:p-2 [&_th]:bg-[var(--hover)] [&_th]:text-sm [&_th]:font-semibold
+    [&_td]:border [&_td]:border-[var(--border)] [&_td]:p-2 [&_td]:text-sm
+    [&_img]:rounded-lg [&_img]:max-w-full [&_img]:h-auto [&_img]:my-4
+    [&_blockquote]:border-l-4 [&_blockquote]:border-[var(--primary)] [&_blockquote]:pl-4 [&_blockquote]:text-[var(--text-soft)] [&_blockquote]:italic [&_blockquote]:mb-5
+    [&_a]:text-[var(--primary)] [&_a]:underline
+  ">
+    <p>线性规划和整数规划是运筹优化的基础工具，Gurobi 是目前最强大的商业求解器之一。本文记录使用 Gurobi Python API 进行基础建模的常用操作。</p>
+<h2 id="环境配置">环境配置</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pip install gurobipy
+</span></span></code></pre></div><p>需要学术许可（免费），在 Gurobi 官网注册后获取 license key。</p>
+<h2 id="线性规划示例">线性规划示例</h2>
+<p>考虑一个简单的生产计划问题：</p>
+<p>$$ \min z = 3x_1 + 2x_2 $$</p>
+<p>约束条件：</p>
+<p>$$ x_1 + x_2 \geq 10 $$
+$$ 2x_1 + x_2 \leq 30 $$
+$$ x_1, x_2 \geq 0 $$</p>
+<p>使用 Gurobi 求解：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> gurobipy <span style="color:#f92672">import</span> Model, GRB
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建模型</span>
+</span></span><span style="display:flex;"><span>m <span style="color:#f92672">=</span> Model(<span style="color:#e6db74">&#34;production&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 添加变量</span>
+</span></span><span style="display:flex;"><span>x1 <span style="color:#f92672">=</span> m<span style="color:#f92672">.</span>addVar(name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;x1&#34;</span>, lb<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>x2 <span style="color:#f92672">=</span> m<span style="color:#f92672">.</span>addVar(name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;x2&#34;</span>, lb<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 设置目标函数</span>
+</span></span><span style="display:flex;"><span>m<span style="color:#f92672">.</span>setObjective(<span style="color:#ae81ff">3</span><span style="color:#f92672">*</span>x1 <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span><span style="color:#f92672">*</span>x2, GRB<span style="color:#f92672">.</span>MINIMIZE)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 添加约束</span>
+</span></span><span style="display:flex;"><span>m<span style="color:#f92672">.</span>addConstr(x1 <span style="color:#f92672">+</span> x2 <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">10</span>, <span style="color:#e6db74">&#34;c1&#34;</span>)
+</span></span><span style="display:flex;"><span>m<span style="color:#f92672">.</span>addConstr(<span style="color:#ae81ff">2</span><span style="color:#f92672">*</span>x1 <span style="color:#f92672">+</span> x2 <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">30</span>, <span style="color:#e6db74">&#34;c2&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 求解</span>
+</span></span><span style="display:flex;"><span>m<span style="color:#f92672">.</span>optimize()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 输出结果</span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;x1 = </span><span style="color:#e6db74">{</span>x1<span style="color:#f92672">.</span>X<span style="color:#e6db74">}</span><span style="color:#e6db74">, x2 = </span><span style="color:#e6db74">{</span>x2<span style="color:#f92672">.</span>X<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Optimal value = </span><span style="color:#e6db74">{</span>m<span style="color:#f92672">.</span>ObjVal<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span></code></pre></div><h2 id="整数规划">整数规划</h2>
+<p>当变量必须取整数值时，将变量类型设为 <code>GRB.INTEGER</code>：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>x1 <span style="color:#f92672">=</span> m<span style="color:#f92672">.</span>addVar(name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;x1&#34;</span>, lb<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, vtype<span style="color:#f92672">=</span>GRB<span style="color:#f92672">.</span>INTEGER)
+</span></span></code></pre></div><h2 id="常用操作">常用操作</h2>
+<table>
+  <thead>
+      <tr>
+          <th>操作</th>
+          <th>代码</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>设置求解时间限制</td>
+          <td><code>m.setParam(&quot;TimeLimit&quot;, 60)</code></td>
+      </tr>
+      <tr>
+          <td>设置 MIP Gap</td>
+          <td><code>m.setParam(&quot;MIPGap&quot;, 0.01)</code></td>
+      </tr>
+      <tr>
+          <td>获取求解状态</td>
+          <td><code>m.Status</code></td>
+      </tr>
+      <tr>
+          <td>导出 LP 文件</td>
+          <td><code>m.write(&quot;model.lp&quot;)</code></td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="总结">总结</h2>
+<p>Gurobi 的 Python API 非常直观，适合快速原型开发。后续笔记会记录更复杂的调度模型和启发式算法对比。</p>
+
+  </article>
+
+  
+  <div class="mt-12 pt-8 border-t border-[var(--border)]">
+    <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--text-soft)] hover:text-[var(--primary)] transition-colors">← 返回博客首页</a>
+  </div>
+
+</div>
+</main>
+
+<button id="scrollTopBtn" class="scroll-top-btn fixed bottom-6 right-6 w-10 h-10 rounded-full bg-[var(--primary)] text-white shadow-md flex items-center justify-center text-lg z-40 hover:opacity-90" data-i18n-aria="back.top" aria-label="回到顶部">↑</button>
+<script src="/assets/js/theme.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/shared.js"></script>
+
+
+</body>
+</html>

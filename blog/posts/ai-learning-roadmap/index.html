@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="green-purple" data-mode="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AI 整体学习路线图（附进度标记） · Kyra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'var(--primary)',secondary:'var(--secondary)',bg:'var(--bg)',card:'var(--card)',text:'var(--text)','text-soft':'var(--text-soft)',border:'var(--border)',hover:'var(--hover)'},borderRadius:{DEFAULT:'8px'},fontFamily:{sans:['Inter','Noto Sans SC','system-ui','sans-serif']}}}}</script>
+<link rel="stylesheet" href="/assets/css/base.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<style>.scroll-top-btn{opacity:0;pointer-events:none;transition:opacity .3s}@media(max-width:767px){.mobile-hidden{display:none}}</style>
+
+</head>
+<body data-page="blog" class="min-h-screen flex flex-col">
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[var(--bg)]/90 backdrop-blur-md border-b border-[var(--border)]">
+<div class="max-w-6xl mx-auto flex items-center justify-between px-6 py-3">
+<a href="/" class="text-lg font-bold text-[var(--text)] hover:text-[var(--primary)] transition-colors">Kyra</a>
+<div class="hidden md:flex items-center gap-6 text-sm font-medium">
+<a href="/" class="nav-link" data-nav="home">首页</a>
+<a href="/about/" class="nav-link" data-nav="about">关于我</a>
+<a href="/resume/" class="nav-link" data-nav="resume">简历</a>
+<a href="/works/" class="nav-link" data-nav="works">作品集</a>
+<a href="/blog/" class="nav-link" data-nav="blog">博客</a>
+<a href="/contact/" class="nav-link" data-nav="contact">联系我</a>
+</div>
+<div class="flex items-center gap-3 text-sm">
+<button id="langToggle" class="px-2 py-1 rounded-md border border-[var(--border)] text-[var(--text-soft)] hover:text-[var(--text)] bg-[var(--card)] text-xs font-medium" data-i18n="lang.label">EN</button>
+<button id="modeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Toggle dark mode">🌙</button>
+<div class="relative">
+<button id="themeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Switch theme">🎨</button>
+<div id="themePopover" class="hidden absolute right-0 top-10 bg-[var(--card)] border border-[var(--border)] rounded-lg shadow-md p-3 z-50" style="min-width:160px">
+<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)] mb-1" data-theme="green-purple">🟢🟣 绿紫</button>
+<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)]" data-theme="blue-yellow">🔵🟡 蓝黄</button>
+</div></div>
+<button id="hamburger" class="md:hidden text-xl text-[var(--text)]">☰</button>
+</div></div>
+<div id="mobileMenu" class="hidden md:hidden border-t border-[var(--border)] bg-[var(--card)] px-6 py-3 space-y-2">
+<a href="/" class="block py-2 nav-link" data-nav="home">首页</a>
+<a href="/about/" class="block py-2 nav-link" data-nav="about">关于我</a>
+<a href="/resume/" class="block py-2 nav-link" data-nav="resume">简历</a>
+<a href="/works/" class="block py-2 nav-link" data-nav="works">作品集</a>
+<a href="/blog/" class="block py-2 nav-link" data-nav="blog">博客</a>
+<a href="/contact/" class="block py-2 nav-link" data-nav="contact">联系我</a>
+</div></nav>
+
+
+<main class="flex-1 pt-24 pb-16">
+<div class="max-w-3xl mx-auto px-6">
+
+  
+  <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--text-soft)] hover:text-[var(--primary)] transition-colors mb-8">← 返回博客首页</a>
+
+  
+  <header class="mb-10">
+    <h1 class="text-2xl md:text-3xl font-bold text-[var(--text)] mb-4">AI 整体学习路线图（附进度标记）</h1>
+    <div class="flex flex-wrap items-center gap-4 text-sm text-[var(--text-soft)]">
+      <span>2026-06-07</span>
+      <span>·</span>
+      <span>预计阅读 4 分钟</span>
+      
+      <span class="px-2 py-0.5 rounded-full bg-[var(--primary-soft)] text-[var(--primary)] text-xs">AI学习</span>
+      
+    </div>
+  </header>
+
+  
+  <article class="prose prose-slate max-w-none text-[var(--text)] leading-relaxed
+    [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:mt-10 [&_h2]:mb-4
+    [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3
+    [&_p]:mb-5 [&_p]:leading-relaxed
+    [&_ul]:mb-5 [&_ol]:mb-5 [&_li]:mb-2
+    [&_code]:bg-[var(--hover)] [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-sm
+    [&_pre]:bg-[var(--hover)] [&_pre]:p-4 [&_pre]:rounded-lg [&_pre]:overflow-x-auto [&_pre]:mb-5
+    [&_pre_code]:bg-transparent [&_pre_code]:p-0
+    [&_table]:w-full [&_table]:border-collapse [&_table]:mb-5
+    [&_th]:border [&_th]:border-[var(--border)] [&_th]:p-2 [&_th]:bg-[var(--hover)] [&_th]:text-sm [&_th]:font-semibold
+    [&_td]:border [&_td]:border-[var(--border)] [&_td]:p-2 [&_td]:text-sm
+    [&_img]:rounded-lg [&_img]:max-w-full [&_img]:h-auto [&_img]:my-4
+    [&_blockquote]:border-l-4 [&_blockquote]:border-[var(--primary)] [&_blockquote]:pl-4 [&_blockquote]:text-[var(--text-soft)] [&_blockquote]:italic [&_blockquote]:mb-5
+    [&_a]:text-[var(--primary)] [&_a]:underline
+  ">
+    <h2 id="ai-整体学习框架">AI 整体学习框架</h2>
+<h3 id="一基础能力层">一、基础能力层</h3>
+<h4 id="1-数学基础">1. 数学基础</h4>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> 线性代数：矩阵、向量、特征值、张量</li>
+<li><input checked="" disabled="" type="checkbox"> 概率论与数理统计：分布、期望、方差、贝叶斯、假设检验</li>
+<li><input checked="" disabled="" type="checkbox"> 微积分：导数、偏导、梯度、积分</li>
+<li><input checked="" disabled="" type="checkbox"> 优化理论：极值、凸优化、损失函数原理</li>
+</ul>
+<h4 id="2-编程基础">2. 编程基础</h4>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> Python 核心语法、数据结构、面向对象</li>
+<li><input checked="" disabled="" type="checkbox"> 常用库：NumPy、Pandas、Matplotlib/Seaborn</li>
+<li><input checked="" disabled="" type="checkbox"> 版本控制：Git &amp; GitHub</li>
+</ul>
+<h4 id="3-计算机基础">3. 计算机基础</h4>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> 计算机网络、操作系统基础</li>
+<li><input checked="" disabled="" type="checkbox"> 数据库：SQL 基础（MySQL/SQLite）</li>
+</ul>
+<hr>
+<h3 id="二传统机器学习层">二、传统机器学习层</h3>
+<h4 id="1-入门理论与算法">1. 入门理论与算法</h4>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> 机器学习概述：监督/无监督/强化学习、训练/验证/测试集、过拟合/欠拟合</li>
+<li><input checked="" disabled="" type="checkbox"> 经典监督算法：线性回归、逻辑回归、决策树、随机森林、SVM、KNN</li>
+<li><input checked="" disabled="" type="checkbox"> 经典无监督算法：K-Means、聚类、降维（PCA）、关联规则</li>
+</ul>
+<h4 id="2-模型训练与调优">2. 模型训练与调优</h4>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> 特征工程：特征筛选、归一化、编码、特征构造</li>
+<li><input checked="" disabled="" type="checkbox"> 模型评估：准确率、召回率、F1、AUC、MSE 等指标</li>
+<li><input checked="" disabled="" type="checkbox"> 调参技巧：网格搜索、随机搜索、交叉验证</li>
+</ul>
+<h4 id="3-实战工具">3. 实战工具</h4>
+<ul>
+<li>Scikit-learn 全流程实战</li>
+<li>小型数据集项目练手</li>
+</ul>
+<hr>
+<h3 id="三深度学习层当下主流-ai-方向">三、深度学习层（当下主流 AI 方向）</h3>
+<h4 id="1-深度学习基础">1. 深度学习基础</h4>
+<ul>
+<li>神经网络原理：神经元、激活函数、反向传播、梯度下降</li>
+<li>网络结构：全连接神经网络</li>
+</ul>
+<h4 id="2-细分网络体系">2. 细分网络体系</h4>
+<ol>
+<li><strong>计算机视觉 CV</strong>
+<ul>
+<li>CNN 卷积神经网络：卷积、池化、经典模型（LeNet、AlexNet、VGG、ResNet）</li>
+<li>任务：图像分类、目标检测、图像分割、图像生成</li>
+</ul>
+</li>
+<li><strong>自然语言处理 NLP</strong>
+<ul>
+<li>词向量、RNN/LSTM/GRU</li>
+<li>Transformer 核心（注意力机制）</li>
+<li>预训练模型：BERT、GPT 系列基础原理</li>
+<li>任务：文本分类、情感分析、翻译、摘要</li>
+</ul>
+</li>
+</ol>
+<h4 id="3-深度学习框架">3. 深度学习框架</h4>
+<ul>
+<li>主流二选一：PyTorch / TensorFlow + Keras</li>
+<li>高阶工具：分布式训练、混合精度训练</li>
+</ul>
+<h4 id="4-进阶方向">4. 进阶方向</h4>
+<ul>
+<li>生成式模型：GAN、Diffusion 扩散模型</li>
+<li>强化学习 RL：Q-Learning、DQN、PPO</li>
+<li>多模态：图文、音视频融合</li>
+</ul>
+<hr>
+<h3 id="四大模型--应用工程层当下就业落地核心">四、大模型 &amp; 应用工程层（当下就业/落地核心）</h3>
+<h4 id="1-大模型基础认知">1. 大模型基础认知</h4>
+<ul>
+<li>LLM 发展脉络、基座模型、微调、对齐（RLHF/DPO）</li>
+<li>上下文窗口、Token、Prompt 原理</li>
+</ul>
+<h4 id="2-大模型应用开发">2. 大模型应用开发</h4>
+<ul>
+<li><strong>提示工程 Prompt Engineering</strong>：基础提示、Few-shot、思维链 CoT</li>
+<li><strong>检索增强生成 RAG</strong>：向量数据库、文档解析、向量召回、问答系统</li>
+<li><strong>智能体 Agent</strong>：工具调用、规划、记忆、多 Agent 协作</li>
+</ul>
+<h4 id="3-工程部署--运维">3. 工程部署 &amp; 运维</h4>
+<ul>
+<li>模型推理：本地部署、API 调用、批量推理</li>
+<li>部署框架：FastAPI、Gradio、Streamlit（快速做演示应用）</li>
+<li>容器化：Docker 打包 AI 服务</li>
+<li>云端部署：云服务器、模型托管平台</li>
+</ul>
+<h4 id="4-低代码开源生态">4. 低代码/开源生态</h4>
+<ul>
+<li>开源大模型使用、模型量化、轻量化部署</li>
+<li>开源项目二次开发（RAG 框架、Agent 框架）</li>
+</ul>
+<hr>
+<h3 id="五专项进阶--职业方向">五、专项进阶 &amp; 职业方向</h3>
+<p>根据目标挑选 1~2 个主线深入：</p>
+<ol>
+<li><strong>算法研究方向</strong>
+<ul>
+<li><input disabled="" type="checkbox"> 模型微调、预训练、模型压缩/量化/剪枝</li>
+<li><input disabled="" type="checkbox"> 论文阅读、实验复现、顶会基础</li>
+</ul>
+</li>
+<li><strong>AI 应用开发方向</strong>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> 全栈 AI 应用、前后端结合、产品落地</li>
+<li><input checked="" disabled="" type="checkbox"> AI+业务（办公、客服、教育、工业等）</li>
+</ul>
+</li>
+<li><strong>数据/AI 工程方向</strong>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> 数据治理、数据标注、AI 数据流水线</li>
+<li><input disabled="" type="checkbox"> 算力调度、集群运维</li>
+</ul>
+</li>
+<li><strong>AI 产品方向</strong>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> 能力拆解、需求设计、原型、AI 产品落地逻辑</li>
+</ul>
+</li>
+</ol>
+<hr>
+
+  </article>
+
+  
+  <div class="mt-12 pt-8 border-t border-[var(--border)]">
+    <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--text-soft)] hover:text-[var(--primary)] transition-colors">← 返回博客首页</a>
+  </div>
+
+</div>
+</main>
+
+<button id="scrollTopBtn" class="scroll-top-btn fixed bottom-6 right-6 w-10 h-10 rounded-full bg-[var(--primary)] text-white shadow-md flex items-center justify-center text-lg z-40 hover:opacity-90" data-i18n-aria="back.top" aria-label="回到顶部">↑</button>
+<script src="/assets/js/theme.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/shared.js"></script>
+
+
+</body>
+</html>
