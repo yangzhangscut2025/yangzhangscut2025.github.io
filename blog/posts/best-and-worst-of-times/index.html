@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="green-purple" data-mode="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>这是最好的时代，也是最坏的时代 · 张阳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'var(--primary)',secondary:'var(--secondary)',bg:'var(--bg)',card:'var(--card)',text:'var(--text)','text-soft':'var(--text-soft)',border:'var(--border)',hover:'var(--hover)'},borderRadius:{DEFAULT:'8px'},fontFamily:{sans:['Inter','Noto Sans SC','system-ui','sans-serif']}}}}</script>
+<link rel="stylesheet" href="/assets/css/base.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<style>.scroll-top-btn{opacity:0;pointer-events:none;transition:opacity .3s}@media(max-width:767px){.mobile-hidden{display:none}}</style>
+
+</head>
+<body data-page="blog" class="min-h-screen flex flex-col">
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[var(--bg)]/90 backdrop-blur-md border-b border-[var(--border)]">
+<div class="max-w-6xl mx-auto flex items-center justify-between px-6 py-3">
+<a href="/" class="text-lg font-bold text-[var(--text)] hover:text-[var(--primary)] transition-colors">Yang Zhang</a>
+<div class="hidden md:flex items-center gap-6 text-sm font-medium">
+<a href="/" class="nav-link" data-nav="home">首页</a>
+<a href="/about/" class="nav-link" data-nav="about">关于我</a>
+<a href="/resume/" class="nav-link" data-nav="resume">简历</a>
+<a href="/works/" class="nav-link" data-nav="works">作品集</a>
+<a href="/blog/" class="nav-link" data-nav="blog">博客</a>
+<a href="/contact/" class="nav-link" data-nav="contact">联系我</a>
+</div>
+<div class="flex items-center gap-3 text-sm">
+<button id="langToggle" class="px-2 py-1 rounded-md border border-[var(--border)] text-[var(--text-soft)] hover:text-[var(--text)] bg-[var(--card)] text-xs font-medium" data-i18n="lang.label">EN</button>
+<button id="modeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Toggle dark mode">🌙</button>
+<div class="relative">
+<button id="themeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Switch theme">🎨</button>
+<div id="themePopover" class="hidden absolute right-0 top-10 bg-[var(--card)] border border-[var(--border)] rounded-lg shadow-md p-3 z-50" style="min-width:160px">
+<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)] mb-1" data-theme="green-purple">🟢🟣 绿紫</button>
+<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)]" data-theme="blue-yellow">🔵🟡 蓝黄</button>
+</div></div>
+<button id="hamburger" class="md:hidden text-xl text-[var(--text)]">☰</button>
+</div></div>
+<div id="mobileMenu" class="hidden md:hidden border-t border-[var(--border)] bg-[var(--card)] px-6 py-3 space-y-2">
+<a href="/" class="block py-2 nav-link" data-nav="home">首页</a>
+<a href="/about/" class="block py-2 nav-link" data-nav="about">关于我</a>
+<a href="/resume/" class="block py-2 nav-link" data-nav="resume">简历</a>
+<a href="/works/" class="block py-2 nav-link" data-nav="works">作品集</a>
+<a href="/blog/" class="block py-2 nav-link" data-nav="blog">博客</a>
+<a href="/contact/" class="block py-2 nav-link" data-nav="contact">联系我</a>
+</div></nav>
+
+
+<main class="flex-1 pt-24 pb-16">
+<div class="max-w-3xl mx-auto px-6">
+
+  
+  <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--text-soft)] hover:text-[var(--primary)] transition-colors mb-8">← 返回博客首页</a>
+
+  
+  <header class="mb-10">
+    <h1 class="text-2xl md:text-3xl font-bold text-[var(--text)] mb-4">这是最好的时代，也是最坏的时代</h1>
+    <div class="flex flex-wrap items-center gap-4 text-sm text-[var(--text-soft)]">
+      <span>2026-06-10</span>
+      <span>·</span>
+      <span>预计阅读 3 分钟</span>
+      
+      <span class="px-2 py-0.5 rounded-full bg-[var(--primary-soft)] text-[var(--primary)] text-xs">个人随笔</span>
+      
+    </div>
+  </header>
+
+  
+  <article class="prose prose-slate max-w-none text-[var(--text)] leading-relaxed
+    [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:mt-10 [&_h2]:mb-4
+    [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3
+    [&_p]:mb-5 [&_p]:leading-relaxed
+    [&_ul]:mb-5 [&_ol]:mb-5 [&_li]:mb-2
+    [&_code]:bg-[var(--hover)] [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-sm
+    [&_pre]:bg-[var(--hover)] [&_pre]:p-4 [&_pre]:rounded-lg [&_pre]:overflow-x-auto [&_pre]:mb-5
+    [&_pre_code]:bg-transparent [&_pre_code]:p-0
+    [&_table]:w-full [&_table]:border-collapse [&_table]:mb-5
+    [&_th]:border [&_th]:border-[var(--border)] [&_th]:p-2 [&_th]:bg-[var(--hover)] [&_th]:text-sm [&_th]:font-semibold
+    [&_td]:border [&_td]:border-[var(--border)] [&_td]:p-2 [&_td]:text-sm
+    [&_img]:rounded-lg [&_img]:max-w-full [&_img]:h-auto [&_img]:my-4
+    [&_blockquote]:border-l-4 [&_blockquote]:border-[var(--primary)] [&_blockquote]:pl-4 [&_blockquote]:text-[var(--text-soft)] [&_blockquote]:italic [&_blockquote]:mb-5
+    [&_a]:text-[var(--primary)] [&_a]:underline
+  ">
+    <p>引用《双城记》里的一句话：“这是最好的时代，也是最坏的时代。”走过短短二十余年人生，我愈发觉得，这句话完美概括了我们当下所处的时代，也道尽了我对AI浪潮下这个新世界的全部感受。</p>
+<p>回望我的成长历程，我真切见证了科技近乎飞跃式的迭代。小学看着父亲的按键手机慢慢换成流畅的触屏智能机；初中拥有属于自己的第一部手机，步入大学，第一次拥有专属的电脑设备。学生时代的十几年里，我的重心始终放在读书学习上，相比于一些从小接触电子产品、熟悉各类数码设备的同龄人，我接触网络、智能设备的时间要晚很多，在科技认知的起步阶段，我并不算领先。</p>
+<p>但幸运的是，互联网的普及、海量开源的公共知识，再加上日新月异的AI技术，可以磨平起步晚的差距。它给了我站在巨人肩膀上学习的机会，让我得以打破认知的壁垒，自由汲取各行各业的新知识、新技能。</p>
+<p>如今科技更新的速度超乎想象，各类AI模型、智能工具如同潮水般一波接一波涌现。新工具、新玩法层出不穷，常常刚熟悉一款工具，更先进的模型就已经上线，让人始终追赶不及。但在不断接触、学习的过程中，我慢慢发现，五花八门的AI产品背后，底层逻辑始终相通。</p>
+<p>我们熟知的大语言模型LLM，更像是一个“缸中之脑”，依托海量数据训练，依靠概率逻辑结合上下文推演、生成内容。而单纯的大模型存在局限，因此开发者为其拓展了<strong>联网检索、外部工具调用</strong>的能力，弥补了模型知识滞后、脱离现实场景的短板。</p>
+<p>也正是这项能力，让AI完成了质的升级：从单纯的文本生成，变成了可以主动获取外界信息、建立现实认知、独立思考拆解问题、落地执行任务的智能体（Agent）。它会接收任务、执行操作、获取结果、接收反馈，再用全新的经验丰富自身的知识库，形成一套完整的学习闭环，拥有了近似人类的思考与成长逻辑。</p>
+<p>于普通人而言，这无疑是最好的时代。</p>
+<p>生产力被科技大幅解放，温饱早已成为绝大多数人无需焦虑的问题。更难得的是，知识不再被垄断。AI就像一位随时在线、博学全能的老师，不分昼夜、毫无保留地为普通人答疑解惑、赋能成长。哪怕是零基础，只要愿意学习，就能借助互联网与AI，快速掌握专业技能、拓展认知边界，每个人都拥有自我提升、突破圈层的机会。</p>
+<p>可与此同时，这也是充满焦虑的最坏的时代。</p>
+<p>AI的智能化、工具化、普及化，在赋能大众的同时，也在不断重塑各行各业的就业形态。越来越多基础、重复性、甚至部分专业性的岗位，正在被智能工具替代。作为即将步入职场、身处时代浪潮中的年轻人，我也难免迷茫与焦虑：高速发展的AI，正在一点点挤占我们未来的就业空间。在智能化全面普及的未来，普通人的核心竞争力到底是什么？我们又该如何不被时代淘汰？</p>
+<p>我始终试着辩证地看待AI、看待这个飞速迭代的时代。一边是前所未有的学习机遇、成长红利，一边是无处不在的竞争压力、生存焦虑。</p>
+<p>目前的我，还没有足够成熟的认知，完全理清这份矛盾与平衡，暂且记下这些零散、真实的所思所想，记录下我身处AI时代真切的感悟。</p>
+
+  </article>
+
+  
+  <div class="mt-12 pt-8 border-t border-[var(--border)]">
+    <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--text-soft)] hover:text-[var(--primary)] transition-colors">← 返回博客首页</a>
+  </div>
+
+</div>
+</main>
+
+<button id="scrollTopBtn" class="scroll-top-btn fixed bottom-6 right-6 w-10 h-10 rounded-full bg-[var(--primary)] text-white shadow-md flex items-center justify-center text-lg z-40 hover:opacity-90" data-i18n-aria="back.top" aria-label="回到顶部">↑</button>
+<script src="/assets/js/theme.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/shared.js"></script>
+
+
+</body>
+</html>
