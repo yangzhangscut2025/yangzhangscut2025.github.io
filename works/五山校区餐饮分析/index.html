@@ -58,7 +58,7 @@
 <li>25 格网格化采集，覆盖 2000m 半径</li>
 <li>API 限流自动重试（指数退避）</li>
 <li>DeepSeek 批量分类 + 结果缓存</li>
-<li>LayerControl 8 类别 + 热力图自由切换</li>
+<li>LayerControl 10 类别 + 热力图自由切换</li>
 <li>MarkerCluster 聚合标记 + 高德导航弹窗</li>
 <li>右上角统计图例面板 + 采集日期</li>
 </ul>
@@ -82,7 +82,28 @@
 <div class="rounded-lg border border-[var(--border)] overflow-hidden mb-4">
 <iframe src="wushan_food_map.html" class="w-full h-[600px] border-0" loading="lazy" title="交互式餐饮地图"></iframe>
 </div>
-<p class="text-xs text-[var(--text-soft)] mb-8">提示：右上角图层控制器可切换 8 个类别和热力图 · 点击聚合圆展开 · 点击店铺查看详情并跳转高德导航</p>
+<p class="text-xs text-[var(--text-soft)] mb-8">提示：右上角图层控制器可切换 10 个类别和热力图 · 点击聚合圆展开 · 点击店铺查看详情并跳转高德导航</p>
+
+<!-- Stats -->
+<h2 class="text-xl font-bold text-[var(--text)] mb-4">数据概览</h2>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+  <div class="bg-[var(--card)] border border-[var(--border)] rounded-lg p-4 text-center">
+    <div class="text-2xl font-bold text-[var(--text)]">552</div>
+    <div class="text-xs text-[var(--text-soft)] mt-1">店铺总数</div>
+  </div>
+  <div class="bg-[var(--card)] border border-[var(--border)] rounded-lg p-4 text-center">
+    <div class="text-2xl font-bold text-[var(--text)]">10</div>
+    <div class="text-xs text-[var(--text-soft)] mt-1">餐饮类别</div>
+  </div>
+  <div class="bg-[var(--card)] border border-[var(--border)] rounded-lg p-4 text-center">
+    <div class="text-2xl font-bold text-[var(--text)]">25</div>
+    <div class="text-xs text-[var(--text-soft)] mt-1">采集网格数</div>
+  </div>
+  <div class="bg-[var(--card)] border border-[var(--border)] rounded-lg p-4 text-center">
+    <div class="text-2xl font-bold text-[var(--text)]">2000m</div>
+    <div class="text-xs text-[var(--text-soft)] mt-1">覆盖半径</div>
+  </div>
+</div>
 
 <!-- Links -->
 <h2 class="text-xl font-bold text-[var(--text)] mb-4">链接</h2>
