@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="green-purple" data-mode="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>合同智能提取工具 · Kyra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:"var(--primary)",secondary:"var(--secondary)",bg:"var(--bg)",card:"var(--card)",text:"var(--text)","text-soft":"var(--text-soft)",border:"var(--border)",hover:"var(--hover)"},borderRadius:{DEFAULT:"8px"},fontFamily:{sans:["Inter","Noto Sans SC","system-ui","sans-serif"]}}}}</script>
+<link rel="stylesheet" href="/assets/css/base.css">
+<style>
+.scroll-top-btn{opacity:0;pointer-events:none;transition:opacity .3s}
+@media(max-width:767px){.mobile-hidden{display:none}}
+.screenshot-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
+.screenshot-card{border-radius:8px;overflow:hidden;border:1px solid var(--border);background:var(--card);transition:box-shadow .2s}
+.screenshot-card:hover{box-shadow:var(--shadow-md)}
+.screenshot-card img{width:100%;height:auto;display:block}
+.screenshot-card p{padding:.6rem 1rem;font-size:.8rem;color:var(--text-soft);margin:0}
+</style>
+</head>
+<body data-page="works" class="min-h-screen flex flex-col">
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[var(--bg)]/90 backdrop-blur-md border-b border-[var(--border)]">
+<div class="max-w-6xl mx-auto flex items-center justify-between px-6 py-3">
+<a href="/" class="text-lg font-bold text-[var(--text)] hover:text-[var(--primary)] transition-colors">Kyra</a>
+<div class="hidden md:flex items-center gap-6 text-sm font-medium">
+<a href="/" class="nav-link" data-nav="home">首页</a>
+<a href="/about/" class="nav-link" data-nav="about">关于我</a>
+<a href="/resume/" class="nav-link" data-nav="resume">简历</a>
+<a href="/works/" class="nav-link" data-nav="works">作品集</a>
+<a href="/blog/" class="nav-link" data-nav="blog">博客</a>
+<a href="/contact/" class="nav-link" data-nav="contact">联系我</a>
+</div>
+<div class="flex items-center gap-3 text-sm">
+<button id="langToggle" class="px-2 py-1 rounded-md border border-[var(--border)] text-[var(--text-soft)] hover:text-[var(--text)] bg-[var(--card)] text-xs font-medium" data-i18n="lang.label">EN</button>
+<button id="modeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Toggle dark mode">🌙</button>
+<div class="relative">
+<button id="themeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Switch theme">🎨</button>
+<div id="themePopover" class="hidden absolute right-0 top-10 bg-[var(--card)] border border-[var(--border)] rounded-lg shadow-md p-3 z-50" style="min-width:160px">
+<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)] mb-1" data-theme="green-purple">🟢🟣 绿紫</button>
+<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)]" data-theme="blue-yellow">🔵🟡 蓝黄</button>
+</div></div>
+<button id="hamburger" class="md:hidden text-xl text-[var(--text)]">☰</button>
+</div></div>
+<div id="mobileMenu" class="hidden md:hidden border-t border-[var(--border)] bg-[var(--card)] px-6 py-3 space-y-2">
+<a href="/" class="block py-2 nav-link" data-nav="home">首页</a>
+<a href="/about/" class="block py-2 nav-link" data-nav="about">关于我</a>
+<a href="/resume/" class="block py-2 nav-link" data-nav="resume">简历</a>
+<a href="/works/" class="block py-2 nav-link" data-nav="works">作品集</a>
+<a href="/blog/" class="block py-2 nav-link" data-nav="blog">博客</a>
+<a href="/contact/" class="block py-2 nav-link" data-nav="contact">联系我</a>
+</div></nav>
+
+<main class="flex-1 pt-20 pb-16">
+<div class="max-w-4xl mx-auto px-6">
+
+<a href="/works/" class="inline-flex items-center gap-1 text-sm text-[var(--text-soft)] hover:text-[var(--primary)] transition-colors mb-6">← 返回作品集列表</a>
+
+<div class="rounded-lg bg-gradient-to-br from-[var(--primary-soft)] to-[var(--secondary-soft)] h-48 md:h-64 flex items-center justify-center text-6xl mb-8">📄</div>
+
+<h1 class="text-2xl md:text-3xl font-bold text-[var(--text)] mb-2">合同智能提取工具</h1>
+<div class="flex flex-wrap items-center gap-3 text-sm text-[var(--text-soft)] mb-6">
+  <span>2026.06</span><span>·</span>
+  <span class="px-2 py-0.5 rounded-full bg-[var(--primary-soft)] text-[var(--primary)]">AI与数据应用</span>
+  <span class="px-2 py-0.5 rounded-full bg-[var(--hover)] text-[var(--text-soft)]">Electron · React · TypeScript · DeepSeek · OCR</span>
+</div>
+
+<div class="flex gap-8">
+<div class="flex-1 min-w-0">
+
+<div class="max-w-none text-[var(--text)]">
+
+<h2 class="text-lg font-semibold mb-3">项目背景</h2>
+<p class="mb-4 leading-relaxed">企业 HR / 法务部门需要从大量 PDF 劳动合同和调薪文件中手工提取员工信息，效率低、易出错。本工具利用 LLM + OCR 实现批量自动提取 44 个关键字段，并提供人工校对与导出功能。</p>
+
+<h2 class="text-lg font-semibold mb-3 mt-8">核心功能</h2>
+<ul class="space-y-3 mb-6">
+  <li><strong>文件管理</strong> — 拖拽/批量导入 PDF，MD5 自动去重，文件名解析员工编号。支持按状态筛选、全选、删除、清理重复。</li>
+  <li><strong>智能提取</strong> — pdfjs 文字提取 + 阿里云 OCR 扫描件识别（可选），DeepSeek / 智谱 AI 提取 44 字段，自动格式校验。</li>
+  <li><strong>校对审核</strong> — 左侧 PDF 原版渲染（Canvas），右侧字段表格。点击字段名高亮定位 PDF 对应文字，支持手动修正。</li>
+  <li><strong>翻译辅助</strong> — LLM 译为中文，日期/金额/人名保留原文，翻译结果缓存不重复调用。</li>
+  <li><strong>表格校验</strong> — Excel 式全文件表格视图，同一员工行背景同色，双击跳转校对页。</li>
+  <li><strong>Excel 导出</strong> — 49 列完整导出，校验异常黄色标注，失败文件自动填入员工编号。</li>
+</ul>
+
+<h2 class="text-lg font-semibold mb-3 mt-8">技术架构</h2>
+<div class="overflow-x-auto mb-6">
+<table class="w-full border-collapse text-sm">
+  <tr class="bg-[var(--hover)]"><td class="border border-[var(--border)] p-2 font-medium">框架</td><td class="border border-[var(--border)] p-2">Electron 31 + React 18 + TypeScript</td></tr>
+  <tr><td class="border border-[var(--border)] p-2 font-medium">UI</td><td class="border border-[var(--border)] p-2">Ant Design 5 + Zustand 状态管理</td></tr>
+  <tr class="bg-[var(--hover)]"><td class="border border-[var(--border)] p-2 font-medium">LLM</td><td class="border border-[var(--border)] p-2">DeepSeek / 智谱 AI · 44 字段结构化提取</td></tr>
+  <tr><td class="border border-[var(--border)] p-2 font-medium">PDF 引擎</td><td class="border border-[var(--border)] p-2">pdfjs-dist 文字提取 + @napi-rs/canvas 渲染</td></tr>
+  <tr class="bg-[var(--hover)]"><td class="border border-[var(--border)] p-2 font-medium">OCR</td><td class="border border-[var(--border)] p-2">阿里云 OCR（扫描件识别，可选）</td></tr>
+  <tr><td class="border border-[var(--border)] p-2 font-medium">数据库</td><td class="border border-[var(--border)] p-2">sql.js（SQLite 本地）</td></tr>
+  <tr class="bg-[var(--hover)]"><td class="border border-[var(--border)] p-2 font-medium">导出</td><td class="border border-[var(--border)] p-2">exceljs · 49 列 · 校验高亮</td></tr>
+</table>
+</div>
+
+<h2 class="text-lg font-semibold mb-3 mt-8">界面截图</h2>
+<div class="screenshot-grid mb-8">
+  <div class="screenshot-card"><img src="images/文件管理页面.png" alt="文件管理" loading="lazy"><p>文件管理 — 拖拽导入，状态筛选，批量操作</p></div>
+  <div class="screenshot-card"><img src="images/设置页面deepseek配置.png" alt="DeepSeek配置" loading="lazy"><p>设置 — DeepSeek / 智谱 AI 配置</p></div>
+  <div class="screenshot-card"><img src="images/设置页面阿里云ocr配置.png" alt="OCR配置" loading="lazy"><p>设置 — 阿里云 OCR 配置（可选）</p></div>
+  <div class="screenshot-card"><img src="images/合同校对页面-0.png" alt="校对审核" loading="lazy"><p>校对审核 — 左 PDF 原版 / 右字段表格</p></div>
+  <div class="screenshot-card"><img src="images/合同校对页面-双击字段高亮.png" alt="字段高亮" loading="lazy"><p>校对 — 点击字段名，PDF 黄色高亮定位</p></div>
+  <div class="screenshot-card"><img src="images/合同校对页面-翻译功能.png" alt="翻译" loading="lazy"><p>校对 — LLM 翻译辅助</p></div>
+  <div class="screenshot-card"><img src="images/表格校验页面.png" alt="表格校验" loading="lazy"><p>表格校验 — Excel 式全文件视图</p></div>
+  <div class="screenshot-card"><img src="images/导出页面.png" alt="导出" loading="lazy"><p>导出 — 49 列 Excel，校验异常黄色标注</p></div>
+</div>
+
+<h2 class="text-lg font-semibold mb-3 mt-8">量化成果</h2>
+<ul class="space-y-2 mb-6">
+  <li>✅ 支持 <strong>47 个字段</strong>（44 AI 提取 + 3 系统字段）的自动化处理流水线</li>
+  <li>✅ 结合 LLM + OCR，覆盖文字型/扫描件两种 PDF 格式</li>
+  <li>✅ 校对页面支持 PDF 原文点击高亮定位，翻译缓存机制减少重复 API 调用</li>
+  <li>✅ 5 个一组生产建议，适配批量处理场景</li>
+</ul>
+
+</div></div>
+
+<aside class="hidden lg:block w-40 shrink-0">
+  <div class="sticky top-24 space-y-2">
+    <div class="text-xs font-semibold text-[var(--text-soft)] uppercase tracking-wider mb-3">目录</div>
+    <a href="#" class="block text-sm text-[var(--text-soft)] hover:text-[var(--primary)] py-1">项目背景</a>
+    <a href="#" class="block text-sm text-[var(--text-soft)] hover:text-[var(--primary)] py-1">核心功能</a>
+    <a href="#" class="block text-sm text-[var(--text-soft)] hover:text-[var(--primary)] py-1">技术架构</a>
+    <a href="#" class="block text-sm text-[var(--text-soft)] hover:text-[var(--primary)] py-1">界面截图</a>
+    <a href="#" class="block text-sm text-[var(--text-soft)] hover:text-[var(--primary)] py-1">量化成果</a>
+  </div>
+</aside>
+</div></div></main>
+
+<button id="scrollTopBtn" class="scroll-top-btn fixed bottom-6 right-6 w-10 h-10 rounded-full bg-[var(--primary)] text-white shadow-md flex items-center justify-center text-lg z-40 hover:opacity-90" aria-label="回到顶部">↑</button>
+<script src="/assets/js/theme.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/shared.js"></script>
+</body>
+</html>
