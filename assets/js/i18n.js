@@ -59,6 +59,13 @@
       'contact.desc':'欢迎交流算法、数据分析、学习与求职相关问题。',
       'contact.email':'邮箱',
       'contact.github':'GitHub',
+      'hobby.craft':'三分钟热度手艺人',
+      'hobby.mountain':'山野小径爱好者',
+      'hobby.nature':'动植物观察员',
+      'hobby.skate':'轮滑街溜子',
+      'hobby.otaku':'轻度二次元患者',
+      'hobby.anime':'动漫',
+      'hobby.novels':'小说',
     },
     en: {
       'nav.home':    'Home',
@@ -110,6 +117,13 @@
       'contact.desc':'Feel free to reach out about algorithms, data analysis, and job consultation.',
       'contact.email':'Email',
       'contact.github':'GitHub',
+      'hobby.craft':'Amateur Crafter',
+      'hobby.mountain':'Mountain Hiker',
+      'hobby.nature':'Wildlife Observer',
+      'hobby.skate':'Street Skater',
+      'hobby.otaku':'Casual Otaku',
+      'hobby.anime':'Anime',
+      'hobby.novels':'Novels',
     },
 
   /* ---- Apply translations ---- */

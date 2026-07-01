@@ -9,7 +9,19 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script>tailwind.config={theme:{extend:{colors:{primary:'var(--primary)',secondary:'var(--secondary)',bg:'var(--bg)',card:'var(--card)',text:'var(--text)','text-soft':'var(--text-soft)',border:'var(--border)',hover:'var(--hover)'},borderRadius:{DEFAULT:'8px'},fontFamily:{sans:['Inter','Noto Sans SC','system-ui','sans-serif']}}}}</script>
 <link rel="stylesheet" href="/assets/css/base.css">
-<style>.scroll-top-btn{opacity:0;pointer-events:none;transition:opacity .3s}@media(max-width:767px){.mobile-hidden{display:none}}</style>
+<style>
+.scroll-top-btn{opacity:0;pointer-events:none;transition:opacity .3s}
+@media(max-width:767px){.mobile-hidden{display:none}}
+/* Hobby gallery */
+.hobby-scroll-wrap{position:relative;overflow:hidden;border-radius:8px}
+.hobby-scroll{display:flex;gap:10px;overflow-x:auto;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:4px 0;-ms-overflow-style:none}
+.hobby-scroll::-webkit-scrollbar{display:none}
+.hobby-scroll img{width:180px;height:120px;object-fit:cover;border-radius:8px;flex-shrink:0;box-shadow:var(--shadow-sm);transition:transform .2s;cursor:pointer;background:var(--hover)}
+.hobby-scroll img:hover{transform:scale(1.04)}
+.hobby-arrow{position:absolute;top:50%;transform:translateY(-50%);width:32px;height:32px;border-radius:50%;border:1px solid var(--border);background:var(--card);color:var(--text-soft);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;z-index:2;box-shadow:var(--shadow-sm);transition:opacity .2s}
+.hobby-arrow:hover{opacity:0.8}
+.hobby-arrow.left{left:4px}.hobby-arrow.right{right:4px}
+</style>
 </head>
 <body data-page="about" class="min-h-screen flex flex-col">
 <nav class="fixed top-0 left-0 right-0 z-50 bg-[var(--bg)]/90 backdrop-blur-md border-b border-[var(--border)]">
@@ -52,21 +64,43 @@
 <div class="relative pl-6 pb-8 border-l-2 border-[var(--border)] last:border-transparent"><div class="absolute left-[-5px] top-1 w-2.5 h-2.5 rounded-full bg-[var(--primary)]"></div><span class="text-xs text-[var(--text-soft)]">2021.09 – 2025.06</span><h3 class="text-sm font-semibold text-[var(--text)] mt-0.5">华南理工大学 · 工业工程 学士</h3><p class="text-sm text-[var(--text-soft)] mt-1">系统学习运筹、供应链、数据分析课程，课余参加各类建模竞赛积累经验。</p></div>
 </div></section>
 <section><h2 class="text-lg font-semibold text-[var(--text)] mb-6 pb-2 border-b border-[var(--border)]">爱好</h2>
-<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-<div class="p-5 rounded-lg border border-[var(--border)] bg-[var(--card)] mt-0">
-<div class="text-2xl mb-3">🏃</div>
-<div class="font-semibold text-sm text-[var(--text)] mb-2">户外运动</div>
-<div class="flex flex-wrap gap-1.5"><span class="text-xs px-2 py-0.5 rounded-full bg-[var(--hover)] text-[var(--text-soft)]">轮滑</span><span class="text-xs px-2 py-0.5 rounded-full bg-[var(--hover)] text-[var(--text-soft)]">徒步</span><span class="text-xs px-2 py-0.5 rounded-full bg-[var(--hover)] text-[var(--text-soft)]">散步</span><span class="text-xs px-2 py-0.5 rounded-full bg-[var(--hover)] text-[var(--text-soft)]">观鸟</span></div>
+
+<!-- Section: Craft -->
+<div class="hobby-section mb-10">
+<h3 class="text-sm font-semibold text-[var(--text)] mb-3" data-i18n="hobby.craft">三分钟热度手艺人</h3>
+<div class="hobby-scroll-wrap"><div class="hobby-scroll" data-dir="craft"></div></div>
 </div>
-<div class="p-5 rounded-lg border border-[var(--border)] bg-[var(--card)] mt-3 sm:mt-6">
-<div class="text-2xl mb-3">🎧</div>
-<div class="font-semibold text-sm text-[var(--text)] mb-2">休闲娱乐</div>
-<div class="flex flex-wrap gap-1.5"><span class="text-xs px-2 py-0.5 rounded-full bg-[var(--hover)] text-[var(--text-soft)]">小说</span><span class="text-xs px-2 py-0.5 rounded-full bg-[var(--hover)] text-[var(--text-soft)]">动漫</span><span class="text-xs px-2 py-0.5 rounded-full bg-[var(--hover)] text-[var(--text-soft)]">音乐</span></div>
+
+<!-- Section: Mountain -->
+<div class="hobby-section mb-10">
+<h3 class="text-sm font-semibold text-[var(--text)] mb-3" data-i18n="hobby.mountain">山野小径爱好者</h3>
+<div class="hobby-scroll-wrap"><div class="hobby-scroll" data-dir="mountain"></div></div>
 </div>
-<div class="p-5 rounded-lg border border-[var(--border)] bg-[var(--card)] mt-1 sm:mt-3">
-<div class="text-2xl mb-3">✂️</div>
-<div class="font-semibold text-sm text-[var(--text)] mb-2">手工创作</div>
-<div class="flex flex-wrap gap-1.5"><span class="text-xs px-2 py-0.5 rounded-full bg-[var(--hover)] text-[var(--text-soft)]">绕线</span><span class="text-xs px-2 py-0.5 rounded-full bg-[var(--hover)] text-[var(--text-soft)]">拼豆</span><span class="text-xs px-2 py-0.5 rounded-full bg-[var(--hover)] text-[var(--text-soft)]">编织</span><span class="text-xs px-2 py-0.5 rounded-full bg-[var(--hover)] text-[var(--text-soft)]">串珠</span><span class="text-xs px-2 py-0.5 rounded-full bg-[var(--hover)] text-[var(--text-soft)]">羊毛毡</span></div>
+
+<!-- Section: Nature -->
+<div class="hobby-section mb-10">
+<h3 class="text-sm font-semibold text-[var(--text)] mb-3" data-i18n="hobby.nature">动植物观察员</h3>
+<div class="hobby-scroll-wrap"><div class="hobby-scroll" data-dir="nature"></div></div>
+</div>
+
+<!-- Section: Skate -->
+<div class="hobby-section mb-10">
+<h3 class="text-sm font-semibold text-[var(--text)] mb-3" data-i18n="hobby.skate">轮滑街溜子</h3>
+<div class="hobby-scroll-wrap"><div class="hobby-scroll" data-dir="skate"></div></div>
+</div>
+
+<!-- Section: Otaku (two sub-rows) -->
+<div class="hobby-section mb-10">
+<h3 class="text-sm font-semibold text-[var(--text)] mb-3" data-i18n="hobby.otaku">轻度二次元患者</h3>
+<div class="flex flex-col md:flex-row gap-6">
+  <div class="flex-1 min-w-0">
+    <p class="text-xs text-[var(--text-soft)] mb-2" data-i18n="hobby.anime">动漫</p>
+    <div class="hobby-scroll-wrap"><div class="hobby-scroll" data-dir="anime"></div></div>
+  </div>
+  <div class="flex-1 min-w-0">
+    <p class="text-xs text-[var(--text-soft)] mb-2" data-i18n="hobby.novels">小说</p>
+    <div class="hobby-scroll-wrap"><div class="hobby-scroll" data-dir="book"></div></div>
+  </div>
 </div>
 </div></section>
 </div></main>
@@ -75,4 +109,39 @@
 <script src="/assets/js/theme.js"></script>
 <script src="/assets/js/i18n.js"></script>
 <script src="/assets/js/shared.js"></script>
+<script>
+(function(){
+  var dirs=['craft','mountain','nature','skate','anime','book'];
+  dirs.forEach(function(d){
+    var el=document.querySelector('.hobby-scroll[data-dir="'+d+'"]');
+    if(!el)return;
+    // Placeholder images (3 per row for layout testing)
+    for(var i=1;i<=5;i++){
+      var img=document.createElement('img');
+      img.src='/assets/images/hobby/'+d+'/img'+i+'.jpg';
+      img.alt='';
+      img.loading='lazy';
+      img.onerror=function(){this.style.display='none';};
+      el.appendChild(img);
+    }
+    // Add arrows
+    var wrap=el.parentElement;
+    var left=document.createElement('button');
+    left.className='hobby-arrow left';left.textContent='‹';
+    left.onclick=function(){el.scrollBy({left:-300,behavior:'smooth'});};
+    var right=document.createElement('button');
+    right.className='hobby-arrow right';right.textContent='›';
+    right.onclick=function(){el.scrollBy({left:300,behavior:'smooth'});};
+    wrap.appendChild(left);wrap.appendChild(right);
+    // Touch drag
+    var down=false,sX=0,sL=0;
+    el.addEventListener('mousedown',function(e){down=true;sX=e.pageX;sL=el.scrollLeft;el.style.cursor='grabbing';});
+    el.addEventListener('mouseleave',function(){down=false;el.style.cursor='';});
+    el.addEventListener('mouseup',function(){down=false;el.style.cursor='';});
+    el.addEventListener('mousemove',function(e){if(!down)return;e.preventDefault();el.scrollLeft=sL-(e.pageX-sX);});
+    el.addEventListener('touchstart',function(e){sX=e.touches[0].pageX;sL=el.scrollLeft;});
+    el.addEventListener('touchmove',function(e){el.scrollLeft=sL-(e.touches[0].pageX-sX);},{passive:true});
+  });
+})();
+</script>
 </body></html>
