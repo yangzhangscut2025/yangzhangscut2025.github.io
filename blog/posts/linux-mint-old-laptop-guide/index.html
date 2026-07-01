@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="green-purple" data-mode="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>老电脑换Linux系统优化改造教程 · 张阳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'var(--primary)',secondary:'var(--secondary)',bg:'var(--bg)',card:'var(--card)',text:'var(--text)','text-soft':'var(--text-soft)',border:'var(--border)',hover:'var(--hover)'},borderRadius:{DEFAULT:'8px'},fontFamily:{sans:['Inter','Noto Sans SC','system-ui','sans-serif']}}}}</script>
+<link rel="stylesheet" href="/assets/css/base.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<style>.scroll-top-btn{opacity:0;pointer-events:none;transition:opacity .3s}@media(max-width:767px){.mobile-hidden{display:none}}</style>
+
+</head>
+<body data-page="blog" class="min-h-screen flex flex-col">
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[var(--bg)]/90 backdrop-blur-md border-b border-[var(--border)]">
+<div class="max-w-6xl mx-auto flex items-center justify-between px-6 py-3">
+<a href="/" class="text-lg font-bold text-[var(--text)] hover:text-[var(--primary)] transition-colors">Yang Zhang</a>
+<div class="hidden md:flex items-center gap-6 text-sm font-medium">
+<a href="/" class="nav-link" data-nav="home">首页</a>
+<a href="/about/" class="nav-link" data-nav="about">关于我</a>
+<a href="/resume/" class="nav-link" data-nav="resume">简历</a>
+<a href="/works/" class="nav-link" data-nav="works">作品集</a>
+<a href="/blog/" class="nav-link" data-nav="blog">博客</a>
+<a href="/contact/" class="nav-link" data-nav="contact">联系我</a>
+</div>
+<div class="flex items-center gap-3 text-sm">
+<button id="langToggle" class="px-2 py-1 rounded-md border border-[var(--border)] text-[var(--text-soft)] hover:text-[var(--text)] bg-[var(--card)] text-xs font-medium" data-i18n="lang.label">EN</button>
+<button id="modeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Toggle dark mode">🌙</button>
+<div class="relative">
+<button id="themeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Switch theme">🎨</button>
+<div id="themePopover" class="hidden absolute right-0 top-10 bg-[var(--card)] border border-[var(--border)] rounded-lg shadow-md p-3 z-50" style="min-width:160px">
+<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)] mb-1" data-theme="green-purple">🟢🟣 绿紫</button>
+<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)]" data-theme="blue-yellow">🔵🟡 蓝黄</button>
+</div></div>
+<button id="hamburger" class="md:hidden text-xl text-[var(--text)]">☰</button>
+</div></div>
+<div id="mobileMenu" class="hidden md:hidden border-t border-[var(--border)] bg-[var(--card)] px-6 py-3 space-y-2">
+<a href="/" class="block py-2 nav-link" data-nav="home">首页</a>
+<a href="/about/" class="block py-2 nav-link" data-nav="about">关于我</a>
+<a href="/resume/" class="block py-2 nav-link" data-nav="resume">简历</a>
+<a href="/works/" class="block py-2 nav-link" data-nav="works">作品集</a>
+<a href="/blog/" class="block py-2 nav-link" data-nav="blog">博客</a>
+<a href="/contact/" class="block py-2 nav-link" data-nav="contact">联系我</a>
+</div></nav>
+
+
+<main class="flex-1 pt-24 pb-16">
+<div class="max-w-3xl mx-auto px-6">
+
+  
+  <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--text-soft)] hover:text-[var(--primary)] transition-colors mb-8">← 返回博客首页</a>
+
+  
+  <header class="mb-10">
+    <h1 class="text-2xl md:text-3xl font-bold text-[var(--text)] mb-4">老电脑换Linux系统优化改造教程</h1>
+    <div class="flex flex-wrap items-center gap-4 text-sm text-[var(--text-soft)]">
+      <span>2026-06-10</span>
+      <span>·</span>
+      <span>预计阅读 10 分钟</span>
+      
+      <span class="px-2 py-0.5 rounded-full bg-[var(--primary-soft)] text-[var(--primary)] text-xs">技术教程</span>
+      
+    </div>
+  </header>
+
+  
+  <article class="prose prose-slate max-w-none text-[var(--text)] leading-relaxed
+    [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:mt-10 [&_h2]:mb-4
+    [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3
+    [&_p]:mb-5 [&_p]:leading-relaxed
+    [&_ul]:mb-5 [&_ol]:mb-5 [&_li]:mb-2
+    [&_code]:bg-[var(--hover)] [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-sm
+    [&_pre]:bg-[var(--hover)] [&_pre]:p-4 [&_pre]:rounded-lg [&_pre]:overflow-x-auto [&_pre]:mb-5
+    [&_pre_code]:bg-transparent [&_pre_code]:p-0
+    [&_table]:w-full [&_table]:border-collapse [&_table]:mb-5
+    [&_th]:border [&_th]:border-[var(--border)] [&_th]:p-2 [&_th]:bg-[var(--hover)] [&_th]:text-sm [&_th]:font-semibold
+    [&_td]:border [&_td]:border-[var(--border)] [&_td]:p-2 [&_td]:text-sm
+    [&_img]:rounded-lg [&_img]:max-w-full [&_img]:h-auto [&_img]:my-4
+    [&_blockquote]:border-l-4 [&_blockquote]:border-[var(--primary)] [&_blockquote]:pl-4 [&_blockquote]:text-[var(--text-soft)] [&_blockquote]:italic [&_blockquote]:mb-5
+    [&_a]:text-[var(--primary)] [&_a]:underline
+  ">
+    <p>起因是家里闲置老电脑想重新利用，Windows 系统太卡了，想换 Linux 系统玩玩，顺便熟悉一下 Linux 系统的操作。</p>
+<h2 id="教程前言">教程前言</h2>
+<p>本教程针对联想 V330-14IKB（i5-8250U、4G 内存、机械硬盘、原厂 Win7）老旧低配笔记本，全程无需任何硬件升级，通过替换轻量化 Linux Mint 系统、深度适配低配硬件优化、锁死 UEFI 启动引导，解决原 Windows 系统臃肿、开机慢、多开卡顿的问题。改造后可实现开机直入 Linux 系统、无旧 Win7 引导跳转，流畅满足日常办公、网页浏览、影音娱乐、网课等基础使用需求，是该机型零成本续命最优方案。</p>
+<h2 id="一整机完整硬件参数与升级可行性分析">一、整机完整硬件参数与升级可行性分析</h2>
+<h3 id="1-基础整机信息">1. 基础整机信息</h3>
+<ul>
+<li>机型：Lenovo V330-14IKB 81B0</li>
+<li>主板：LNVNB161216</li>
+<li>BIOS：Lenovo 6UCN35WW(V2.02)，2017-11-14，支持 UEFI/Legacy 双启动</li>
+<li>改造系统：Linux Mint 22.3 Zena（Xfce 轻量化版本，内核 6.14）</li>
+<li>整机架构：Intel 8 代酷睿双显卡笔记本（Intel 核显 + AMD Radeon 独显）</li>
+</ul>
+<h3 id="2-处理器cpu">2. 处理器（CPU）</h3>
+<ul>
+<li>型号：Intel Core i5-8250U 1.6GHz 4 核 8 线程</li>
+<li>缓存参数：L1=256KiB、L2=1MiB、L3=6MiB</li>
+<li>频率：基础 1.6GHz，最大睿频 4.005GHz</li>
+<li>性能定位：15W 低功耗办公处理器，满足网页多开、文档编辑、影音播放，不支持重度渲染、大型游戏</li>
+<li><strong>升级结论</strong>：板载焊接固定，无法更换、无法升级</li>
+</ul>
+<h3 id="3-内存核心低配瓶颈">3. 内存（核心低配瓶颈）</h3>
+<ul>
+<li>硬件规格：板载三星 DDR4 2400MHz 4GB（焊死不可拆卸），预留 1 个 SODIMM 空余插槽</li>
+<li>扩展上限：支持单条最大 8GB DDR4 2400MHz 内存，扩容后最高 12GB</li>
+<li>当前短板：4GB 物理内存容量过小，多开程序易占满内存，频繁调用机械硬盘虚拟内存，造成整机卡顿</li>
+<li><strong>升级收益（可选）</strong>：4G+8G 双通道 12GB 内存，彻底解决内存溢出、Swap 频繁读写卡顿，大幅提升多任务流畅度</li>
+</ul>
+<h3 id="4-双显卡配置">4. 双显卡配置</h3>
+<ul>
+<li>核显（主输出）：Intel UHD Graphics 620，驱动 i915，负责桌面显示、办公、网页、视频播放，默认省电启用，显存共享系统内存</li>
+<li>独显：AMD Radeon 530 Mobile 2G GDDR5 独显，驱动 amdgpu，支持轻度修图、简易 3D、小游戏，Linux 默认休眠断电省电，可手动调用</li>
+<li><strong>升级结论</strong>：双显卡均主板焊接，不可更换、不可加装</li>
+</ul>
+<h3 id="5-存储硬盘整机最大性能瓶颈">5. 存储硬盘（整机最大性能瓶颈）</h3>
+<p>主板仅支持 AHCI SATA 协议，无 M.2/NVMe 插槽，仅适配 2.5 英寸 SATA 硬盘，双 SATA 接口可双硬盘混用。</p>
+<ul>
+<li>sda 系统盘：西数 500GB 2.5 寸机械硬盘，含 EFI 引导分区，原 Win7 系统盘，读写速度慢，是整机核心卡顿根源</li>
+<li>sdb 闲置盘：128GB SATA 固态硬盘，NTFS 格式，原 Win7 备用盘，当前闲置未挂载</li>
+</ul>
+<p>两种低成本升级方案（可选）：</p>
+<ul>
+<li><strong>性价比方案</strong>：将 Linux 系统迁移至 128G 固态，500G 机械盘仅用作文件存储，开机、软件加载速度提升 3-5 倍</li>
+<li><strong>全固态极致方案</strong>：替换 500G 机械盘为 1TB/2TB 2.5 寸 SATA 固态，彻底消除机械硬盘读写延迟</li>
+</ul>
+<h3 id="6-网络音频与外设">6. 网络、音频与外设</h3>
+<ul>
+<li>有线网卡：Realtek RTL8111 千兆网卡，驱动 r8169，兼容稳定</li>
+<li>无线网卡：Intel AC3165，支持 2.4G/5G 双频 WiFi + 蓝牙 4.2，Linux 原生完美兼容</li>
+<li>音频：Intel Sunrise Point-LP HD 音频，耳机、麦克风、HDMI 音频输出正常</li>
+<li>外设接口/设备：USB3.0 高速接口、Elan 触控板、标准键盘、1080P 内置摄像头、扬声器麦克风，全部免驱适配</li>
+</ul>
+<h3 id="7-硬件升级优先级排序">7. 硬件升级优先级排序</h3>
+<ul>
+<li><strong>优先升级（提升显著）</strong>：加装 8GB DDR4 2400MHz 内存（成本最低，根治多开卡顿）&gt; 系统迁移固态/更换大容量 SATA 固态（速度提升最明显）</li>
+<li><strong>可选升级</strong>：更换老化电池（仅影响续航，不影响系统流畅度）</li>
+<li><strong>绝对不建议升级</strong>：CPU、双显卡、屏幕（均焊死或更换成本极高，无性能收益）</li>
+</ul>
+<h2 id="二改造前期准备">二、改造前期准备</h2>
+<h3 id="1-工具清单">1. 工具清单</h3>
+<ul>
+<li>8GB 及以上空白 U 盘（制作启动盘，数据将全部清空）</li>
+<li>一台正常 Windows 电脑（用于下载镜像、烧录 U 盘）</li>
+<li>稳定 WiFi 网络（系统安装、更新、软件下载全程联网）</li>
+</ul>
+<h3 id="2-系统选型理由linux-mint-xfce">2. 系统选型理由（Linux Mint Xfce）</h3>
+<p>放弃 Cinnamon、MATE 版本，首选 Xfce 轻量化版本，适配 4G 内存低配机型：开机空载内存仅 300-450MB，资源占用极低；界面逻辑贴近 Windows，新手零学习成本；联想全系硬件原生免驱兼容，无需手动配置声卡、网卡、显卡驱动，稳定性拉满。</p>
+<h3 id="3-资源下载地址">3. 资源下载地址</h3>
+<ul>
+<li>系统镜像：Linux Mint 官方下载页（选择 Xfce 22.3 版本）</li>
+<li>烧录工具：Rufus（Windows 免费开源启动盘制作工具）</li>
+</ul>
+<h2 id="三系统启动盘制作">三、系统启动盘制作</h2>
+<p>全程在备用 Windows 电脑操作：</p>
+<ol>
+<li>插入空白 U 盘，打开 Rufus 软件，自动识别接入 U 盘</li>
+<li>设备选中当前 U 盘，引导类型选择「磁盘或 ISO 镜像」，加载已下载的 Linux Mint Xfce 镜像</li>
+<li>关键设置：分区类型选择 GPT，适配笔记本 UEFI 启动，杜绝引导错乱</li>
+<li>点击「开始」，确认格式化 U 盘，等待镜像烧录 + 自动校验完成，拔出 U 盘备用</li>
+</ol>
+<h2 id="四bios-设置与系统安装">四、BIOS 设置与系统安装</h2>
+<h3 id="1-u-盘临时启动">1. U 盘临时启动</h3>
+<ol>
+<li>改造笔记本插入制作好的系统 U 盘，开机瞬间连续按 F12，调出临时启动菜单</li>
+<li>选择带「EFI」标识的 U 盘启动项，回车进入系统安装界面</li>
+</ol>
+<h3 id="2-完整安装步骤">2. 完整安装步骤</h3>
+<ol>
+<li>语言选择「简体中文」，点击「安装 Linux Mint」</li>
+<li>连接 WiFi 网络，勾选「安装时下载更新」，保证驱动完整适配</li>
+<li>核心安装设置：安装类型选择「抹掉整个磁盘并安装 Linux Mint」，不推荐双系统，彻底清除 Win7 残留引导碎片，杜绝后续开机跳转旧系统问题</li>
+<li>时区选择「上海」，键盘布局「汉语」，自定义用户名与开机密码</li>
+<li>等待 20-40 分钟安装完成，拔出 U 盘，重启电脑</li>
+</ol>
+<h2 id="五系统初始化基础配置">五、系统初始化基础配置</h2>
+<h3 id="1-更换国内源--完整系统更新">1. 更换国内源 + 完整系统更新</h3>
+<ol>
+<li>打开系统菜单「软件源」，将官方默认源替换为阿里云镜像，大幅提升下载、更新速度</li>
+<li>打开终端，执行完整更新命令，输入开机密码等待执行完成：</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo apt update <span style="color:#f92672">&amp;&amp;</span> sudo apt full-upgrade -y
+</span></span></code></pre></div><ol start="3">
+<li>更新全部完成后，重启电脑生效</li>
+</ol>
+<h3 id="2-中文输入法配置">2. 中文输入法配置</h3>
+<ol>
+<li>打开「语言支持」，系统自动下载并安装缺失的中文语言包</li>
+<li>将输入法框架切换为 fcitx，保存设置后重启电脑</li>
+<li>打开输入法配置面板，添加「Pinyin 拼音输入法」，设置切换快捷键为 Ctrl+空格</li>
+</ol>
+<h2 id="六4g-内存--机械硬盘专属极致优化核心章节">六、4G 内存 + 机械硬盘专属极致优化（核心章节）</h2>
+<h3 id="1-关闭桌面特效降低硬件负载">1. 关闭桌面特效，降低硬件负载</h3>
+<p>低配机型无需桌面动画，关闭冗余渲染，降低 CPU、显卡占用 20% 以上：</p>
+<ol>
+<li>菜单搜索「窗口管理器微调」，切换至「合成器」标签页</li>
+<li>取消勾选「启用显示合成」，同步关闭窗口阴影、窗口预览、过渡动画、缩放特效</li>
+<li>设置后桌面无多余渲染负载，空载硬件占用大幅降低</li>
+</ol>
+<h3 id="2-精简开机自启压低空载内存">2. 精简开机自启，压低空载内存</h3>
+<p>打开「会话和启动」-「应用程序自启动」，严格按以下规则设置，优化后开机内存可控制在 400MB 以内：</p>
+<ul>
+<li><strong>必须保留（禁止禁用）</strong>：电源管理器、屏幕解锁程序、网络管理器小程序</li>
+<li><strong>全部禁用</strong>：更新管理器、蓝牙 Blueman、系统故障报告、无障碍辅助服务</li>
+</ul>
+<h3 id="3-配置-swap-虚拟内存杜绝内存溢出卡顿">3. 配置 Swap 虚拟内存，杜绝内存溢出卡顿</h3>
+<p>4G 物理内存容量有限，搭配机械硬盘读写慢，需手动配置虚拟内存兜底，优先调用物理内存，减少硬盘读写损耗。终端依次执行以下完整命令：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建 4GB 虚拟内存交换文件</span>
+</span></span><span style="display:flex;"><span>sudo fallocate -l 4G /swapfile
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 加固文件权限，保障系统安全</span>
+</span></span><span style="display:flex;"><span>sudo chmod <span style="color:#ae81ff">600</span> /swapfile
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 格式化交换分区</span>
+</span></span><span style="display:flex;"><span>sudo mkswap /swapfile
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 临时启用虚拟内存</span>
+</span></span><span style="display:flex;"><span>sudo swapon /swapfile
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 设置开机自动挂载，永久生效</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#39;/swapfile none swap sw 0 0&#39;</span> | sudo tee -a /etc/fstab
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 内存占用 60% 时才调用虚拟内存，减少机械硬盘读写卡顿</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#39;vm.swappiness=60&#39;</span> | sudo tee /etc/sysctl.d/99-swap.conf
+</span></span><span style="display:flex;"><span>sudo sysctl -p /etc/sysctl.d/99-swap.conf
+</span></span></code></pre></div><p>验证方式：终端输入 <code>swapon --show</code>，显示 <code>/swapfile</code> 即配置成功。</p>
+<h2 id="七彻底根治开机跳转-win7-引导故障">七、彻底根治开机跳转 Win7 引导故障</h2>
+<h3 id="1-故障根源">1. 故障根源</h3>
+<p>原厂 BIOS 默认 Legacy 优先启动，会优先扫描旧 Win7 的 MBR 传统引导，即便 UEFI 顺位 Linux 靠前，仍会自动跳转 Win7，需彻底禁用老式引导通道。</p>
+<h3 id="2-根治操作步骤">2. 根治操作步骤</h3>
+<p><strong>步骤一：BIOS 锁定 UEFI Only 启动模式</strong></p>
+<ol>
+<li>重启电脑，开机连续按 F2 进入 BIOS 设置</li>
+<li>切换至 Boot 选项卡，找到 Boot Mode 选项</li>
+<li>将「Legacy Support / Legacy First」修改为 UEFI Only，禁止 BIOS 扫描老式引导</li>
+<li>按 F10 保存设置并重启</li>
+</ol>
+<p><strong>步骤二：锁定 Linux 为第一启动项，删除 Win7 引导残留</strong></p>
+<ol>
+<li>F12 临时选择 Ubuntu 启动项进入系统，终端输入 <code>sudo efibootmgr</code>，查看所有 EFI 启动项</li>
+<li>记录 BootXXX* Ubuntu 对应的 4 位编号（如 0007）</li>
+<li>执行命令锁定启动顺序（替换为自己的实际编号）：</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo efibootmgr -o 0007,0000,2001,2003,2002
+</span></span></code></pre></div><ol start="4">
+<li>删除所有旧 Win7 Legacy 引导项（按需替换编号）：</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo efibootmgr -b <span style="color:#ae81ff">0001</span> -B
+</span></span><span style="display:flex;"><span>sudo efibootmgr -b <span style="color:#ae81ff">0002</span> -B
+</span></span></code></pre></div><ol start="5">
+<li>再次执行 <code>sudo efibootmgr</code>，确认 BootOrder 首位为 Ubuntu 编号即设置完成</li>
+</ol>
+<h3 id="3-最终效果">3. 最终效果</h3>
+<p>开机无需任何手动操作，自动直入 Linux Mint 系统，无启动选择菜单、无 Win7 跳转问题，引导彻底稳定。</p>
+<h2 id="八适配低配机型的软件推荐与使用规范">八、适配低配机型的软件推荐与使用规范</h2>
+<h3 id="1-必备常用软件">1. 必备常用软件</h3>
+<ul>
+<li>浏览器：Firefox（轻量化、兼容好、资源占用低）</li>
+<li>办公套件：LibreOffice（系统原生自带，完美兼容 Word/Excel/PPT，无需安装臃肿 WPS）</li>
+<li>通讯工具：微信 Linux 版、QQ</li>
+<li>影音播放：VLC 万能播放器，支持全格式视频、无广告、低资源占用</li>
+</ul>
+<h3 id="2-4g--机械硬盘专属使用规范">2. 4G + 机械硬盘专属使用规范</h3>
+<ul>
+<li>浏览器标签页控制在 8 个以内，避免多开占满内存触发 Swap 卡顿</li>
+<li>闲置软件及时关闭，禁止长期后台最小化常驻</li>
+<li>关闭系统自动更新，每周手动批量更新，避免占用磁盘与网速</li>
+<li>硬盘始终预留 10% 以上空余空间，磁盘塞满会大幅降低机械硬盘读写速度</li>
+</ul>
+<h2 id="九常见故障快速排查">九、常见故障快速排查</h2>
+<table>
+  <thead>
+      <tr>
+          <th>故障现象</th>
+          <th>解决办法</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>开机依旧跳转 Win7</td>
+          <td>1. BIOS 改为 UEFI Only；2. 终端锁定 Ubuntu 为第一启动项；3. 删除所有 Legacy 旧引导项</td>
+      </tr>
+      <tr>
+          <td>输入法无法切换中英文</td>
+          <td>重启 fcitx 输入法服务，或直接重启电脑</td>
+      </tr>
+      <tr>
+          <td>多开软件/网页卡顿加载慢</td>
+          <td>关闭多余后台程序，查看 Swap 占用情况，清理浏览器缓存，减少同时运行程序数量</td>
+      </tr>
+      <tr>
+          <td>开机弹出 F12 启动选择菜单</td>
+          <td>重新校验 UEFI 启动顺序，确保 Ubuntu 为第一顺位，保存 BIOS 设置</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="十改造总结">十、改造总结</h2>
+<p>本次改造全程零硬件升级、零成本，针对联想 V330-14IKB 低配老旧硬件精准适配：通过 Xfce 轻量化系统降低资源占用，关闭冗余特效、精简开机自启压低空载负载，配置 Swap 虚拟内存解决 4G 内存瓶颈，锁死 UEFI 引导彻底杜绝旧系统跳转问题。改造后彻底摆脱原 Win7 系统臃肿、卡顿、开机慢的痛点，整机运行流畅稳定，完全满足日常办公、网页浏览、影音娱乐、网课学习等基础场景，是该机型低配硬件下最优的长期续命方案。</p>
+
+  </article>
+
+  
+  <div class="mt-12 pt-8 border-t border-[var(--border)]">
+    <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--text-soft)] hover:text-[var(--primary)] transition-colors">← 返回博客首页</a>
+  </div>
+
+</div>
+</main>
+
+<button id="scrollTopBtn" class="scroll-top-btn fixed bottom-6 right-6 w-10 h-10 rounded-full bg-[var(--primary)] text-white shadow-md flex items-center justify-center text-lg z-40 hover:opacity-90" data-i18n-aria="back.top" aria-label="回到顶部">↑</button>
+<script src="/assets/js/theme.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/shared.js"></script>
+
+
+</body>
+</html>
