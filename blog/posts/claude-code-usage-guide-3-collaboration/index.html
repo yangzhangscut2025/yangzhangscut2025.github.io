@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="green-purple" data-mode="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Claude Code 使用指南（下）：高效协作方法 · 张阳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'var(--primary)',secondary:'var(--secondary)',bg:'var(--bg)',card:'var(--card)',text:'var(--text)','text-soft':'var(--text-soft)',border:'var(--border)',hover:'var(--hover)'},borderRadius:{DEFAULT:'8px'},fontFamily:{sans:['Inter','Noto Sans SC','system-ui','sans-serif']}}}}</script>
+<link rel="stylesheet" href="/assets/css/base.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<style>.scroll-top-btn{opacity:0;pointer-events:none;transition:opacity .3s}@media(max-width:767px){.mobile-hidden{display:none}}</style>
+
+</head>
+<body data-page="blog" class="min-h-screen flex flex-col">
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[var(--bg)]/90 backdrop-blur-md border-b border-[var(--border)]">
+<div class="max-w-6xl mx-auto flex items-center justify-between px-6 py-3">
+<a href="/" class="text-lg font-bold text-[var(--text)] hover:text-[var(--primary)] transition-colors">Yang Zhang</a>
+<div class="hidden md:flex items-center gap-6 text-sm font-medium">
+<a href="/" class="nav-link" data-nav="home">首页</a>
+<a href="/about/" class="nav-link" data-nav="about">关于我</a>
+<a href="/resume/" class="nav-link" data-nav="resume">简历</a>
+<a href="/works/" class="nav-link" data-nav="works">作品集</a>
+<a href="/blog/" class="nav-link" data-nav="blog">博客</a>
+<a href="/contact/" class="nav-link" data-nav="contact">联系我</a>
+</div>
+<div class="flex items-center gap-3 text-sm">
+<button id="langToggle" class="px-2 py-1 rounded-md border border-[var(--border)] text-[var(--text-soft)] hover:text-[var(--text)] bg-[var(--card)] text-xs font-medium" data-i18n="lang.label">EN</button>
+<button id="modeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Toggle dark mode">🌙</button>
+<div class="relative">
+<button id="themeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Switch theme">🎨</button>
+<div id="themePopover" class="hidden absolute right-0 top-10 bg-[var(--card)] border border-[var(--border)] rounded-lg shadow-md p-3 z-50" style="min-width:160px">
+<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)] mb-1" data-theme="green-purple">🟢🟣 绿紫</button>
+<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)]" data-theme="blue-yellow">🔵🟡 蓝黄</button>
+</div></div>
+<button id="hamburger" class="md:hidden text-xl text-[var(--text)]">☰</button>
+</div></div>
+<div id="mobileMenu" class="hidden md:hidden border-t border-[var(--border)] bg-[var(--card)] px-6 py-3 space-y-2">
+<a href="/" class="block py-2 nav-link" data-nav="home">首页</a>
+<a href="/about/" class="block py-2 nav-link" data-nav="about">关于我</a>
+<a href="/resume/" class="block py-2 nav-link" data-nav="resume">简历</a>
+<a href="/works/" class="block py-2 nav-link" data-nav="works">作品集</a>
+<a href="/blog/" class="block py-2 nav-link" data-nav="blog">博客</a>
+<a href="/contact/" class="block py-2 nav-link" data-nav="contact">联系我</a>
+</div></nav>
+
+
+<main class="flex-1 pt-24 pb-16">
+<div class="max-w-3xl mx-auto px-6">
+
+  
+  <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--text-soft)] hover:text-[var(--primary)] transition-colors mb-8">← 返回博客首页</a>
+
+  
+  <header class="mb-10">
+    <h1 class="text-2xl md:text-3xl font-bold text-[var(--text)] mb-4">Claude Code 使用指南（下）：高效协作方法</h1>
+    <div class="flex flex-wrap items-center gap-4 text-sm text-[var(--text-soft)]">
+      <span>2026-07-24</span>
+      <span>·</span>
+      <span>预计阅读 13 分钟</span>
+      
+      <span class="px-2 py-0.5 rounded-full bg-[var(--primary-soft)] text-[var(--primary)] text-xs">AI学习</span>
+      
+    </div>
+  </header>
+
+  
+  <article class="prose prose-slate max-w-none text-[var(--text)] leading-relaxed
+    [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:mt-10 [&_h2]:mb-4
+    [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3
+    [&_p]:mb-5 [&_p]:leading-relaxed
+    [&_ul]:mb-5 [&_ol]:mb-5 [&_li]:mb-2
+    [&_code]:bg-[var(--hover)] [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-sm
+    [&_pre]:bg-[var(--hover)] [&_pre]:p-4 [&_pre]:rounded-lg [&_pre]:overflow-x-auto [&_pre]:mb-5
+    [&_pre_code]:bg-transparent [&_pre_code]:p-0
+    [&_table]:w-full [&_table]:border-collapse [&_table]:mb-5
+    [&_th]:border [&_th]:border-[var(--border)] [&_th]:p-2 [&_th]:bg-[var(--hover)] [&_th]:text-sm [&_th]:font-semibold
+    [&_td]:border [&_td]:border-[var(--border)] [&_td]:p-2 [&_td]:text-sm
+    [&_img]:rounded-lg [&_img]:max-w-full [&_img]:h-auto [&_img]:my-4
+    [&_blockquote]:border-l-4 [&_blockquote]:border-[var(--primary)] [&_blockquote]:pl-4 [&_blockquote]:text-[var(--text-soft)] [&_blockquote]:italic [&_blockquote]:mb-5
+    [&_a]:text-[var(--primary)] [&_a]:underline
+  ">
+    <blockquote>
+<p>上篇讲命令，中篇讲记忆。有了这些基础，本篇聚焦<strong>怎么跟 AI 高效协作</strong>——提问的技巧、计划模式的用法、输出质量的控制。这些方法不限于 Claude Code，用其他 AI 工具时同样适用。</p>
+</blockquote>
+<hr>
+<h2 id="一提问的五个层次">一、提问的五个层次</h2>
+<p>同样的任务，不同的提问方式，结果天差地别。以下是五个典型的层次：</p>
+<table>
+  <thead>
+      <tr>
+          <th>层次</th>
+          <th>提问</th>
+          <th>效果</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>❌ 太模糊</td>
+          <td>&ldquo;帮我优化这个&rdquo;</td>
+          <td>AI 猜你的意图，大概率跑偏</td>
+      </tr>
+      <tr>
+          <td>⚠️ 太宽泛</td>
+          <td>&ldquo;修复所有问题&rdquo;</td>
+          <td>AI 会漏，你不知道漏了什么</td>
+      </tr>
+      <tr>
+          <td>✅ 刚好</td>
+          <td>&ldquo;去掉这段代码里重复的查询&rdquo;</td>
+          <td>范围明确，AI 能精准执行</td>
+      </tr>
+      <tr>
+          <td>✅ 更好</td>
+          <td>&ldquo;先分析哪些查询可以合并，不要改代码&rdquo;</td>
+          <td>先分析再动手，避免误改</td>
+      </tr>
+      <tr>
+          <td>✅ 最佳</td>
+          <td>&ldquo;这段代码访问了三次数据库，能不能合并成一次查询？先给方案，不改代码&rdquo;</td>
+          <td>有上下文、有约束、有明确的输出要求</td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>核心原则：描述&quot;做什么&quot;和&quot;为什么&quot;，让 AI 决定&quot;怎么做&quot;。</strong></p>
+<h3 id="好的提问包含什么">好的提问包含什么</h3>
+<pre tabindex="0"><code>[上下文]   &#34;这段代码是用户登录的校验逻辑&#34;
+[问题]     &#34;每次登录会查两次数据库&#34;
+[目标]     &#34;想合并成一次查询&#34;
+[约束]     &#34;先给方案，不要直接改代码&#34;
+</code></pre><p>这四点说清楚，AI 基本不会跑偏。</p>
+<h3 id="坏的提问长什么样">坏的提问长什么样</h3>
+<table>
+  <thead>
+      <tr>
+          <th>坏提问</th>
+          <th>问题所在</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>&ldquo;帮我看看这个&rdquo;</td>
+          <td>没有说看什么、目的是什么</td>
+      </tr>
+      <tr>
+          <td>&ldquo;这个不对&rdquo;</td>
+          <td>没有说哪里不对、预期应该是什么</td>
+      </tr>
+      <tr>
+          <td>&ldquo;你懂的&rdquo;</td>
+          <td>AI 真的不懂</td>
+      </tr>
+      <tr>
+          <td>&ldquo;按上次那样处理&rdquo;</td>
+          <td>对话压缩后 AI 可能忘了&quot;上次&quot;是什么</td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>如果你不确定怎么描述，至少说清楚三件事</strong>：当前状态 → 期望结果 → 约束条件。</p>
+<hr>
+<h2 id="二先分析再动手最有效的协作模式">二、&ldquo;先分析，再动手&rdquo;——最有效的协作模式</h2>
+<h3 id="为什么这个模式重要">为什么这个模式重要</h3>
+<p>AI 擅长两个独立的能力：<strong>分析</strong>和<strong>执行</strong>。但把两个能力串在一起时（直接&quot;帮我改&quot;），AI 容易跳过分析直接执行，导致改错地方、遗漏影响范围。</p>
+<p>把分析和执行分开，是最简单也最有效的提效手段。</p>
+<h3 id="具体操作">具体操作</h3>
+<pre tabindex="0"><code>你说：先分析这个 bug 的原因，不要改代码
+AI：  分析了 → 给出根因和影响范围
+你说：确认，按方案 A 改
+AI：  精准修改
+</code></pre><p>对比：</p>
+<pre tabindex="0"><code>你说：修复这个 bug
+AI：  改了 → 但改错了地方（因为没先分析调用链）
+你说：还是不对
+AI：  又改了 → 还是不完整
+</code></pre><p><strong>多花的 30 秒分析时间，省下的是来回改的 10 分钟。</strong></p>
+<h3 id="什么时候必须先分析">什么时候必须&quot;先分析&quot;</h3>
+<ul>
+<li>Bug 排查（不知道根因的时候）</li>
+<li>涉及多个文件的功能修改</li>
+<li>不确定影响范围的改动</li>
+<li>重构代码</li>
+</ul>
+<h3 id="什么时候可以直接动手">什么时候可以直接&quot;动手&quot;</h3>
+<ul>
+<li>单文件的简单修改（改文案、修 typo）</li>
+<li>之前分析过的同类问题</li>
+<li>你已经明确知道改动方案</li>
+</ul>
+<hr>
+<h2 id="三计划模式复杂任务的必经之路">三、计划模式——复杂任务的必经之路</h2>
+<h3 id="是什么">是什么</h3>
+<p>计划模式（<code>/plan</code> 或直接说&quot;先给计划&quot;）让 AI 在写代码之前，先理清思路、探索代码、设计方案，然后等你确认。</p>
+<h3 id="什么时候用">什么时候用</h3>
+<p><strong>用</strong>：</p>
+<ul>
+<li>新功能开发（你不知道怎么拆解）</li>
+<li>涉及 3 个以上文件的改动</li>
+<li>有多种实现方案需要对比</li>
+<li>架构级别的决策</li>
+</ul>
+<p><strong>不用</strong>：</p>
+<ul>
+<li>修一个 typo</li>
+<li>改一行配置</li>
+<li>你已经明确知道要改什么</li>
+</ul>
+<h3 id="计划模式的实际流程">计划模式的实际流程</h3>
+<pre tabindex="0"><code>1. 你说需求
+2. AI 探索代码 → 理解现有实现
+3. AI 出计划 → 步骤、影响文件、方案对比
+4. 你审核确认 → 可以要求修改方案
+5. AI 按计划执行
+</code></pre><p><strong>关键</strong>：第 4 步是你的决策权。AI 出方案，你拍板。不要跳过审核直接让 AI 执行——那是放弃了你作为决策者的角色。</p>
+<h3 id="你已有的经验">你已有的经验</h3>
+<p>回顾你的薪酬审阅工具开发，最顺畅的部分正是用了这个模式：</p>
+<blockquote>
+<p>&ldquo;先分析，不要改代码&rdquo;——每次我说这句话，你都能准确找到根因。</p>
+</blockquote>
+<p>你实际上已经发现了这个模式的有效性，只是没有系统化。计划模式就是这个模式的正式版本。</p>
+<hr>
+<h2 id="四控制-ai-的输出">四、控制 AI 的输出</h2>
+<h3 id="控制详细程度">控制详细程度</h3>
+<table>
+  <thead>
+      <tr>
+          <th>你想要</th>
+          <th>怎么说</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>简洁回答</td>
+          <td>&ldquo;一句话回答&rdquo; / &ldquo;只给结论&rdquo;</td>
+      </tr>
+      <tr>
+          <td>详细解释</td>
+          <td>&ldquo;详细展开&rdquo; / &ldquo;解释每一步&rdquo;</td>
+      </tr>
+      <tr>
+          <td>列出方案</td>
+          <td>&ldquo;给我三个方案，附优缺点&rdquo;</td>
+      </tr>
+      <tr>
+          <td>只给代码</td>
+          <td>&ldquo;直接给代码，不用解释&rdquo;</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="控制格式">控制格式</h3>
+<p>Claude Code 支持代码高亮、表格、流程图（Mermaid 语法）。需要特定格式时直接说：</p>
+<pre tabindex="0"><code>&#34;用表格对比这三种方案&#34;
+&#34;画一个 Mermaid 流程图&#34;
+&#34;输出 JSON 格式&#34;
+</code></pre><h3 id="控制语言">控制语言</h3>
+<p>虽然 CLAUDE.md 和 <code>/memory</code> 可以设置默认语言偏好，但单次对话中也可以临时切换：</p>
+<pre tabindex="0"><code>&#34;这段代码注释用英文写&#34;
+&#34;解释用中文，代码保持英文&#34;
+</code></pre><h3 id="纠正输出方向">纠正输出方向</h3>
+<p>AI 跑偏时，不要忍受到最后。立即纠正：</p>
+<pre tabindex="0"><code>&#34;不对，我说的不是这个意思，重新理解一下&#34;
+&#34;太啰嗦了，精简到一半&#34;
+&#34;不要展开，这个方向不需要&#34;
+</code></pre><p><strong>最好的协作是你及时纠正，而不是默默接受。</strong></p>
+<hr>
+<h2 id="五常见反模式不要做的事">五、常见反模式——不要做的事</h2>
+<h3 id="反模式一一次给太多任务">反模式一：一次给太多任务</h3>
+<pre tabindex="0"><code>❌ &#34;帮我重构整个认证模块，优化性能，加上日志，再写单元测试&#34;
+✅ 拆成四个独立任务，一个一个来
+</code></pre><p>AI 的注意力是有限的，任务太多会遗漏。</p>
+<h3 id="反模式二用代词引用太久以前的内容">反模式二：用代词引用太久以前的内容</h3>
+<pre tabindex="0"><code>❌ &#34;按上次那个方案改一下&#34;（100 轮对话之前讨论的方案）
+✅ &#34;按之前讨论的缓存方案（Redis + TTL 30 分钟）改&#34;
+</code></pre><p>对话被压缩后，&ldquo;上次&quot;可能已经不存在了。关键信息每次都要重新提。</p>
+<h3 id="反模式三让-ai-猜你的需求">反模式三：让 AI 猜你的需求</h3>
+<pre tabindex="0"><code>❌ &#34;你觉得应该怎么改&#34;（没有上下文和约束）
+✅ &#34;这段代码有性能问题，我怀疑是 N+1 查询，帮我确认并给出优化方案&#34;
+</code></pre><p>没有约束的开放式问题，AI 会过度设计。</p>
+<h3 id="反模式四改了不测试直接部署">反模式四：改了不测试，直接部署</h3>
+<pre tabindex="0"><code>❌ AI 改完 → 直接 git push
+✅ AI 改完 → 你测试 → 确认无误 → 提交
+</code></pre><p>AI 不会实际运行你的应用。所有功能验证都依赖你。</p>
+<h3 id="反模式五只在出问题时纠正不在顺利时反馈">反模式五：只在出问题时纠正，不在顺利时反馈</h3>
+<pre tabindex="0"><code>✅ &#34;这个方案很好，记住这种风格&#34; → AI 学到你的偏好
+</code></pre><p>正面反馈同样有价值。AI 会调整输出风格来匹配你的偏好。</p>
+<hr>
+<h2 id="六你应该记住的-10-条协作原则">六、你应该记住的 10 条协作原则</h2>
+<ol>
+<li><strong>你定义&quot;做什么&quot;和&quot;为什么&rdquo;，AI 负责&quot;怎么做&quot;</strong>——决策权永远在你</li>
+<li><strong>先分析，再动手</strong>——多花 30 秒，省下 10 分钟</li>
+<li><strong>复杂任务用计划模式</strong>——方案对了再执行</li>
+<li><strong>一次只做一件事</strong>——大任务拆开，逐个击破</li>
+<li><strong>给上下文</strong>——不要假设 AI 知道你的项目现状</li>
+<li><strong>及时纠正</strong>——AI 跑偏时立刻说，不要忍</li>
+<li><strong>写进记忆</strong>——反复用到的规则写进 CLAUDE.md 或 <code>/memory</code></li>
+<li><strong>测试是你的事</strong>——AI 写代码，你验证功能</li>
+<li><strong>持续迭代</strong>——第一次不完美很正常，多轮对话逐步逼近目标</li>
+<li><strong>好坏都反馈</strong>——正面反馈让 AI 更贴合你的风格</li>
+</ol>
+<hr>
+<h2 id="七系列总结">七、系列总结</h2>
+<p>三篇文章覆盖了 Claude Code 使用体系的完整图景：</p>
+<table>
+  <thead>
+      <tr>
+          <th>篇目</th>
+          <th>主题</th>
+          <th>核心收获</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>上篇</td>
+          <td>命令与配置</td>
+          <td>知道工具有什么、怎么设置</td>
+      </tr>
+      <tr>
+          <td>中篇</td>
+          <td>记忆系统</td>
+          <td>让 AI 理解你的项目和偏好</td>
+      </tr>
+      <tr>
+          <td>下篇</td>
+          <td>协作方法</td>
+          <td>高效提问、计划模式、输出控制</td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>从&quot;会用&quot;到&quot;用好&quot;，关键不在于知道多少命令，而在于建立一套适合自己的协作模式。</strong> CLAUDE.md 是你给 AI 的说明书，协作方法是你和 AI 的工作协议。两者结合，AI 才能从&quot;能干活&quot;变成&quot;干得好&quot;。</p>
+<hr>
+<blockquote>
+<p>上一篇：<a href="/blog/posts/claude-code-usage-guide-2-memory/">Claude Code 使用指南（中）：记忆系统与项目上下文</a></p>
+</blockquote>
+
+  </article>
+
+  
+  <div class="mt-12 pt-8 border-t border-[var(--border)]">
+    <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--text-soft)] hover:text-[var(--primary)] transition-colors">← 返回博客首页</a>
+  </div>
+
+</div>
+</main>
+
+<button id="scrollTopBtn" class="scroll-top-btn fixed bottom-6 right-6 w-10 h-10 rounded-full bg-[var(--primary)] text-white shadow-md flex items-center justify-center text-lg z-40 hover:opacity-90" data-i18n-aria="back.top" aria-label="回到顶部">↑</button>
+<script src="/assets/js/theme.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/shared.js"></script>
+
+
+</body>
+</html>
