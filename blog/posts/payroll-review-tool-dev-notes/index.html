@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="green-purple" data-mode="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>薪酬合规审阅工具 — 开发心得与知识点总结 · 张阳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'var(--primary)',secondary:'var(--secondary)',bg:'var(--bg)',card:'var(--card)',text:'var(--text)','text-soft':'var(--text-soft)',border:'var(--border)',hover:'var(--hover)'},borderRadius:{DEFAULT:'8px'},fontFamily:{sans:['Inter','Noto Sans SC','system-ui','sans-serif']}}}}</script>
+<link rel="stylesheet" href="/assets/css/base.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<style>.scroll-top-btn{opacity:0;pointer-events:none;transition:opacity .3s}@media(max-width:767px){.mobile-hidden{display:none}}</style>
+
+</head>
+<body data-page="blog" class="min-h-screen flex flex-col">
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[var(--bg)]/90 backdrop-blur-md border-b border-[var(--border)]">
+<div class="max-w-6xl mx-auto flex items-center justify-between px-6 py-3">
+<a href="/" class="text-lg font-bold text-[var(--text)] hover:text-[var(--primary)] transition-colors">Yang Zhang</a>
+<div class="hidden md:flex items-center gap-6 text-sm font-medium">
+<a href="/" class="nav-link" data-nav="home">首页</a>
+<a href="/about/" class="nav-link" data-nav="about">关于我</a>
+<a href="/resume/" class="nav-link" data-nav="resume">简历</a>
+<a href="/works/" class="nav-link" data-nav="works">作品集</a>
+<a href="/blog/" class="nav-link" data-nav="blog">博客</a>
+<a href="/contact/" class="nav-link" data-nav="contact">联系我</a>
+</div>
+<div class="flex items-center gap-3 text-sm">
+<button id="langToggle" class="px-2 py-1 rounded-md border border-[var(--border)] text-[var(--text-soft)] hover:text-[var(--text)] bg-[var(--card)] text-xs font-medium" data-i18n="lang.label">EN</button>
+<button id="modeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Toggle dark mode">🌙</button>
+<div class="relative">
+<button id="themeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Switch theme">🎨</button>
+<div id="themePopover" class="hidden absolute right-0 top-10 bg-[var(--card)] border border-[var(--border)] rounded-lg shadow-md p-3 z-50" style="min-width:160px">
+<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)] mb-1" data-theme="green-purple">🟢🟣 绿紫</button>
+<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)]" data-theme="blue-yellow">🔵🟡 蓝黄</button>
+</div></div>
+<button id="hamburger" class="md:hidden text-xl text-[var(--text)]">☰</button>
+</div></div>
+<div id="mobileMenu" class="hidden md:hidden border-t border-[var(--border)] bg-[var(--card)] px-6 py-3 space-y-2">
+<a href="/" class="block py-2 nav-link" data-nav="home">首页</a>
+<a href="/about/" class="block py-2 nav-link" data-nav="about">关于我</a>
+<a href="/resume/" class="block py-2 nav-link" data-nav="resume">简历</a>
+<a href="/works/" class="block py-2 nav-link" data-nav="works">作品集</a>
+<a href="/blog/" class="block py-2 nav-link" data-nav="blog">博客</a>
+<a href="/contact/" class="block py-2 nav-link" data-nav="contact">联系我</a>
+</div></nav>
+
+
+<main class="flex-1 pt-24 pb-16">
+<div class="max-w-3xl mx-auto px-6">
+
+  
+  <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--text-soft)] hover:text-[var(--primary)] transition-colors mb-8">← 返回博客首页</a>
+
+  
+  <header class="mb-10">
+    <h1 class="text-2xl md:text-3xl font-bold text-[var(--text)] mb-4">薪酬合规审阅工具 — 开发心得与知识点总结</h1>
+    <div class="flex flex-wrap items-center gap-4 text-sm text-[var(--text-soft)]">
+      <span>2026-06-10</span>
+      <span>·</span>
+      <span>预计阅读 12 分钟</span>
+      
+      <span class="px-2 py-0.5 rounded-full bg-[var(--primary-soft)] text-[var(--primary)] text-xs">技术教程</span>
+      
+    </div>
+  </header>
+
+  
+  <article class="prose prose-slate max-w-none text-[var(--text)] leading-relaxed
+    [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:mt-10 [&_h2]:mb-4
+    [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3
+    [&_p]:mb-5 [&_p]:leading-relaxed
+    [&_ul]:mb-5 [&_ol]:mb-5 [&_li]:mb-2
+    [&_code]:bg-[var(--hover)] [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-sm
+    [&_pre]:bg-[var(--hover)] [&_pre]:p-4 [&_pre]:rounded-lg [&_pre]:overflow-x-auto [&_pre]:mb-5
+    [&_pre_code]:bg-transparent [&_pre_code]:p-0
+    [&_table]:w-full [&_table]:border-collapse [&_table]:mb-5
+    [&_th]:border [&_th]:border-[var(--border)] [&_th]:p-2 [&_th]:bg-[var(--hover)] [&_th]:text-sm [&_th]:font-semibold
+    [&_td]:border [&_td]:border-[var(--border)] [&_td]:p-2 [&_td]:text-sm
+    [&_img]:rounded-lg [&_img]:max-w-full [&_img]:h-auto [&_img]:my-4
+    [&_blockquote]:border-l-4 [&_blockquote]:border-[var(--primary)] [&_blockquote]:pl-4 [&_blockquote]:text-[var(--text-soft)] [&_blockquote]:italic [&_blockquote]:mb-5
+    [&_a]:text-[var(--primary)] [&_a]:underline
+  ">
+    <h1 id="薪酬合规审阅工具--开发心得与知识点总结">薪酬合规审阅工具 — 开发心得与知识点总结</h1>
+<blockquote>
+<p>从零到一，一个人+AI 助手，两周完成一个团队协作 Web 应用。</p>
+</blockquote>
+<hr>
+<h2 id="一项目是怎么开始的">一、项目是怎么开始的</h2>
+<p>需求很简单：薪酬合规团队有一份 Excel 表格，包含各国用工规则，需要对每条规则进行审阅、标注、导出。原来用 Excel 传来传去，版本混乱，不知道谁审了谁没审。</p>
+<p><strong>核心痛点</strong>：</p>
+<ul>
+<li>多人协作时不知道进度</li>
+<li>修改历史无法追溯</li>
+<li>导出格式丢失</li>
+</ul>
+<p><strong>目标</strong>：做一个 Web 工具，上传 Excel → 在线审阅 → 导出结果。</p>
+<hr>
+<h2 id="二为什么选-flask--sqlite">二、为什么选 Flask + SQLite</h2>
+<h3 id="什么是-flask">什么是 Flask</h3>
+<p>Flask 是 Python 的 Web 框架。&ldquo;框架&quot;就是一个脚手架，帮你处理 HTTP 请求、路由、模板渲染这些底层工作，你只需要写业务逻辑。</p>
+<h3 id="为什么不用-django">为什么不用 Django</h3>
+<p>Django 功能更全但更重，自带 ORM、Admin、用户系统。这个项目只需要简单的增删改查，Flask 更轻量，代码量少很多。</p>
+<h3 id="什么是-sqlite">什么是 SQLite</h3>
+<p>SQLite 是一个嵌入式数据库，数据存成一个文件（<code>data.db</code>），不需要安装数据库服务。MySQL/PostgreSQL 需要单独跑一个服务进程，SQLite 直接读文件就行。</p>
+<p><strong>为什么选 SQLite</strong>：</p>
+<ul>
+<li>零配置，不需要装数据库</li>
+<li>8 人以内并发够用</li>
+<li>备份就是复制一个文件</li>
+</ul>
+<p><strong>代价</strong>：SQLite 不支持高并发写入，8 人同时保存偶尔会 <code>database is locked</code>（数据库被锁）。代码里加了 3 次重试解决。</p>
+<hr>
+<h2 id="三excel-解析的坑">三、Excel 解析的坑</h2>
+<h3 id="三种格式的兼容">三种格式的兼容</h3>
+<p>项目支持三种 Excel 格式（v1/v2/v3），列数不同、列名不同。怎么自动识别？</p>
+<p><strong>思路</strong>：检查表头特征。第一列是「标题Ⅰ」→ v2；第一列是「l1_标题」且没有「内部口径」列 → v3；否则 → v1。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">detect_format</span>(headers):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> headers[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;标题Ⅰ&#39;</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#39;v2&#39;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#39;实务内容（官方）&#39;</span> <span style="color:#f92672">in</span> headers <span style="color:#f92672">and</span> <span style="color:#e6db74">&#39;实务内容（内部口径）&#39;</span> <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> headers:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#39;v3&#39;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#39;v1&#39;</span>
+</span></span></code></pre></div><h3 id="合并单元格的处理">合并单元格的处理</h3>
+<p>Excel 里一级模块标题经常跨行合并，openpyxl 读合并单元格时，只有左上角单元格有值，合并区域内的其他单元格为 None。</p>
+<p><strong>解决</strong>：遍历所有合并区域，把左上角的值填充到区域内每个单元格。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>merged <span style="color:#f92672">=</span> {}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> merge_range <span style="color:#f92672">in</span> ws<span style="color:#f92672">.</span>merged_cells<span style="color:#f92672">.</span>ranges:
+</span></span><span style="display:flex;"><span>    top_left_val <span style="color:#f92672">=</span> ws<span style="color:#f92672">.</span>cell(row<span style="color:#f92672">=</span>merge_range<span style="color:#f92672">.</span>min_row, column<span style="color:#f92672">=</span>merge_range<span style="color:#f92672">.</span>min_col)<span style="color:#f92672">.</span>value
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> row <span style="color:#f92672">in</span> range(merge_range<span style="color:#f92672">.</span>min_row, merge_range<span style="color:#f92672">.</span>max_row <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> col <span style="color:#f92672">in</span> range(merge_range<span style="color:#f92672">.</span>min_col, merge_range<span style="color:#f92672">.</span>max_col <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>):
+</span></span><span style="display:flex;"><span>            merged[(row, col)] <span style="color:#f92672">=</span> top_left_val
+</span></span></code></pre></div><h3 id="为什么用-openpyxl-而不是-pandas">为什么用 openpyxl 而不是 pandas</h3>
+<p>pandas 读 Excel 更方便，但它不保留格式（颜色、字体、合并单元格）。这个项目需要导出带格式的 Excel，所以必须用 openpyxl 读写。</p>
+<hr>
+<h2 id="四审阅页面的三栏布局">四、审阅页面的三栏布局</h2>
+<h3 id="布局设计">布局设计</h3>
+<p>审阅页面是使用最频繁的页面，布局直接影响工作效率：</p>
+<pre tabindex="0"><code>左侧树(180px) | 主内容(弹性) | Prompt面板(450px)
+</code></pre><p>三个区域用 Bootstrap 的 <code>row</code> + <code>col</code> 实现。左右两栏可折叠。</p>
+<h3 id="埋过的坑div-嵌套错误">埋过的坑：div 嵌套错误</h3>
+<p>最初 Prompt 面板一直显示在底部而不是右侧。排查半天发现是 HTML 里多了一个 <code>&lt;/div&gt;</code>，导致 flex row 提前关闭，Prompt 面板被挤出去。</p>
+<p><strong>教训</strong>：flex 布局的 div 嵌套一定要严格配对，多一个少一个都会导致整个布局错乱。</p>
+<h3 id="动态宽度计算">动态宽度计算</h3>
+<p>面板折叠/展开时，主内容区域的宽度需要动态调整。不能用 CSS 硬编码，因为三个变量叠加：</p>
+<ul>
+<li>侧栏：0 或 180px</li>
+<li>Prompt 面板：0 或 450px</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">updateMainColWidth</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">sidebarW</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">getSidebarWidth</span>();  <span style="color:#75715e">// 0 or 180
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">promptW</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">promptOpen</span> <span style="color:#f92672">?</span> <span style="color:#ae81ff">450</span> <span style="color:#f92672">:</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">mainCol</span>.<span style="color:#a6e22e">style</span>.<span style="color:#a6e22e">maxWidth</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;calc(100% - &#39;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">sidebarW</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;px - &#39;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">promptW</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;px)&#39;</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><hr>
+<h2 id="五quill-富文本编辑器">五、Quill 富文本编辑器</h2>
+<h3 id="为什么选-quill">为什么选 Quill</h3>
+<p>审阅过程中需要标注颜色（红=修改、绿=增加、蓝=无源）和加粗/删除线。普通的 <code>&lt;textarea&gt;</code> 只能存纯文本，Quill 可以存带格式的 HTML。</p>
+<h3 id="颜色白名单">颜色白名单</h3>
+<p>Quill 默认只支持少数颜色。需要手动扩展白名单：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">ColorStyle</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">Quill</span>.<span style="color:#66d9ef">import</span>(<span style="color:#e6db74">&#39;attributors/style/color&#39;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ColorStyle</span>.<span style="color:#a6e22e">whitelist</span> <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;#C00000&#39;</span>, <span style="color:#e6db74">&#39;#548235&#39;</span>, <span style="color:#e6db74">&#39;#2E75B5&#39;</span>, ...];
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Quill</span>.<span style="color:#a6e22e">register</span>(<span style="color:#a6e22e">ColorStyle</span>, <span style="color:#66d9ef">true</span>);
+</span></span></code></pre></div><h3 id="初始化技巧">初始化技巧</h3>
+<p>Quill 编辑器必须在 DOM 中可见才能正确初始化 toolbar。如果容器是 <code>display:none</code>，toolbar 绑定会失败。解决方案：先渲染到 <code>position:absolute; left:-9999px</code>，初始化完再移回正常位置。</p>
+<h3 id="导出时保留格式">导出时保留格式</h3>
+<p>Quill 生成的 HTML 需要转成 openpyxl 的 RichText 格式。通过正则解析 HTML 标签（<code>&lt;strong&gt;</code>, <code>&lt;span style=&quot;color:...&quot;&gt;</code>, <code>&lt;s&gt;</code> 等），映射到 openpyxl 的 Font 属性：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># HTML: &lt;span style=&#34;color:#C00000;&#34;&gt;修改&lt;/span&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># openpyxl: InlineFont(color=&#39;C00000&#39;)</span>
+</span></span></code></pre></div><hr>
+<h2 id="六权限系统">六、权限系统</h2>
+<h3 id="设计思路">设计思路</h3>
+<p>两种角色：<strong>负责人</strong>（创建项目的人）和<strong>校验人</strong>（被分配模块的人）。</p>
+<ul>
+<li>负责人可以编辑所有模块</li>
+<li>校验人只能编辑自己被分配的模块</li>
+</ul>
+<h3 id="实现方式">实现方式</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">check_permission</span>(project, module_l1, username):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> project<span style="color:#f92672">.</span>created_by <span style="color:#f92672">==</span> username:  <span style="color:#75715e"># 项目创建者</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>    assignment <span style="color:#f92672">=</span> ModuleAssignment<span style="color:#f92672">.</span>query<span style="color:#f92672">.</span>filter_by(
+</span></span><span style="display:flex;"><span>        project_id<span style="color:#f92672">=</span>project<span style="color:#f92672">.</span>id, module_l1<span style="color:#f92672">=</span>module_l1)<span style="color:#f92672">.</span>first()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> assignment <span style="color:#f92672">and</span> assignment<span style="color:#f92672">.</span>assignee <span style="color:#f92672">==</span> username  <span style="color:#75715e"># 已被分配</span>
+</span></span></code></pre></div><h3 id="注意事项">注意事项</h3>
+<p>权限判断用的是 <code>project.created_by</code>（项目创建者），不是用户的角色字段。角色只是用来在 UI 上显示/隐藏按钮，不影响实际权限检查。</p>
+<hr>
+<h2 id="七ai-prompt-面板">七、AI Prompt 面板</h2>
+<h3 id="设计理念">设计理念</h3>
+<p>审阅时，校验人需要根据参考链接逐条核对内容的准确性。把这个过程交给 AI 可以大幅提效。</p>
+<p><strong>做法</strong>：自动将当前模块的内容和参考链接拼接成一个 Prompt，用户复制到豆包/DeepSeek 对话框里用。</p>
+<h3 id="为什么推荐复制而不是直接发送">为什么推荐复制而不是直接发送</h3>
+<p>API 调用缺少对话上下文，输出质量不如对话框。而且 API 调用收不到用户的追问，只能一次性返回结果。复制到对话框里，用户可以追问、纠正、要求重新分析。</p>
+<h3 id="prompt-模板设计">Prompt 模板设计</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">【</span>任务<span style="color:#960050;background-color:#1e0010">】</span>
+</span></span><span style="display:flex;"><span>请根据我提供的有效链接<span style="color:#960050;background-color:#1e0010">，</span>逐条核对以下信息的准确性<span style="color:#960050;background-color:#1e0010">。</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">【</span>核对规则<span style="color:#960050;background-color:#1e0010">】</span>
+</span></span><span style="display:flex;"><span>一<span style="color:#960050;background-color:#1e0010">、</span>逐项判断标准
+</span></span><span style="display:flex;"><span>正确<span style="color:#960050;background-color:#1e0010">：</span>链接原文能完整支持该信息
+</span></span><span style="display:flex;"><span>错误<span style="color:#960050;background-color:#1e0010">：</span>信息与链接原文矛盾<span style="color:#960050;background-color:#1e0010">、</span>数据有误
+</span></span><span style="display:flex;"><span><span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">【</span>输出格式<span style="color:#960050;background-color:#1e0010">】</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">【</span>信息序号X<span style="color:#960050;background-color:#1e0010">】</span>判断<span style="color:#960050;background-color:#1e0010">：</span>[正确<span style="color:#f92672">/</span>错误<span style="color:#f92672">/</span>缺漏<span style="color:#f92672">/</span>未找到<span style="color:#f92672">/</span>推断成立]
+</span></span><span style="display:flex;"><span>溯源<span style="color:#960050;background-color:#1e0010">：</span>[链接编号]
+</span></span><span style="display:flex;"><span>说明<span style="color:#960050;background-color:#1e0010">：</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">【</span>待核对信息<span style="color:#960050;background-color:#1e0010">】</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;</span>当前模块的内容<span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">【</span>参考链接<span style="color:#960050;background-color:#1e0010">】</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;</span>链接列表<span style="color:#f92672">&gt;</span>
+</span></span></code></pre></div><h3 id="v2v3-格式的链接合并">v2/v3 格式的链接合并</h3>
+<p>v2 和 v3 只有 2 个对照对，每个参考依据的链接较少。Prompt 生成时自动合并两个参考面板的全部链接，每个链接标注来源：</p>
+<pre tabindex="0"><code>链接1（官方网站）：https://...
+链接2（官方网站）：https://...
+链接3（权威网站）：https://...
+</code></pre><hr>
+<h2 id="八导出与翻译">八、导出与翻译</h2>
+<h3 id="导出原理">导出原理</h3>
+<p>在原 Excel 的每列右侧插入一列「校验列」，填入审阅内容：</p>
+<pre tabindex="0"><code>原始列：实务内容（官方）
+校验列：实务内容（官方）_校验列  ← 插入到原始列右边
+</code></pre><p>关键：插入列的顺序必须从右到左，否则列号会乱。因为插入一列后，右边所有列的列号都 +1。</p>
+<h3 id="html-标签翻译保护">HTML 标签翻译保护</h3>
+<p>导出时英文 sheet 需要用 AI 翻译审阅内容。但审阅内容里包含 HTML 标签（颜色标注），AI 翻译时语序变化会导致标签错位。</p>
+<p><strong>解决方案</strong>：翻译前把 HTML 标签替换成占位符，翻译后再还原。</p>
+<pre tabindex="0"><code>原文：需要&lt;span style=&#34;color:#C00000;&#34;&gt;修改&lt;/span&gt;的内容
+替换：需要{__T0__}修改{__T1__}的内容
+翻译：{__T0__}modification{__T1__} needed
+还原：&lt;span style=&#34;color:#C00000;&#34;&gt;modification&lt;/span&gt; needed
+</code></pre><p>这样 HTML 标签 100% 保留，AI 只翻译纯文本。</p>
+<h3 id="后台线程导出">后台线程导出</h3>
+<p>导出文件可能很大，翻译耗时几十秒。如果同步处理，前端会一直等待直到超时。</p>
+<p><strong>解决方案</strong>：异步导出 + 进度轮询。</p>
+<ol>
+<li>前端发起导出请求 → 后端开一个后台线程处理</li>
+<li>前端每秒轮询进度</li>
+<li>完成后自动触发下载</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>thread <span style="color:#f92672">=</span> threading<span style="color:#f92672">.</span>Thread(target<span style="color:#f92672">=</span>run_export, daemon<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>thread<span style="color:#f92672">.</span>start()
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">return</span> jsonify({<span style="color:#e6db74">&#39;ok&#39;</span>: <span style="color:#66d9ef">True</span>, <span style="color:#e6db74">&#39;task_id&#39;</span>: task_id})
+</span></span></code></pre></div><p><strong>注意</strong>：后台线程没有 Flask 的请求上下文，不能直接操作数据库。需要手动创建 app context：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>app <span style="color:#f92672">=</span> current_app<span style="color:#f92672">.</span>_get_current_object()  <span style="color:#75715e"># 在主线程拿 app 对象</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 在后台线程中：</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">with</span> app<span style="color:#f92672">.</span>app_context():
+</span></span><span style="display:flex;"><span>    db<span style="color:#f92672">.</span>session<span style="color:#f92672">.</span>commit()
+</span></span></code></pre></div><hr>
+<h2 id="九内网穿透与服务器部署">九、内网穿透与服务器部署</h2>
+<h3 id="什么是内网穿透">什么是内网穿透</h3>
+<p>你的电脑在公司内网，没有公网 IP，别人连不上。内网穿透就是用一个公网服务器做中转：</p>
+<pre tabindex="0"><code>你电脑 → 主动连接 → 公网服务器
+同事  → 访问公网服务器 → 转发到你电脑
+</code></pre><h3 id="尝试过的方案">尝试过的方案</h3>
+<table>
+  <thead>
+      <tr>
+          <th>方案</th>
+          <th>优缺点</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>cpolar</td>
+          <td>国内免费，但限速丢包，8 人同时用经常加载不全</td>
+      </tr>
+      <tr>
+          <td>ZeroTier</td>
+          <td>虚拟局域网，但公司安全软件拦截</td>
+      </tr>
+      <tr>
+          <td>bore</td>
+          <td>免费不限速，但服务器在新加坡，延迟高</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="最终选择腾讯云服务器">最终选择：腾讯云服务器</h3>
+<p>直接把项目部署到云服务器上，省去穿透的麻烦。</p>
+<p><strong>部署步骤</strong>：</p>
+<ol>
+<li>买云服务器（腾讯云轻量，2 核 2G，¥65/月）</li>
+<li>SSH 连接，装 Python 和依赖</li>
+<li>上传项目文件</li>
+<li>配 systemd 服务（开机自启、崩溃重启）</li>
+<li>控制台防火墙放行 5000 端口</li>
+</ol>
+<p><strong>systemd 服务配置</strong>：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ini" data-lang="ini"><span style="display:flex;"><span><span style="color:#66d9ef">[Unit]</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Description</span><span style="color:#f92672">=</span><span style="color:#e6db74">Payroll Review Tool</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">After</span><span style="color:#f92672">=</span><span style="color:#e6db74">network.target</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">[Service]</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Type</span><span style="color:#f92672">=</span><span style="color:#e6db74">simple</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">User</span><span style="color:#f92672">=</span><span style="color:#e6db74">ubuntu</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">WorkingDirectory</span><span style="color:#f92672">=</span><span style="color:#e6db74">/home/ubuntu/review-tool</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ExecStart</span><span style="color:#f92672">=</span><span style="color:#e6db74">python3 app.py</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Restart</span><span style="color:#f92672">=</span><span style="color:#e6db74">always</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">RestartSec</span><span style="color:#f92672">=</span><span style="color:#e6db74">5</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">[Install]</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">WantedBy</span><span style="color:#f92672">=</span><span style="color:#e6db74">multi-user.target</span>
+</span></span></code></pre></div><h3 id="waitress-替代-flask-开发服务器">Waitress 替代 Flask 开发服务器</h3>
+<p>Flask 自带的 <code>app.run()</code> 是单线程开发服务器，不适合生产环境。Waitress 是生产级 WSGI 服务器，支持多线程：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> waitress <span style="color:#f92672">import</span> serve
+</span></span><span style="display:flex;"><span>serve(app, host<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;0.0.0.0&#39;</span>, port<span style="color:#f92672">=</span><span style="color:#ae81ff">5000</span>, threads<span style="color:#f92672">=</span><span style="color:#ae81ff">16</span>)
+</span></span></code></pre></div><h3 id="代码同步">代码同步</h3>
+<p>本地改代码后，用 <code>scp</code> 上传到服务器并重启服务：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 打包 → 上传 → 解压 → 重启</span>
+</span></span><span style="display:flex;"><span>scp sync.zip ubuntu@106.53.56.194:/home/ubuntu/review-tool/
+</span></span><span style="display:flex;"><span>ssh ubuntu@106.53.56.194 <span style="color:#e6db74">&#34;cd /home/ubuntu/review-tool &amp;&amp; unzip -o sync.zip &amp;&amp; sudo systemctl restart review-tool&#34;</span>
+</span></span></code></pre></div><hr>
+<h2 id="十学到的经验">十、学到的经验</h2>
+<h3 id="1-先跑通核心流程再打磨细节">1. 先跑通核心流程，再打磨细节</h3>
+<p>一开始只做了上传→审阅→导出，功能少但能用。后续才加 Prompt 面板、翻译、导出预览。</p>
+<h3 id="2-前端-js-别用可选链-">2. 前端 JS 别用可选链 <code>?.</code></h3>
+<p>这个项目同事用各种浏览器，<code>?.</code> 语法在旧版 Safari 上不支持。全部用 <code>var obj = a &amp;&amp; a.b &amp;&amp; a.b.c</code> 替代。</p>
+<h3 id="3-jinja-模板里-js-变量用-tojson-转义">3. Jinja 模板里 JS 变量用 <code>|tojson</code> 转义</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span><span style="color:#75715e">&lt;!-- 错误：模块名含特殊字符会导致 JS 语法错误 --&gt;</span>
+</span></span><span style="display:flex;"><span>const CURRENT_L1 = &#34;{{ current_l1 }}&#34;;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">&lt;!-- 正确：tojson 自动处理转义 --&gt;</span>
+</span></span><span style="display:flex;"><span>const CURRENT_L1 = {{ current_l1|tojson }};
+</span></span></code></pre></div><h3 id="4-sqlite-备份就是复制文件">4. SQLite 备份就是复制文件</h3>
+<p>不需要 <code>mysqldump</code>，不需要 <code>pg_dump</code>。直接 <code>scp data.db</code> 就是一个完整备份。</p>
+<h3 id="5-后台线程不能直接用-flask-的-dbsession">5. 后台线程不能直接用 Flask 的 <code>db.session</code></h3>
+<p>Flask 的 <code>db.session</code> 和 <code>current_app</code> 都依赖请求上下文。后台线程里需要手动创建 app context。</p>
+<h3 id="6-python-format-里花括号要转义">6. Python <code>.format()</code> 里花括号要转义</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 报错：KeyError: &#39;__T0__&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;翻译时保留 </span><span style="color:#e6db74">{__T0__}</span><span style="color:#e6db74"> 占位符&#39;</span><span style="color:#f92672">.</span>format(items<span style="color:#f92672">=...</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 正确：{{ 输出 {，}} 输出 }</span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;翻译时保留 {{__T0__}} 占位符&#39;</span><span style="color:#f92672">.</span>format(items<span style="color:#f92672">=...</span>)
+</span></span></code></pre></div><h3 id="7-导出时插入列要从右到左">7. 导出时插入列要从右到左</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 从右到左排序，插入列号不会乱</span>
+</span></span><span style="display:flex;"><span>sorted_cols <span style="color:#f92672">=</span> sorted(col_positions<span style="color:#f92672">.</span>items(), key<span style="color:#f92672">=</span><span style="color:#66d9ef">lambda</span> x: x[<span style="color:#ae81ff">1</span>], reverse<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span></code></pre></div><h3 id="8-git-worktree-实现多分支并行开发">8. Git worktree 实现多分支并行开发</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git worktree add ../newidea-dev -b dev
+</span></span></code></pre></div><p>三个文件夹，三个分支，修改互不影响。</p>
+<h3 id="9-quill-编辑器的-p-标签陷阱">9. Quill 编辑器的 <code>&lt;p&gt;</code> 标签陷阱</h3>
+<p>Quill 编辑器保存内容时，会自动给文本包一层 <code>&lt;p&gt;</code> 标签。比如用户输入&quot;需要修改的内容&rdquo;，保存后变成 <code>&lt;p&gt;需要修改的内容&lt;/p&gt;</code>。</p>
+<p><strong>这导致一个问题</strong>：比较 <code>changed_content</code> 和 <code>original_content</code> 时，即使审阅人没改任何文字，字符串也不相等（因为 <code>&lt;p&gt;</code> 标签）。最初用这个判断哪些字段需要翻译，结果 369 个字段全被判为&quot;有改动&quot;。</p>
+<p><strong>解决</strong>：比较前先剥掉 HTML 标签，只比较纯文本。或者更精确地——只检查有没有审阅标记（<code>&lt;span style&gt;</code>、<code>&lt;s&gt;</code>、<code>&lt;strong&gt;</code>），忽略 <code>&lt;p&gt;</code> 和 <code>&lt;br&gt;</code>。</p>
+<h3 id="10-html-标签占位符保护">10. HTML 标签占位符保护</h3>
+<p>翻译时需要把中文审阅内容译成英文，但审阅内容里有 HTML 颜色标签（<code>&lt;span style=&quot;color:#C00000;&quot;&gt;</code> 等）。AI 翻译时语序变化会导致标签错位。</p>
+<p><strong>解决</strong>：翻译前把 HTML 标签替换成占位符，翻译后再还原。</p>
+<pre tabindex="0"><code>原文：需要&lt;span style=&#34;color:#C00000;&#34;&gt;修改&lt;/span&gt;的内容
+替换：需要{__T0__}修改{__T1__}的内容
+翻译：{__T0__}modification{__T1__} needed
+还原：&lt;span style=&#34;color:#C00000;&#34;&gt;modification&lt;/span&gt; needed
+</code></pre><p>注意：Python 的 <code>.format()</code> 中 <code>{</code> 和 <code>}</code> 需转义为 <code>{{</code> 和 <code>}}</code>，否则会报 KeyError。</p>
+<h3 id="11-翻译重试循环">11. 翻译重试循环</h3>
+<p>AI 翻译时，偶尔返回的条目数少于输入（比如 20 条进去，19 条出来）。</p>
+<p><strong>解决</strong>：不对整套翻译进行全部丢弃，而是只重试缺失的条目，最多 3 次。重试完仍有缺失的，直接用英文原文作为回退。</p>
+<h3 id="12-windows-路径-vs-linux-路径">12. Windows 路径 vs Linux 路径</h3>
+<p>数据库里的 <code>file_path</code> 是 Windows 格式（<code>C:\Users\...</code>），部署到 Ubuntu 服务器后找不到文件。</p>
+<p><strong>教训</strong>：部署到不同操作系统时，数据库里的路径要同步更新。本次用 SQL 批量替换修复。</p>
+<h3 id="13-两个导出路径需同步维护">13. 两个导出路径需同步维护</h3>
+<p>项目有两个导出入口：快速导出（<code>export_quick</code>）和异步导出（<code>generate_review_excel</code>）。它们有各自独立的代码，改一个功能时两边都要改。</p>
+<p><strong>教训</strong>：最好把核心逻辑抽成共享函数，避免维护两份代码。但快速导出为了简洁直接内联了逻辑，导致这次修链接格式时漏了一边。</p>
+<h3 id="14-链接格式在-excel-中的实现">14. 链接格式在 Excel 中的实现</h3>
+<p>导出时，无效链接需要标红+删除线。openpyxl 支持 <code>InlineFont</code> 的 <code>color</code> 和 <code>strike</code> 属性。把链接包成 HTML 再交给 <code>_apply_html_to_cell</code> 即可：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 无效链接 → 红色+删除线</span>
+</span></span><span style="display:flex;"><span>content <span style="color:#f92672">=</span> content<span style="color:#f92672">.</span>replace(url, <span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;&lt;span style=&#34;color:#C00000;&#34;&gt;&lt;s&gt;</span><span style="color:#e6db74">{</span>url<span style="color:#e6db74">}</span><span style="color:#e6db74">&lt;/s&gt;&lt;/span&gt;&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 有纠正链接 → 追加</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> corrected_url:
+</span></span><span style="display:flex;"><span>    content <span style="color:#f92672">+=</span> <span style="color:#e6db74">f</span><span style="color:#e6db74">&#39; → </span><span style="color:#e6db74">{</span>corrected_url<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>
+</span></span></code></pre></div><h3 id="15-分支保护的实际操作">15. 分支保护的实际操作</h3>
+<p>GitHub 分支保护开启后，直接 push 会被拒绝。日常流程：</p>
+<pre tabindex="0"><code>改代码 → push 到 dev → 开 PR → Review → Approve → Merge
+</code></pre><p><strong>注意</strong>：审批人就是你自己时，去 PR 页面的 Files changed → Review changes → Approve 即可。不需要第二个人。</p>
+<h2 id="十一技术栈一览">十一、技术栈一览</h2>
+<table>
+  <thead>
+      <tr>
+          <th>层</th>
+          <th>技术</th>
+          <th>为什么选它</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>后端框架</td>
+          <td>Flask</td>
+          <td>轻量、灵活，适合小项目</td>
+      </tr>
+      <tr>
+          <td>数据库</td>
+          <td>SQLite</td>
+          <td>零配置，备份是复制文件</td>
+      </tr>
+      <tr>
+          <td>ORM</td>
+          <td>SQLAlchemy</td>
+          <td>Python 最成熟的 ORM</td>
+      </tr>
+      <tr>
+          <td>前端</td>
+          <td>Bootstrap 5 + 原生 JS</td>
+          <td>不需要学 React/Vue，快速出活</td>
+      </tr>
+      <tr>
+          <td>富文本</td>
+          <td>Quill.js</td>
+          <td>轻量、API 简单、支持颜色标注</td>
+      </tr>
+      <tr>
+          <td>Excel 读写</td>
+          <td>openpyxl</td>
+          <td>支持格式、合并单元格、富文本</td>
+      </tr>
+      <tr>
+          <td>生产服务器</td>
+          <td>Waitress</td>
+          <td>Windows/Linux 通用，多线程</td>
+      </tr>
+      <tr>
+          <td>AI 接口</td>
+          <td>DeepSeek API（腾讯网关）</td>
+          <td>国内可用，便宜</td>
+      </tr>
+      <tr>
+          <td>内网穿透</td>
+          <td>腾讯云服务器</td>
+          <td>省去穿透的麻烦，稳定</td>
+      </tr>
+      <tr>
+          <td>配置管理</td>
+          <td>python-dotenv</td>
+          <td>API Key 不入库，安全</td>
+      </tr>
+      <tr>
+          <td>部署</td>
+          <td>systemd</td>
+          <td>开机自启，崩溃重启</td>
+      </tr>
+      <tr>
+          <td>备份</td>
+          <td>scp + Windows 定时任务</td>
+          <td>每天 18:30 自动备份</td>
+      </tr>
+      <tr>
+          <td>版本控制</td>
+          <td>Git + SSH + worktree</td>
+          <td>多分支开发，互不干扰</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<blockquote>
+<p><strong>项目链接</strong>：<a href="https://github.com/yangzhangscut2025/payroll-review-tool">GitHub 源码</a> ｜ <a href="https://yangzhangscut2025.github.io/works/%E8%96%AA%E9%85%AC%E5%90%88%E8%A7%84%E5%AE%A1%E9%98%85%E5%B7%A5%E5%85%B7/">项目详情页</a></p>
+</blockquote>
+
+  </article>
+
+  
+  <div class="mt-12 pt-8 border-t border-[var(--border)]">
+    <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--text-soft)] hover:text-[var(--primary)] transition-colors">← 返回博客首页</a>
+  </div>
+
+</div>
+</main>
+
+<button id="scrollTopBtn" class="scroll-top-btn fixed bottom-6 right-6 w-10 h-10 rounded-full bg-[var(--primary)] text-white shadow-md flex items-center justify-center text-lg z-40 hover:opacity-90" data-i18n-aria="back.top" aria-label="回到顶部">↑</button>
+<script src="/assets/js/theme.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/shared.js"></script>
+
+
+</body>
+</html>
