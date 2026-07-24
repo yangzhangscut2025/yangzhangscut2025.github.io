@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="green-purple" data-mode="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Claude Code 使用指南（上）：命令与配置体系 · 张阳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'var(--primary)',secondary:'var(--secondary)',bg:'var(--bg)',card:'var(--card)',text:'var(--text)','text-soft':'var(--text-soft)',border:'var(--border)',hover:'var(--hover)'},borderRadius:{DEFAULT:'8px'},fontFamily:{sans:['Inter','Noto Sans SC','system-ui','sans-serif']}}}}</script>
+<link rel="stylesheet" href="/assets/css/base.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<style>.scroll-top-btn{opacity:0;pointer-events:none;transition:opacity .3s}@media(max-width:767px){.mobile-hidden{display:none}}</style>
+
+</head>
+<body data-page="blog" class="min-h-screen flex flex-col">
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[var(--bg)]/90 backdrop-blur-md border-b border-[var(--border)]">
+<div class="max-w-6xl mx-auto flex items-center justify-between px-6 py-3">
+<a href="/" class="text-lg font-bold text-[var(--text)] hover:text-[var(--primary)] transition-colors">Yang Zhang</a>
+<div class="hidden md:flex items-center gap-6 text-sm font-medium">
+<a href="/" class="nav-link" data-nav="home">首页</a>
+<a href="/about/" class="nav-link" data-nav="about">关于我</a>
+<a href="/resume/" class="nav-link" data-nav="resume">简历</a>
+<a href="/works/" class="nav-link" data-nav="works">作品集</a>
+<a href="/blog/" class="nav-link" data-nav="blog">博客</a>
+<a href="/contact/" class="nav-link" data-nav="contact">联系我</a>
+</div>
+<div class="flex items-center gap-3 text-sm">
+<button id="langToggle" class="px-2 py-1 rounded-md border border-[var(--border)] text-[var(--text-soft)] hover:text-[var(--text)] bg-[var(--card)] text-xs font-medium" data-i18n="lang.label">EN</button>
+<button id="modeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Toggle dark mode">🌙</button>
+<div class="relative">
+<button id="themeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Switch theme">🎨</button>
+<div id="themePopover" class="hidden absolute right-0 top-10 bg-[var(--card)] border border-[var(--border)] rounded-lg shadow-md p-3 z-50" style="min-width:160px">
+<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)] mb-1" data-theme="green-purple">🟢🟣 绿紫</button>
+<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)]" data-theme="blue-yellow">🔵🟡 蓝黄</button>
+</div></div>
+<button id="hamburger" class="md:hidden text-xl text-[var(--text)]">☰</button>
+</div></div>
+<div id="mobileMenu" class="hidden md:hidden border-t border-[var(--border)] bg-[var(--card)] px-6 py-3 space-y-2">
+<a href="/" class="block py-2 nav-link" data-nav="home">首页</a>
+<a href="/about/" class="block py-2 nav-link" data-nav="about">关于我</a>
+<a href="/resume/" class="block py-2 nav-link" data-nav="resume">简历</a>
+<a href="/works/" class="block py-2 nav-link" data-nav="works">作品集</a>
+<a href="/blog/" class="block py-2 nav-link" data-nav="blog">博客</a>
+<a href="/contact/" class="block py-2 nav-link" data-nav="contact">联系我</a>
+</div></nav>
+
+
+<main class="flex-1 pt-24 pb-16">
+<div class="max-w-3xl mx-auto px-6">
+
+  
+  <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--text-soft)] hover:text-[var(--primary)] transition-colors mb-8">← 返回博客首页</a>
+
+  
+  <header class="mb-10">
+    <h1 class="text-2xl md:text-3xl font-bold text-[var(--text)] mb-4">Claude Code 使用指南（上）：命令与配置体系</h1>
+    <div class="flex flex-wrap items-center gap-4 text-sm text-[var(--text-soft)]">
+      <span>2026-07-24</span>
+      <span>·</span>
+      <span>预计阅读 14 分钟</span>
+      
+      <span class="px-2 py-0.5 rounded-full bg-[var(--primary-soft)] text-[var(--primary)] text-xs">AI学习</span>
+      
+    </div>
+  </header>
+
+  
+  <article class="prose prose-slate max-w-none text-[var(--text)] leading-relaxed
+    [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:mt-10 [&_h2]:mb-4
+    [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3
+    [&_p]:mb-5 [&_p]:leading-relaxed
+    [&_ul]:mb-5 [&_ol]:mb-5 [&_li]:mb-2
+    [&_code]:bg-[var(--hover)] [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-sm
+    [&_pre]:bg-[var(--hover)] [&_pre]:p-4 [&_pre]:rounded-lg [&_pre]:overflow-x-auto [&_pre]:mb-5
+    [&_pre_code]:bg-transparent [&_pre_code]:p-0
+    [&_table]:w-full [&_table]:border-collapse [&_table]:mb-5
+    [&_th]:border [&_th]:border-[var(--border)] [&_th]:p-2 [&_th]:bg-[var(--hover)] [&_th]:text-sm [&_th]:font-semibold
+    [&_td]:border [&_td]:border-[var(--border)] [&_td]:p-2 [&_td]:text-sm
+    [&_img]:rounded-lg [&_img]:max-w-full [&_img]:h-auto [&_img]:my-4
+    [&_blockquote]:border-l-4 [&_blockquote]:border-[var(--primary)] [&_blockquote]:pl-4 [&_blockquote]:text-[var(--text-soft)] [&_blockquote]:italic [&_blockquote]:mb-5
+    [&_a]:text-[var(--primary)] [&_a]:underline
+  ">
+    <blockquote>
+<p>上一篇 <a href="/blog/posts/claude-code-deepseek-vscode/">Claude Code + DeepSeek + VS Code 配置流程</a> 讲了怎么安装和跑起来。本篇聚焦<strong>跑起来之后怎么用好</strong>——完整梳理 Claude Code 的斜杠命令、权限系统和配置选项。</p>
+</blockquote>
+<hr>
+<h2 id="一命令全景图">一、命令全景图</h2>
+<p>Claude Code 的斜杠命令可以分成四类：</p>
+<table>
+  <thead>
+      <tr>
+          <th>类别</th>
+          <th>命令</th>
+          <th>一句话概括</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>对话管理</td>
+          <td><code>/clear</code> <code>/compact</code> <code>/cost</code> <code>/output-style</code></td>
+          <td>控制对话本身</td>
+      </tr>
+      <tr>
+          <td>项目配置</td>
+          <td><code>/init</code> <code>/config</code> <code>/add-dir</code> <code>/doctor</code> <code>/statusline</code> <code>/update</code></td>
+          <td>设置和诊断环境</td>
+      </tr>
+      <tr>
+          <td>开发辅助</td>
+          <td><code>/review</code> <code>/pr-comments</code></td>
+          <td>围绕代码的工作</td>
+      </tr>
+      <tr>
+          <td>扩展管理</td>
+          <td><code>/memory</code> <code>/permissions</code> <code>/mcp</code> <code>/ide</code></td>
+          <td>记忆、权限、集成</td>
+      </tr>
+  </tbody>
+</table>
+<p>下面逐个展开，按实用频率排序。</p>
+<hr>
+<h2 id="二对话管理">二、对话管理</h2>
+<h3 id="compact--压缩上下文"><code>/compact</code> — 压缩上下文</h3>
+<p><strong>场景</strong>：聊了很久，上下文窗口快满了，AI 开始&quot;忘记&quot;早期讨论的内容。</p>
+<p><strong>作用</strong>：自动把前面的对话做一次摘要，释放空间。摘要会保留关键信息（已做的决策、正在进行的任务、项目背景），丢掉冗余的轮次。</p>
+<p><strong>何时用</strong>：</p>
+<ul>
+<li>系统自动提示上下文快满时</li>
+<li>你感觉 AI 开始&quot;失忆&quot;时</li>
+<li>主动运行，提前清理空间</li>
+</ul>
+<p><strong>注意</strong>：压缩后，被精简掉的对话细节确实丢失了。如果某个细节很重要，在压缩前让 AI 记下来（比如写到 CLAUDE.md 或 <code>/memory</code>）。</p>
+<h3 id="clear--清空对话"><code>/clear</code> — 清空对话</h3>
+<p><strong>场景</strong>：话题完全切换，旧对话没有参考价值了。</p>
+<p><strong>作用</strong>：完全清空当前对话历史，从头开始。相当于&quot;重启&quot;。</p>
+<p><strong>与 <code>/compact</code> 的区别</strong>：<code>/compact</code> 保留摘要，<code>/clear</code> 什么都不留。</p>
+<p><strong>建议</strong>：切换项目或任务时用，日常用 <code>/compact</code> 就够了。</p>
+<h3 id="cost--查看消耗"><code>/cost</code> — 查看消耗</h3>
+<p><strong>场景</strong>：想知道这轮对话用了多少 token、花了多少钱。</p>
+<p><strong>作用</strong>：显示当前会话的 token 消耗统计。</p>
+<h3 id="output-style--输出风格"><code>/output-style</code> — 输出风格</h3>
+<p><strong>场景</strong>：想让 AI 回答更简洁，或者更详细。</p>
+<p><strong>作用</strong>：切换输出风格。可选值包括默认风格和更简洁的风格。如果觉得 AI 输出太啰嗦，可以调成简洁模式；需要详细解释时再切回来。</p>
+<hr>
+<h2 id="三项目配置">三、项目配置</h2>
+<h3 id="init--初始化项目记忆"><code>/init</code> — 初始化项目记忆</h3>
+<p><strong>场景</strong>：新项目接入 Claude Code，想让 AI 理解这个项目。</p>
+<p><strong>作用</strong>：分析项目结构，生成 <code>CLAUDE.md</code> 文件。这个文件会<strong>每次会话自动加载</strong>，作为 AI 的项目记忆。</p>
+<p><strong>CLAUDE.md 是什么</strong>：放在项目根目录的 Markdown 文件，内容是给 AI 看的项目规则——</p>
+<ul>
+<li>项目是做什么的</li>
+<li>目录结构是怎样的</li>
+<li>操作流程是什么</li>
+<li>有哪些约定和规范</li>
+</ul>
+<p><strong>示例</strong>（你当前项目的 CLAUDE.md 片段）：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-markdown" data-lang="markdown"><span style="display:flex;"><span><span style="color:#75715e">## 工作原则
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">-</span> 先读再改：修改文件前必须先阅读当前内容
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> 先计划再执行：非简单操作先给方案，用户确认后再动手
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> 遵守工具流：所有博客操作严格按照本文档执行
+</span></span></code></pre></div><p><strong>关键原则</strong>：CLAUDE.md 里写的是<strong>不会变的事</strong>（项目规则、流程、约定），不是<strong>会变的事</strong>（具体任务、临时决定）。</p>
+<p>后续中篇会专门讲 CLAUDE.md 的写法。</p>
+<h3 id="config--配置设置"><code>/config</code> — 配置设置</h3>
+<p><strong>场景</strong>：调整 Claude Code 的行为，比如权限策略、模型选择。</p>
+<p><strong>作用</strong>：打开配置界面，可以修改：</p>
+<ul>
+<li><strong>权限模式</strong>：什么操作需要确认</li>
+<li><strong>模型选择</strong>：用哪个底层模型</li>
+<li><strong>其他行为设置</strong></li>
+</ul>
+<p>下面第五节和第六节会详细讲权限和配置。</p>
+<h3 id="add-dir--多目录项目"><code>/add-dir</code> — 多目录项目</h3>
+<p><strong>场景</strong>：项目代码分散在多个目录（比如前端和后端在不同文件夹）。</p>
+<p><strong>作用</strong>：把额外的目录加进 Claude Code 的工作范围，AI 就能跨目录操作。</p>
+<h3 id="doctor--环境诊断"><code>/doctor</code> — 环境诊断</h3>
+<p><strong>场景</strong>：Claude Code 出问题了——连不上、命令报错、安装失败。</p>
+<p><strong>作用</strong>：自动检查运行环境（Node.js 版本、网络连通性、工具安装状态等），输出诊断结果。</p>
+<p><strong>什么时候跑</strong>：</p>
+<ul>
+<li>安装后验证环境</li>
+<li>出现莫名其妙的错误</li>
+<li>升级版本后确认兼容</li>
+</ul>
+<h3 id="statusline--状态栏定制"><code>/statusline</code> — 状态栏定制</h3>
+<p><strong>场景</strong>：定制终端底部状态栏显示什么信息。</p>
+<p><strong>作用</strong>：选择状态栏显示的内容，比如当前模型、token 用量、会话时长等。</p>
+<h3 id="update--版本更新"><code>/update</code> — 版本更新</h3>
+<p><strong>场景</strong>：有新版本发布了。</p>
+<p><strong>作用</strong>：检查并更新到最新的 Claude Code 版本。</p>
+<hr>
+<h2 id="四开发辅助">四、开发辅助</h2>
+<h3 id="review--代码审查"><code>/review</code> — 代码审查</h3>
+<p><strong>场景</strong>：改完代码，想找找有没有 bug、安全隐患、性能问题。</p>
+<p><strong>作用</strong>：对当前改动做代码审查，输出发现问题列表。</p>
+<p><strong>使用建议</strong>：提交前跑一次，相当于多一个免费的审查人。</p>
+<h3 id="pr-comments--pr-评论"><code>/pr-comments</code> — PR 评论</h3>
+<p><strong>场景</strong>：GitHub 上收到了 PR 评论，想让 AI 帮助理解和处理。</p>
+<p><strong>作用</strong>：拉取 PR 评论，辅助分析和回复。</p>
+<hr>
+<h2 id="五扩展管理">五、扩展管理</h2>
+<h3 id="memory--持久化记忆"><code>/memory</code> — 持久化记忆</h3>
+<p><strong>场景</strong>：想让 AI 记住一些跨会话的东西，比如你的偏好、项目背景。</p>
+<p><strong>作用</strong>：管理持久化记忆。与 CLAUDE.md 的区别：</p>
+<ul>
+<li><strong>CLAUDE.md</strong>：存在项目里，跟着项目走，全队共享</li>
+<li><strong><code>/memory</code></strong>：存在本地，跟着你走，所有项目都能用</li>
+</ul>
+<p><strong>适合存什么</strong>：</p>
+<ul>
+<li>个人偏好（&ldquo;我喜欢用中文输出&rdquo;）</li>
+<li>常用工作流习惯（&ldquo;我习惯先看方案再动手&rdquo;）</li>
+<li>跨项目的参考信息</li>
+</ul>
+<p>中篇会详细讲。</p>
+<h3 id="permissions--权限管理"><code>/permissions</code> — 权限管理</h3>
+<p><strong>场景</strong>：控制 AI 做什么操作需要你确认。</p>
+<p><strong>作用</strong>：设置权限策略。AI 在处理时会根据设置的规则决定&quot;直接做&quot;还是&quot;先问&quot;。</p>
+<p><strong>三种权限模式</strong>：</p>
+<ul>
+<li><strong>总是允许</strong>：这类操作不再询问</li>
+<li><strong>每次都询问</strong>：默认模式，每次操作都会确认</li>
+<li><strong>始终拒绝</strong>：直接拒绝，AI 不会尝试</li>
+</ul>
+<p><strong>常见操作类型</strong>：读写文件、执行命令、网络请求、Git 操作等。</p>
+<p><strong>一个实际问题的说明</strong>：有时你会看到界面提示&quot;permission denied&quot;但并不是你点了拒绝——可能是权限策略设置的问题。用 <code>/permissions</code> 检查和调整即可。</p>
+<h3 id="mcp--mcp-工具配置"><code>/mcp</code> — MCP 工具配置</h3>
+<p><strong>场景</strong>：想给 Claude Code 接入外部工具——数据库直连、自定义 API、企业内部系统。</p>
+<p><strong>作用</strong>：管理 MCP（Model Context Protocol）服务器。MCP 是 Claude Code 的工具扩展机制，相当于给 AI 装&quot;插件&quot;。</p>
+<p><strong>什么时候需要</strong>：</p>
+<ul>
+<li>让 AI 直接查数据库</li>
+<li>连接企业内部 API</li>
+<li>接入自定义工作流工具</li>
+</ul>
+<p>日常写代码一般不需要，属于进阶功能。</p>
+<h3 id="ide--ide-集成"><code>/ide</code> — IDE 集成</h3>
+<p><strong>场景</strong>：你在 VS Code 或 JetBrains 里用 Claude Code，想调整集成行为。</p>
+<p><strong>作用</strong>：管理 IDE 集成相关设置。</p>
+<hr>
+<h2 id="六权限系统详解">六、权限系统详解</h2>
+<p>权限系统是 Claude Code 的&quot;安全阀门&quot;。每次 AI 要执行可能造成影响的动作（写文件、删文件、执行命令、网络请求），都会触发权限检查。</p>
+<h3 id="四种动作结果">四种动作结果</h3>
+<p>当你看到权限弹窗时，通常有这几个选项：</p>
+<table>
+  <thead>
+      <tr>
+          <th>选项</th>
+          <th>含义</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>允许本次</strong></td>
+          <td>这次让 AI 执行，下次同样的操作还会问</td>
+      </tr>
+      <tr>
+          <td><strong>总是允许</strong></td>
+          <td>这个类型的操作以后不再问，AI 直接做</td>
+      </tr>
+      <tr>
+          <td><strong>拒绝本次</strong></td>
+          <td>这次不让 AI 执行</td>
+      </tr>
+      <tr>
+          <td><strong>始终拒绝</strong></td>
+          <td>这个类型的操作永远拒绝</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="实际使用策略">实际使用策略</h3>
+<p>刚上手时保持默认（什么都问），用了几天后你对 AI 的操作有了信任感，可以把一些低风险操作设为&quot;总是允许&quot;：</p>
+<ul>
+<li>读文件 → 设为允许（AI 只看不改，没风险）</li>
+<li>搜索代码 → 设为允许</li>
+<li>写文件 → 保持询问（防止误改）</li>
+<li>执行命令 → 保持询问（防止误删）</li>
+</ul>
+<p><strong>一个常见误区</strong>：看到 AI 操作之前每次都要确认觉得烦，就全部放行。不建议这样做——至少写文件和执行命令应该保留确认。</p>
+<hr>
+<h2 id="七config-配置详解">七、<code>/config</code> 配置详解</h2>
+<p>运行 <code>/config</code> 进入配置界面后，主要设置项：</p>
+<h3 id="权限策略">权限策略</h3>
+<p>就是上一节讲的内容，在这里可以统一修改。调整后对应操作类型的默认行为会改变。</p>
+<h3 id="模型选择">模型选择</h3>
+<p>Claude Code 支持多种底层模型，你可以根据需求和预算切换。不同模型在速度、能力、价格上有差异。</p>
+<h3 id="工作区信任">工作区信任</h3>
+<p>可以设置哪些目录是&quot;受信任的&quot;，在受信任的目录中权限策略更宽松。</p>
+<h3 id="其他设置">其他设置</h3>
+<p>包括自动压缩阈值、输出风格默认值等行为参数。</p>
+<hr>
+<h2 id="八小结与下篇预告">八、小结与下篇预告</h2>
+<p>上篇覆盖了 Claude Code 的四类命令和权限、配置体系。核心要点：</p>
+<ol>
+<li><strong>日常必知</strong>：<code>/clear</code>（重启）、<code>/compact</code>（释放空间）、<code>/cost</code>（看消耗）</li>
+<li><strong>项目管理</strong>：<code>/init</code>（创建项目记忆）、<code>/config</code>（调整行为）</li>
+<li><strong>权限策略</strong>：默认保持询问，低风险操作可放行，高风险操作保留确认</li>
+<li><strong>环境排障</strong>：出问题先跑 <code>/doctor</code></li>
+</ol>
+<p><strong>中篇预告</strong>：深度讲解记忆系统——CLAUDE.md 怎么写、<code>/memory</code> 怎么用、如何让 AI 真正理解你的项目。</p>
+<hr>
+<blockquote>
+<p>下一篇：<a href="">Claude Code 使用指南（中）：记忆系统与项目上下文</a>（待发布）</p>
+</blockquote>
+
+  </article>
+
+  
+  <div class="mt-12 pt-8 border-t border-[var(--border)]">
+    <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--text-soft)] hover:text-[var(--primary)] transition-colors">← 返回博客首页</a>
+  </div>
+
+</div>
+</main>
+
+<button id="scrollTopBtn" class="scroll-top-btn fixed bottom-6 right-6 w-10 h-10 rounded-full bg-[var(--primary)] text-white shadow-md flex items-center justify-center text-lg z-40 hover:opacity-90" data-i18n-aria="back.top" aria-label="回到顶部">↑</button>
+<script src="/assets/js/theme.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/shared.js"></script>
+
+
+</body>
+</html>
