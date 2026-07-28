@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="green-purple" data-mode="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>OpenAI Codex CLI 试用笔记：与 Claude Code 双 Agent 协作 · 张阳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'var(--primary)',secondary:'var(--secondary)',bg:'var(--bg)',card:'var(--card)',text:'var(--text)','text-soft':'var(--text-soft)',border:'var(--border)',hover:'var(--hover)'},borderRadius:{DEFAULT:'8px'},fontFamily:{sans:['Inter','Noto Sans SC','system-ui','sans-serif']}}}}</script>
+<link rel="stylesheet" href="/assets/css/base.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<style>.scroll-top-btn{opacity:0;pointer-events:none;transition:opacity .3s}@media(max-width:767px){.mobile-hidden{display:none}}</style>
+
+</head>
+<body data-page="blog" class="min-h-screen flex flex-col">
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[var(--bg)]/90 backdrop-blur-md border-b border-[var(--border)]">
+<div class="max-w-6xl mx-auto flex items-center justify-between px-6 py-3">
+<a href="/" class="text-lg font-bold text-[var(--text)] hover:text-[var(--primary)] transition-colors">Yang Zhang</a>
+<div class="hidden md:flex items-center gap-6 text-sm font-medium">
+<a href="/" class="nav-link" data-nav="home">首页</a>
+<a href="/about/" class="nav-link" data-nav="about">关于我</a>
+<a href="/resume/" class="nav-link" data-nav="resume">简历</a>
+<a href="/works/" class="nav-link" data-nav="works">作品集</a>
+<a href="/blog/" class="nav-link" data-nav="blog">博客</a>
+<a href="/contact/" class="nav-link" data-nav="contact">联系我</a>
+</div>
+<div class="flex items-center gap-3 text-sm">
+<button id="langToggle" class="px-2 py-1 rounded-md border border-[var(--border)] text-[var(--text-soft)] hover:text-[var(--text)] bg-[var(--card)] text-xs font-medium" data-i18n="lang.label">EN</button>
+<button id="modeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Toggle dark mode">🌙</button>
+<div class="relative">
+<button id="themeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Switch theme">🎨</button>
+<div id="themePopover" class="hidden absolute right-0 top-10 bg-[var(--card)] border border-[var(--border)] rounded-lg shadow-md p-3 z-50" style="min-width:160px">
+<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)] mb-1" data-theme="green-purple">🟢🟣 绿紫</button>
+<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)]" data-theme="blue-yellow">🔵🟡 蓝黄</button>
+</div></div>
+<button id="hamburger" class="md:hidden text-xl text-[var(--text)]">☰</button>
+</div></div>
+<div id="mobileMenu" class="hidden md:hidden border-t border-[var(--border)] bg-[var(--card)] px-6 py-3 space-y-2">
+<a href="/" class="block py-2 nav-link" data-nav="home">首页</a>
+<a href="/about/" class="block py-2 nav-link" data-nav="about">关于我</a>
+<a href="/resume/" class="block py-2 nav-link" data-nav="resume">简历</a>
+<a href="/works/" class="block py-2 nav-link" data-nav="works">作品集</a>
+<a href="/blog/" class="block py-2 nav-link" data-nav="blog">博客</a>
+<a href="/contact/" class="block py-2 nav-link" data-nav="contact">联系我</a>
+</div></nav>
+
+
+<main class="flex-1 pt-24 pb-16">
+<div class="max-w-3xl mx-auto px-6">
+
+  
+  <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--text-soft)] hover:text-[var(--primary)] transition-colors mb-8">← 返回博客首页</a>
+
+  
+  <header class="mb-10">
+    <h1 class="text-2xl md:text-3xl font-bold text-[var(--text)] mb-4">OpenAI Codex CLI 试用笔记：与 Claude Code 双 Agent 协作</h1>
+    <div class="flex flex-wrap items-center gap-4 text-sm text-[var(--text-soft)]">
+      <span>2026-07-28</span>
+      <span>·</span>
+      <span>预计阅读 8 分钟</span>
+      
+      <span class="px-2 py-0.5 rounded-full bg-[var(--primary-soft)] text-[var(--primary)] text-xs">AI学习</span>
+      
+    </div>
+  </header>
+
+  
+  <article class="prose prose-slate max-w-none text-[var(--text)] leading-relaxed
+    [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:mt-10 [&_h2]:mb-4
+    [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3
+    [&_p]:mb-5 [&_p]:leading-relaxed
+    [&_ul]:mb-5 [&_ol]:mb-5 [&_li]:mb-2
+    [&_code]:bg-[var(--hover)] [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-sm
+    [&_pre]:bg-[var(--hover)] [&_pre]:p-4 [&_pre]:rounded-lg [&_pre]:overflow-x-auto [&_pre]:mb-5
+    [&_pre_code]:bg-transparent [&_pre_code]:p-0
+    [&_table]:w-full [&_table]:border-collapse [&_table]:mb-5
+    [&_th]:border [&_th]:border-[var(--border)] [&_th]:p-2 [&_th]:bg-[var(--hover)] [&_th]:text-sm [&_th]:font-semibold
+    [&_td]:border [&_td]:border-[var(--border)] [&_td]:p-2 [&_td]:text-sm
+    [&_img]:rounded-lg [&_img]:max-w-full [&_img]:h-auto [&_img]:my-4
+    [&_blockquote]:border-l-4 [&_blockquote]:border-[var(--primary)] [&_blockquote]:pl-4 [&_blockquote]:text-[var(--text-soft)] [&_blockquote]:italic [&_blockquote]:mb-5
+    [&_a]:text-[var(--primary)] [&_a]:underline
+  ">
+    <blockquote>
+<p>公司提供了 Codex，我试用了它的 CLI 模式。本文不是官方文档的翻译，而是一个实际使用者的记录——怎么装、怎么用、和 Claude Code 怎么分工。</p>
+</blockquote>
+<hr>
+<h2 id="一背景">一、背景</h2>
+<p>在接触 Codex 之前，我已经用了几个月的 Claude Code（在 VS Code 里，配合 DeepSeek API）。日常的代码阅读、调试、写文档，基本都由 Claude Code 配合完成。</p>
+<p>这次公司提供了 OpenAI Codex 的访问权限。Codex 有三种使用形态——桌面客户端、CLI 命令行、IDE 插件。桌面端我不需要，IDE 插件和 Claude Code 的场景高度重叠。真正让我感兴趣的是 CLI 模式：<strong>一个独立于编辑器的终端 Agent，可以和 VS Code 里的 Claude Code 并行工作。</strong></p>
+<hr>
+<h2 id="二codex-cli-环境准备">二、Codex CLI 环境准备</h2>
+<h3 id="前置条件">前置条件</h3>
+<ul>
+<li>OpenAI 账号（Plus/Pro 账号体验更好，免费账号速率受限）</li>
+<li>Node.js ≥ 22.0</li>
+<li>能稳定访问 OpenAI 服务</li>
+<li>Git（可选，部分功能需要）</li>
+</ul>
+<p>验证环境：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>node -v    <span style="color:#75715e"># 需 ≥ 22.0</span>
+</span></span><span style="display:flex;"><span>npm -v
+</span></span><span style="display:flex;"><span>git --version
+</span></span></code></pre></div><h3 id="安装">安装</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 国内网络可以先切镜像</span>
+</span></span><span style="display:flex;"><span>npm config set registry https://registry.npmmirror.com
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 全局安装</span>
+</span></span><span style="display:flex;"><span>npm i -g @openai/codex
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 验证</span>
+</span></span><span style="display:flex;"><span>codex -v
+</span></span></code></pre></div><h3 id="登录配置">登录配置</h3>
+<p>两种方式：</p>
+<p><strong>方式一：账号登录（推荐）</strong>
+直接在终端 <code>codex login</code>，跳转浏览器用 OpenAI 账号授权。不需要手动管 API Key。</p>
+<p><strong>方式二：API Key</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>codex config set api_key 你的OpenAI_API_Key
+</span></span><span style="display:flex;"><span>codex config list   <span style="color:#75715e"># 确认生效</span>
+</span></span></code></pre></div><blockquote>
+<p>安全提醒：API Key 不要写进项目配置文件里，不要提交到 Git。</p>
+</blockquote>
+<hr>
+<h2 id="三cli-常用命令速查">三、CLI 常用命令速查</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>codex --help                                    <span style="color:#75715e"># 帮助</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>codex generate <span style="color:#e6db74">&#34;Go 实现 HTTP 接口请求&#34;</span> -o request.go   <span style="color:#75715e"># 生成代码并保存</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>codex fix ./test.py                              <span style="color:#75715e"># 纠错</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>codex optimize ./demo.js                         <span style="color:#75715e"># 优化</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>codex comment ./main.java                        <span style="color:#75715e"># 生成注释</span>
+</span></span></code></pre></div><p>基本模式就是 <code>codex &lt;动作&gt; &lt;目标文件&gt;</code>，和日常命令行工具的使用习惯一致。</p>
+<hr>
+<h2 id="四cli-还是-ide-插件两种模式的取舍">四、CLI 还是 IDE 插件？两种模式的取舍</h2>
+<p>Codex IDE 插件（VS Code / JetBrains）和 CLI 是两种完全不同的使用场景。以下是我实际体验后的对比：</p>
+<h3 id="cli-模式">CLI 模式</h3>
+<p><strong>优势</strong>：</p>
+<ul>
+<li>不依赖编辑器，任何项目、任何语言都能用</li>
+<li>支持批量处理——整个目录的代码纠错、批量加注释、跨文件重构</li>
+<li>轻量，无 GUI，低配机器也流畅</li>
+<li>可以写入 Shell 脚本，嵌入 CI/CD 流程</li>
+<li>远程服务器上唯一的可用形态（无桌面环境也能跑）</li>
+</ul>
+<p><strong>劣势</strong>：</p>
+<ul>
+<li>有命令行门槛，新手不如可视化直观</li>
+<li>不能实时补全——是写完代码后批量处理，不是边写边提示</li>
+<li>看不到修改预览，执行完才能打开文件看结果</li>
+</ul>
+<h3 id="ide-插件模式">IDE 插件模式</h3>
+<p><strong>优势</strong>：</p>
+<ul>
+<li>边写边补全，实时纠错，贴合日常编码习惯</li>
+<li>可视化交互，右键就能触发优化、修复、生成测试</li>
+<li>自动读取项目上下文，生成的代码更贴合项目规范</li>
+</ul>
+<p><strong>劣势</strong>：</p>
+<ul>
+<li>强绑定编辑器，换 IDE 就不能用</li>
+<li>占用 IDE 资源，低配机器可能卡顿</li>
+<li>不适合批量处理整个项目</li>
+</ul>
+<h3 id="选型建议">选型建议</h3>
+<table>
+  <thead>
+      <tr>
+          <th>场景</th>
+          <th>选择</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>日常手写代码、边写边改</td>
+          <td>IDE 插件</td>
+      </tr>
+      <tr>
+          <td>批量处理、脚本自动化</td>
+          <td>CLI</td>
+      </tr>
+      <tr>
+          <td>远程服务器开发</td>
+          <td>CLI（唯一选择）</td>
+      </tr>
+      <tr>
+          <td>新手入门</td>
+          <td>IDE 插件</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="五核心发现双-agent-并行协作">五、核心发现：双 Agent 并行协作</h2>
+<p>这是我试用下来最有价值的发现——<strong>Claude Code 和 Codex CLI 不是二选一，而是互补关系。</strong></p>
+<h3 id="各自的角色">各自的角色</h3>
+<table>
+  <thead>
+      <tr>
+          <th></th>
+          <th>Claude Code（VS Code 内）</th>
+          <th>Codex CLI（终端）</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>定位</strong></td>
+          <td>精读助手</td>
+          <td>全局扫描兵</td>
+      </tr>
+      <tr>
+          <td><strong>工作方式</strong></td>
+          <td>跟随你的阅读路径，交互式追问</td>
+          <td>一次性任务，独立执行</td>
+      </tr>
+      <tr>
+          <td><strong>擅长</strong></td>
+          <td>追踪数据流、跨文件调用链、深度理解</td>
+          <td>批量检索、导出清单、全局架构扫描</td>
+      </tr>
+      <tr>
+          <td><strong>优势</strong></td>
+          <td>上下文感知（知道你在看哪个文件、选中了哪段代码）</td>
+          <td>独立进程，并行运行，不阻塞编辑器</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="实际工作流">实际工作流</h3>
+<pre tabindex="0"><code>VS Code 窗口（Claude Code）        终端窗口（Codex CLI）
+   ↓                                    ↓
+&#34;帮我梳理这个函数的调用链&#34;          codex generate &#34;生成项目架构文档&#34;
+   ↓                                    ↓
+交互式精读，逐层追踪                全局扫描，一次输出
+   ↓                                    ↓
+         ← 两边并行，互不阻塞 →
+</code></pre><p><strong>具体场景</strong>：</p>
+<ol>
+<li>我在 VS Code 里跟着 Claude Code 读一个模块的数据流，同时开一个终端让 Codex CLI 全仓库搜索相关引用、生成调用关系清单</li>
+<li>Claude Code 帮我理解逻辑，Codex CLI 帮我找全所有相关文件</li>
+<li>精读和扫描同步进行，不用切窗口等</li>
+</ol>
+<h3 id="为什么不是两个都用-ide-插件">为什么不是两个都用 IDE 插件</h3>
+<p>如果 Claude Code 和 Codex 插件同时装在 VS Code 里，它们会争抢同一个上下文——都在看当前文件、都在弹补全提示、都会响应你的提问。结果是互相干扰。</p>
+<p>把 Codex 放在终端，它就是一个独立的兵，你给它任务它就执行，不打扰你主窗口的工作流。</p>
+<hr>
+<h2 id="六使用技巧与避坑">六、使用技巧与避坑</h2>
+<h3 id="提高-codex-cli-输出质量">提高 Codex CLI 输出质量</h3>
+<ul>
+<li><strong>精准描述需求</strong>：明确编程语言、功能场景、约束条件，避免模糊指令</li>
+<li><strong>分阶段执行</strong>：复杂任务拆开，先架构再函数再测试，一次给太多会出错</li>
+<li><strong>搭配 Git 使用</strong>：Codex 改完代码后 <code>git diff</code> 对比差异，选择性保留</li>
+<li><strong>定期更新</strong>：<code>npm update -g @openai/codex</code>，保持最新</li>
+</ul>
+<h3 id="常见问题">常见问题</h3>
+<table>
+  <thead>
+      <tr>
+          <th>问题</th>
+          <th>原因</th>
+          <th>解决</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>安装卡住</td>
+          <td>网络连不上 npm 源</td>
+          <td>切国内镜像或换网络</td>
+      </tr>
+      <tr>
+          <td>登录成功但无法生成</td>
+          <td>免费账号限流 / API 额度用完</td>
+          <td>升级 Plus/Pro，查看 OpenAI 后台额度</td>
+      </tr>
+      <tr>
+          <td>CLI 命令不存在</td>
+          <td>npm 全局路径没加入 PATH</td>
+          <td>重启终端或手动配环境变量</td>
+      </tr>
+      <tr>
+          <td>生成卡顿</td>
+          <td>一次提交了太多代码</td>
+          <td>缩小范围，分步提交</td>
+      </tr>
+      <tr>
+          <td>响应缓慢</td>
+          <td>后台进程多 / 网络延迟</td>
+          <td>关多余进程，切本地模式</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="卸载">卸载</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># CLI</span>
+</span></span><span style="display:flex;"><span>npm uninstall -g @openai/codex
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># IDE 插件</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 在插件市场找到 Codex，点击卸载，重启 IDE</span>
+</span></span></code></pre></div><hr>
+<h2 id="七总结">七、总结</h2>
+<p>Codex CLI 本身是一个合格的命令行 AI 编程工具。但对我来说，它更大的价值在于 <strong>&ldquo;第二个 Agent&rdquo;</strong>——和 Claude Code 形成互补。</p>
+<ul>
+<li><strong>Claude Code</strong>：我的主驾驶，在编辑器里陪着我精读代码、追踪逻辑、写文档</li>
+<li><strong>Codex CLI</strong>：我的副驾驶，在终端里独立执行批量任务、全局扫描</li>
+</ul>
+<p>两者并行，互不阻塞。这是单 Agent 做不到的工作方式。</p>
+<p>后续计划：</p>
+<ul>
+<li>在新的代码重构任务中尝试双 Agent 协作的实际效果</li>
+<li>持续对比两种 Agent 在不同任务上的表现差异</li>
+</ul>
+
+  </article>
+
+  
+  <div class="mt-12 pt-8 border-t border-[var(--border)]">
+    <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--text-soft)] hover:text-[var(--primary)] transition-colors">← 返回博客首页</a>
+  </div>
+
+</div>
+</main>
+
+<button id="scrollTopBtn" class="scroll-top-btn fixed bottom-6 right-6 w-10 h-10 rounded-full bg-[var(--primary)] text-white shadow-md flex items-center justify-center text-lg z-40 hover:opacity-90" data-i18n-aria="back.top" aria-label="回到顶部">↑</button>
+<script src="/assets/js/theme.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/shared.js"></script>
+
+
+</body>
+</html>
