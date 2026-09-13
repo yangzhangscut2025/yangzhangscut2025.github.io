@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="green-purple" data-mode="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ripgrep 安装与使用指南 · 张阳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'var(--primary)',secondary:'var(--secondary)',bg:'var(--bg)',card:'var(--card)',text:'var(--text)','text-soft':'var(--text-soft)',border:'var(--border)',hover:'var(--hover)'},borderRadius:{DEFAULT:'8px'},fontFamily:{sans:['Inter','Noto Sans SC','system-ui','sans-serif']}}}}</script>
+<link rel="stylesheet" href="/assets/css/base.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<style>.scroll-top-btn{opacity:0;pointer-events:none;transition:opacity .3s}@media(max-width:767px){.mobile-hidden{display:none}}</style>
+
+</head>
+<body data-page="blog" class="min-h-screen flex flex-col">
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[var(--bg)]/90 backdrop-blur-md border-b border-[var(--border)]">
+<div class="max-w-6xl mx-auto flex items-center justify-between px-6 py-3">
+<a href="/" class="text-lg font-bold text-[var(--text)] hover:text-[var(--primary)] transition-colors">Yang Zhang</a>
+<div class="hidden md:flex items-center gap-6 text-sm font-medium">
+<a href="/" class="nav-link" data-nav="home">首页</a>
+<a href="/about/" class="nav-link" data-nav="about">关于我</a>
+<a href="/resume/" class="nav-link" data-nav="resume">简历</a>
+<a href="/works/" class="nav-link" data-nav="works">作品集</a>
+<a href="/blog/" class="nav-link" data-nav="blog">博客</a>
+<a href="/contact/" class="nav-link" data-nav="contact">联系我</a>
+</div>
+<div class="flex items-center gap-3 text-sm">
+<button id="langToggle" class="px-2 py-1 rounded-md border border-[var(--border)] text-[var(--text-soft)] hover:text-[var(--text)] bg-[var(--card)] text-xs font-medium" data-i18n="lang.label">EN</button>
+<button id="modeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Toggle dark mode">🌙</button>
+<div class="relative">
+<button id="themeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Switch theme">🎨</button>
+<div id="themePopover" class="hidden absolute right-0 top-10 bg-[var(--card)] border border-[var(--border)] rounded-lg shadow-md p-3 z-50" style="min-width:160px">
+<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)] mb-1" data-theme="green-purple">🟢🟣 绿紫</button>
+<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)]" data-theme="blue-yellow">🔵🟡 蓝黄</button>
+</div></div>
+<button id="hamburger" class="md:hidden text-xl text-[var(--text)]">☰</button>
+</div></div>
+<div id="mobileMenu" class="hidden md:hidden border-t border-[var(--border)] bg-[var(--card)] px-6 py-3 space-y-2">
+<a href="/" class="block py-2 nav-link" data-nav="home">首页</a>
+<a href="/about/" class="block py-2 nav-link" data-nav="about">关于我</a>
+<a href="/resume/" class="block py-2 nav-link" data-nav="resume">简历</a>
+<a href="/works/" class="block py-2 nav-link" data-nav="works">作品集</a>
+<a href="/blog/" class="block py-2 nav-link" data-nav="blog">博客</a>
+<a href="/contact/" class="block py-2 nav-link" data-nav="contact">联系我</a>
+</div></nav>
+
+
+<main class="flex-1 pt-24 pb-16">
+<div class="max-w-3xl mx-auto px-6">
+
+  
+  <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--text-soft)] hover:text-[var(--primary)] transition-colors mb-8">← 返回博客首页</a>
+
+  
+  <header class="mb-10">
+    <h1 class="text-2xl md:text-3xl font-bold text-[var(--text)] mb-4">ripgrep 安装与使用指南</h1>
+    <div class="flex flex-wrap items-center gap-4 text-sm text-[var(--text-soft)]">
+      <span>2026-09-13</span>
+      <span>·</span>
+      <span>预计阅读 8 分钟</span>
+      
+      <span class="px-2 py-0.5 rounded-full bg-[var(--primary-soft)] text-[var(--primary)] text-xs">技术教程</span>
+      
+    </div>
+  </header>
+
+  
+  <article class="prose prose-slate max-w-none text-[var(--text)] leading-relaxed
+    [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:mt-10 [&_h2]:mb-4
+    [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3
+    [&_p]:mb-5 [&_p]:leading-relaxed
+    [&_ul]:mb-5 [&_ol]:mb-5 [&_li]:mb-2
+    [&_code]:bg-[var(--hover)] [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-sm
+    [&_pre]:bg-[var(--hover)] [&_pre]:p-4 [&_pre]:rounded-lg [&_pre]:overflow-x-auto [&_pre]:mb-5
+    [&_pre_code]:bg-transparent [&_pre_code]:p-0
+    [&_table]:w-full [&_table]:border-collapse [&_table]:mb-5
+    [&_th]:border [&_th]:border-[var(--border)] [&_th]:p-2 [&_th]:bg-[var(--hover)] [&_th]:text-sm [&_th]:font-semibold
+    [&_td]:border [&_td]:border-[var(--border)] [&_td]:p-2 [&_td]:text-sm
+    [&_img]:rounded-lg [&_img]:max-w-full [&_img]:h-auto [&_img]:my-4
+    [&_blockquote]:border-l-4 [&_blockquote]:border-[var(--primary)] [&_blockquote]:pl-4 [&_blockquote]:text-[var(--text-soft)] [&_blockquote]:italic [&_blockquote]:mb-5
+    [&_a]:text-[var(--primary)] [&_a]:underline
+  ">
+    <h2 id="0--为什么装">0- 为什么装</h2>
+<p>ripgrep 几乎是所有主流 AI 编程工具的“标配”搜索底层。</p>
+<h3 id="各工具对-ripgrep-的使用情况">各工具对 ripgrep 的使用情况</h3>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">AI 编程工具</th>
+          <th style="text-align: left">与 ripgrep 的关系</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><strong>Claude Code</strong></td>
+          <td style="text-align: left">内置 ripgrep，搜索工具（Grep/Glob）底层直接调用它，且有三级降级策略确保可用</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>GitHub Copilot CLI</strong></td>
+          <td style="text-align: left">已将 ripgrep <strong>捆绑</strong>进 CLI，并基于它提供了 <code>grep</code> 和 <code>glob</code> 工具</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Cursor</strong></td>
+          <td style="text-align: left">官方博客明确说明，其 Agent 框架<strong>默认使用 ripgrep</strong> 作为搜索工具</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Pi Agent</strong></td>
+          <td style="text-align: left">内部搜索代码时优先调用 <code>rg</code>，未安装则回退到较慢方案</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>其他工具</strong></td>
+          <td style="text-align: left">大量 MCP 服务器（如 octocode-mcp、Open-Dev-MCP）也基于 ripgrep 提供代码搜索能力</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="为什么-ai-工具都选它">为什么 AI 工具都选它</h3>
+<p>AI Agent 在回答问题时，需要频繁地“在项目里找代码”。ripgrep 速度快、默认遵循 <code>.gitignore</code>、能自动跳过无关文件，这些特性直接决定了 AI 找代码的效率。所以 Claude Code、Copilot、Cursor 都不约而同地把它作为搜索层，而不是自己重新造一个。</p>
+<p>不需要为每个工具单独安装 ripgrep。<strong>系统里装一次，这些工具都能受益</strong>——要么直接调用系统 PATH 里的 <code>rg</code>，要么在系统版本不可用时回退到内置版本。装好之后，Pi、Claude Code、Copilot CLI 的代码搜索都会更快。</p>
+<h2 id="一工具定位">一、工具定位</h2>
+<p>ripgrep（命令为 <code>rg</code>）是一个用 Rust 编写的命令行文本搜索工具，作为 <code>grep</code> 的现代替代品。</p>
+<p><strong>核心优势</strong>：</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">维度</th>
+          <th style="text-align: left">说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">速度</td>
+          <td style="text-align: left">比传统 grep 快 10-100 倍。10GB 项目搜索关键词，grep 约 30 秒，rg 不到 1 秒</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">递归默认</td>
+          <td style="text-align: left">直接 <code>rg &quot;pattern&quot;</code> 即递归搜索当前目录及子目录，无需 <code>-r</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">遵循 gitignore</td>
+          <td style="text-align: left">自动跳过 <code>node_modules</code>、<code>.git</code>、构建产物</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">过滤二进制</td>
+          <td style="text-align: left">自动跳过二进制文件和隐藏文件，避免乱码</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">输出可读</td>
+          <td style="text-align: left">默认彩色高亮和行号</td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>适用场景</strong>：全项目关键词搜索、命名不一致排查、TODO 统计、硬编码检查。</p>
+<p><strong>与 Pi 的协同</strong>：Pi 内部执行代码搜索时优先调用 <code>rg</code>。未安装时 Pi 回退到较慢的搜索方式，或提示命令找不到。安装后 Pi 的代码定位效率明显提升。</p>
+<hr>
+<h2 id="二安装方法windows">二、安装方法（Windows）</h2>
+<h3 id="21-推荐winget">2.1 推荐：winget</h3>
+<p>Windows 10/11 自带 winget，在 PowerShell 中执行：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>winget install BurntSushi.ripgrep.MSVC
+</span></span></code></pre></div><p>安装完成后关闭并重新打开终端（使环境变量更新生效），验证：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>rg --version
+</span></span></code></pre></div><p>输出 ripgrep 版本号即安装成功。</p>
+<h3 id="22-备选scoop-或-chocolatey">2.2 备选：Scoop 或 Chocolatey</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>scoop install ripgrep
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 或</span>
+</span></span><span style="display:flex;"><span>choco install ripgrep
+</span></span></code></pre></div><h3 id="23-手动安装">2.3 手动安装</h3>
+<p>从 GitHub Releases 下载 <code>ripgrep-*-x86_64-pc-windows-msvc.zip</code>，解压后将 <code>rg.exe</code> 所在目录加入系统 PATH 环境变量。</p>
+<hr>
+<h2 id="三基本使用">三、基本使用</h2>
+<h3 id="31-搜索范围">3.1 搜索范围</h3>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">命令</th>
+          <th style="text-align: left">作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>rg &quot;pattern&quot;</code></td>
+          <td style="text-align: left">递归搜索当前目录及子目录，自动遵循 .gitignore</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>rg -t py &quot;pattern&quot;</code></td>
+          <td style="text-align: left">只搜索 Python 文件</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>rg -t md &quot;pattern&quot;</code></td>
+          <td style="text-align: left">只搜索 Markdown 文件</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>rg -t py -t md &quot;pattern&quot;</code></td>
+          <td style="text-align: left">同时搜索多种类型</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>rg -g &quot;*.py&quot; &quot;pattern&quot;</code></td>
+          <td style="text-align: left">按文件模式过滤</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>rg --type-list</code></td>
+          <td style="text-align: left">查看所有支持的文件类型</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>rg --hidden &quot;pattern&quot;</code></td>
+          <td style="text-align: left">包含隐藏文件</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>rg -uuu &quot;pattern&quot;</code></td>
+          <td style="text-align: left">包含隐藏文件且不遵循 .gitignore，范围最大</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="32-输出控制">3.2 输出控制</h3>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">命令</th>
+          <th style="text-align: left">作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>rg -n &quot;pattern&quot;</code></td>
+          <td style="text-align: left">显示行号</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>rg -C 3 &quot;pattern&quot;</code></td>
+          <td style="text-align: left">显示匹配行及上下各 3 行</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>rg -A 5 &quot;pattern&quot;</code></td>
+          <td style="text-align: left">显示匹配行及后 5 行</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>rg -B 2 &quot;pattern&quot;</code></td>
+          <td style="text-align: left">显示匹配行及前 2 行</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>rg --files-with-matches &quot;pattern&quot;</code></td>
+          <td style="text-align: left">只显示文件名</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>rg -c &quot;pattern&quot;</code></td>
+          <td style="text-align: left">显示每个文件的匹配行数</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>rg --count-matches &quot;pattern&quot;</code></td>
+          <td style="text-align: left">显示匹配总次数</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="33-匹配控制">3.3 匹配控制</h3>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">命令</th>
+          <th style="text-align: left">作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>rg -i &quot;pattern&quot;</code></td>
+          <td style="text-align: left">忽略大小写</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>rg -v &quot;pattern&quot;</code></td>
+          <td style="text-align: left">反向匹配（排除）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">`rg &ldquo;a</td>
+          <td style="text-align: left">b</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="四项目实用命令">四、项目实用命令</h2>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">目标</th>
+          <th style="text-align: left">命令</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">排查命名不一致</td>
+          <td style="text-align: left">`rg -n &ldquo;spider_index_retry</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">查找 ORM 表定义</td>
+          <td style="text-align: left"><code>rg -n &quot;__tablename__&quot; src/db/orm_models.py</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">查找适配器实现</td>
+          <td style="text-align: left"><code>rg -t py &quot;class.*Adapter&quot; src/adapters/</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">查找未处理 TODO</td>
+          <td style="text-align: left">`rg -n &ldquo;TODO</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">查找硬编码 URL</td>
+          <td style="text-align: left"><code>rg -n &quot;https?://&quot; src/adapters/ -g &quot;!*.md&quot;</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">查找脚本引用</td>
+          <td style="text-align: left"><code>rg -n &quot;scripts/.*\.py&quot; docs/ README.md</code></td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="五与-pi-配合">五、与 Pi 配合</h2>
+<p>安装 rg 后，可在 Pi 中用自然语言触发搜索：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>用 rg 搜索项目中所有引用 spider_index_retry 的位置，列出文件路径和行号
+</span></span></code></pre></div><p>Pi 会自动调用 rg 命令并返回结构化结果，输出比 Select-String 更干净，处理效率更高。</p>
+<hr>
+<h2 id="六常见问题">六、常见问题</h2>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">问题</th>
+          <th style="text-align: left">原因</th>
+          <th style="text-align: left">解决</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">提示&quot;找不到 rg&rdquo;</td>
+          <td style="text-align: left">环境变量未更新</td>
+          <td style="text-align: left">关闭并重开终端，或检查 rg.exe 目录是否在 PATH</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">搜索不到某文件内容</td>
+          <td style="text-align: left">被 .gitignore 排除，或为二进制/隐藏文件</td>
+          <td style="text-align: left">加 <code>--hidden</code> 或 <code>-uuu</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">搜索结果太多</td>
+          <td style="text-align: left">未限定范围</td>
+          <td style="text-align: left">用 <code>-t</code> 限定类型，或 <code>-g &quot;*.py&quot;</code> 限定模式</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>-uuu</code> 搜索结果异常多</td>
+          <td style="text-align: left">未遵循 .gitignore</td>
+          <td style="text-align: left">大型项目中慎用，优先用 <code>-t</code> 或 <code>-g</code></td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="七核心价值">七、核心价值</h2>
+<p>ripgrep 是项目的&quot;代码搜索引擎&rdquo;：一条命令全项目搜索，自动过滤无关文件，速度快到几乎无感。作为 Pi 的底层搜索工具，安装后能显著提升 AI 协作效率。</p>
+
+  </article>
+
+  
+  <div class="mt-12 pt-8 border-t border-[var(--border)]">
+    <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--text-soft)] hover:text-[var(--primary)] transition-colors">← 返回博客首页</a>
+  </div>
+
+</div>
+</main>
+
+<button id="scrollTopBtn" class="scroll-top-btn fixed bottom-6 right-6 w-10 h-10 rounded-full bg-[var(--primary)] text-white shadow-md flex items-center justify-center text-lg z-40 hover:opacity-90" data-i18n-aria="back.top" aria-label="回到顶部">↑</button>
+<script src="/assets/js/theme.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/shared.js"></script>
+
+
+</body>
+</html>
