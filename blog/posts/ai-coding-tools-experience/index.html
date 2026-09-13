@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="green-purple" data-mode="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AI 编程工具使用体验与成本控制经验 · 张阳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'var(--primary)',secondary:'var(--secondary)',bg:'var(--bg)',card:'var(--card)',text:'var(--text)','text-soft':'var(--text-soft)',border:'var(--border)',hover:'var(--hover)'},borderRadius:{DEFAULT:'8px'},fontFamily:{sans:['Inter','Noto Sans SC','system-ui','sans-serif']}}}}</script>
+<link rel="stylesheet" href="/assets/css/base.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<style>.scroll-top-btn{opacity:0;pointer-events:none;transition:opacity .3s}@media(max-width:767px){.mobile-hidden{display:none}}</style>
+
+</head>
+<body data-page="blog" class="min-h-screen flex flex-col">
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[var(--bg)]/90 backdrop-blur-md border-b border-[var(--border)]">
+<div class="max-w-6xl mx-auto flex items-center justify-between px-6 py-3">
+<a href="/" class="text-lg font-bold text-[var(--text)] hover:text-[var(--primary)] transition-colors">Yang Zhang</a>
+<div class="hidden md:flex items-center gap-6 text-sm font-medium">
+<a href="/" class="nav-link" data-nav="home">首页</a>
+<a href="/about/" class="nav-link" data-nav="about">关于我</a>
+<a href="/resume/" class="nav-link" data-nav="resume">简历</a>
+<a href="/works/" class="nav-link" data-nav="works">作品集</a>
+<a href="/blog/" class="nav-link" data-nav="blog">博客</a>
+<a href="/contact/" class="nav-link" data-nav="contact">联系我</a>
+</div>
+<div class="flex items-center gap-3 text-sm">
+<button id="langToggle" class="px-2 py-1 rounded-md border border-[var(--border)] text-[var(--text-soft)] hover:text-[var(--text)] bg-[var(--card)] text-xs font-medium" data-i18n="lang.label">EN</button>
+<button id="modeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Toggle dark mode">🌙</button>
+<div class="relative">
+<button id="themeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Switch theme">🎨</button>
+<div id="themePopover" class="hidden absolute right-0 top-10 bg-[var(--card)] border border-[var(--border)] rounded-lg shadow-md p-3 z-50" style="min-width:160px">
+<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)] mb-1" data-theme="green-purple">🟢🟣 绿紫</button>
+<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)]" data-theme="blue-yellow">🔵🟡 蓝黄</button>
+</div></div>
+<button id="hamburger" class="md:hidden text-xl text-[var(--text)]">☰</button>
+</div></div>
+<div id="mobileMenu" class="hidden md:hidden border-t border-[var(--border)] bg-[var(--card)] px-6 py-3 space-y-2">
+<a href="/" class="block py-2 nav-link" data-nav="home">首页</a>
+<a href="/about/" class="block py-2 nav-link" data-nav="about">关于我</a>
+<a href="/resume/" class="block py-2 nav-link" data-nav="resume">简历</a>
+<a href="/works/" class="block py-2 nav-link" data-nav="works">作品集</a>
+<a href="/blog/" class="block py-2 nav-link" data-nav="blog">博客</a>
+<a href="/contact/" class="block py-2 nav-link" data-nav="contact">联系我</a>
+</div></nav>
+
+
+<main class="flex-1 pt-24 pb-16">
+<div class="max-w-3xl mx-auto px-6">
+
+  
+  <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--text-soft)] hover:text-[var(--primary)] transition-colors mb-8">← 返回博客首页</a>
+
+  
+  <header class="mb-10">
+    <h1 class="text-2xl md:text-3xl font-bold text-[var(--text)] mb-4">AI 编程工具使用体验与成本控制经验</h1>
+    <div class="flex flex-wrap items-center gap-4 text-sm text-[var(--text-soft)]">
+      <span>2026-09-13</span>
+      <span>·</span>
+      <span>预计阅读 6 分钟</span>
+      
+      <span class="px-2 py-0.5 rounded-full bg-[var(--primary-soft)] text-[var(--primary)] text-xs">AI学习</span>
+      
+    </div>
+  </header>
+
+  
+  <article class="prose prose-slate max-w-none text-[var(--text)] leading-relaxed
+    [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:mt-10 [&_h2]:mb-4
+    [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3
+    [&_p]:mb-5 [&_p]:leading-relaxed
+    [&_ul]:mb-5 [&_ol]:mb-5 [&_li]:mb-2
+    [&_code]:bg-[var(--hover)] [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-sm
+    [&_pre]:bg-[var(--hover)] [&_pre]:p-4 [&_pre]:rounded-lg [&_pre]:overflow-x-auto [&_pre]:mb-5
+    [&_pre_code]:bg-transparent [&_pre_code]:p-0
+    [&_table]:w-full [&_table]:border-collapse [&_table]:mb-5
+    [&_th]:border [&_th]:border-[var(--border)] [&_th]:p-2 [&_th]:bg-[var(--hover)] [&_th]:text-sm [&_th]:font-semibold
+    [&_td]:border [&_td]:border-[var(--border)] [&_td]:p-2 [&_td]:text-sm
+    [&_img]:rounded-lg [&_img]:max-w-full [&_img]:h-auto [&_img]:my-4
+    [&_blockquote]:border-l-4 [&_blockquote]:border-[var(--primary)] [&_blockquote]:pl-4 [&_blockquote]:text-[var(--text-soft)] [&_blockquote]:italic [&_blockquote]:mb-5
+    [&_a]:text-[var(--primary)] [&_a]:underline
+  ">
+    <p>记录2026年八到九月份个人在代码生成和适配器开发中使用过的 AI 工具，以及成本控制的经验教训。</p>
+<hr>
+<h2 id="一claude-code">一、Claude Code</h2>
+<p><strong>接入方式</strong>：VSCode 插件</p>
+<p><strong>初期配置</strong>：通过 cc-switch 接入 GPT 和 DeepSeek 的模型</p>
+<p><strong>使用体验</strong>：</p>
+<ul>
+<li>VSCode 插件形态比终端舒服，交互直观</li>
+<li>一开始用 Terra 模型搭框架，效果很好</li>
+<li>Token 消耗较大</li>
+</ul>
+<p><strong>问题</strong>：</p>
+<ul>
+<li>插件形态的上下文管理比较激进，容易消耗大量 Token</li>
+<li>与 Codex 一起使用后，两个工具合计有时一天花费 100 美金</li>
+</ul>
+<hr>
+<h2 id="二codex">二、Codex</h2>
+<p><strong>接入方式</strong>：CLI</p>
+<p><strong>使用体验</strong>：</p>
+<ul>
+<li>体感上和 Claude Code 差不多</li>
+<li>粒度没有 Claude Code 细，适合做粗一点的活</li>
+<li>接原生 GPT 模型</li>
+</ul>
+<p><strong>问题</strong>：</p>
+<ul>
+<li>同样耗费 Token</li>
+<li>一开始用 Codex 读整个旧代码库，Token 消耗直接超标</li>
+</ul>
+<p><strong>教训</strong>：</p>
+<ul>
+<li>不要让 AI 读整个代码库。应该先做侦察，明确需要读哪些文件，再让 AI 有针对性地读取。</li>
+</ul>
+<hr>
+<h2 id="三copilot">三、Copilot</h2>
+<p><strong>申请背景</strong>：GPT 额度用完，转申请 Copilot</p>
+<p><strong>使用体验</strong>：</p>
+<ul>
+<li>默认使用 auto 模式选择模型，通常表现一般</li>
+<li>需要非常详细地阐述任务和代码实现逻辑，才能得到较好结果</li>
+<li>接入 Claude 模型后表现明显更聪明</li>
+</ul>
+<p><strong>问题</strong>：</p>
+<ul>
+<li>Claude 模型价格较高，额度很快用完</li>
+</ul>
+<p><strong>教训</strong>：</p>
+<ul>
+<li>Copilot 的 auto 模式不等于自动选择最优模型，需要手动指定</li>
+<li>用便宜的模型做框架性工作，用贵的模型做关键细节，比全程用贵模型更经济</li>
+</ul>
+<hr>
+<h2 id="四cursor">四、Cursor</h2>
+<p><strong>使用背景</strong>：Copilot 额度用完后，看到 Cursor 有免费额度，尝试使用</p>
+<p><strong>使用体验</strong>：</p>
+<ul>
+<li>有免费额度，可以试用</li>
+<li>接入了一个荷兰数据源的爬虫任务，一个对话就用完了免费额度</li>
+<li>但从任务结果看，效果不错</li>
+</ul>
+<p><strong>问题</strong>：</p>
+<ul>
+<li>免费额度很少，一个中等复杂度的任务就能耗尽</li>
+<li>继续使用需要付费，成本需要评估</li>
+</ul>
+<p><strong>评价</strong>：</p>
+<ul>
+<li>功能上可用，验证性尝试的效果符合预期</li>
+<li>免费额度适合做小规模验证，不适合长期开发</li>
+</ul>
+<hr>
+<h2 id="五pi-agent">五、Pi Agent</h2>
+<p><strong>选型背景</strong>：</p>
+<ul>
+<li>新额度到位后，决定控制用量</li>
+<li>在 Pi Agent 和 DeepSeek Harness 之间权衡</li>
+<li>最终选择 Pi Agent，因为轻量、稳定、适合了解 AI 工作原理</li>
+</ul>
+<p><strong>当前配置</strong>：</p>
+<ul>
+<li>接入 GPT 模型，主要使用 Luna</li>
+<li>通过 New-API 网关监控用量</li>
+<li>搭建了项目专属的 Skills 和子代理</li>
+</ul>
+<p><strong>使用体验</strong>：</p>
+<ul>
+<li>整体好用</li>
+<li>轻量设计使得启动快、Token 消耗可控</li>
+<li>通过 New-API 网关可以实时看到每次调用的成本</li>
+</ul>
+<p><strong>关键差异</strong>：</p>
+<ul>
+<li>Pi 把上下文控制和模型选择权交给用户，而不是自动决策</li>
+<li>配合 New-API 的额度限制，能有效避免超额</li>
+</ul>
+<hr>
+<h2 id="六成本控制经验">六、成本控制经验</h2>
+<h3 id="61-初期的问题">6.1 初期的问题</h3>
+<p>Claude Code 和 Codex 并行使用期间，有时一天消耗 100 美金。主要原因：</p>
+<ul>
+<li>两个工具同时开着，都消耗 Token</li>
+<li>让 AI 读整个代码库，上下文极大</li>
+<li>没有额度限制，用超了才发现</li>
+</ul>
+<h3 id="62-控制措施">6.2 控制措施</h3>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">措施</th>
+          <th style="text-align: left">工具</th>
+          <th style="text-align: left">效果</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">网关层额度限制</td>
+          <td style="text-align: left">New-API 令牌额度</td>
+          <td style="text-align: left">硬性上限，超额直接拒绝</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">会话层预算拦截</td>
+          <td style="text-align: left"><code>pi-budget-guard</code></td>
+          <td style="text-align: left">超标阻止工具调用</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">任务层轮次限制</td>
+          <td style="text-align: left"><code>pi-turn-limit</code></td>
+          <td style="text-align: left">防止死循环</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">模型分级使用</td>
+          <td style="text-align: left">Luna（日常）+ Terra/Sol（难题）</td>
+          <td style="text-align: left">降低单次成本</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">侦察与生成分离</td>
+          <td style="text-align: left">Pi Skills</td>
+          <td style="text-align: left">避免重复探索消耗</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="63-关键经验">6.3 关键经验</h3>
+<p><strong>不要把 AI 当搜索引擎用。</strong> 让它读整个代码库，不如先明确要解决什么问题，再针对性读取。</p>
+<p><strong>不要同时开多个 AI 工具。</strong> 每个工具都在消耗 Token，并行使用等于成本翻倍。</p>
+<p><strong>先规划后执行。</strong> 让 AI 先输出方案，确认后再动手，比一路试错省 Token。</p>
+<p><strong>用便宜的模型做框架。</strong> Luna 可以完成大部分日常编码任务，只有复杂架构决策才需要升级到 Terra 或 Sol。</p>
+<p><strong>有额度上限才安全。</strong> 没有限制的 API Key 等于没有刹车，New-API 的令牌额度是最后一道防线。</p>
+<p><strong>免费额度只能做验证。</strong> Cursor 的免费额度验证了效果，但一个任务就耗尽，不适合承担开发主力。</p>
+<hr>
+<h2 id="七工具选型对比">七、工具选型对比</h2>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">维度</th>
+          <th style="text-align: left">Claude Code</th>
+          <th style="text-align: left">Codex</th>
+          <th style="text-align: left">Copilot</th>
+          <th style="text-align: left">Cursor</th>
+          <th style="text-align: left">Pi Agent</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">形态</td>
+          <td style="text-align: left">VSCode 插件</td>
+          <td style="text-align: left">CLI</td>
+          <td style="text-align: left">IDE 内置</td>
+          <td style="text-align: left">独立 IDE</td>
+          <td style="text-align: left">终端</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">接入模型</td>
+          <td style="text-align: left">cc-switch 转接</td>
+          <td style="text-align: left">原生 GPT</td>
+          <td style="text-align: left">内置 + Claude</td>
+          <td style="text-align: left">内置</td>
+          <td style="text-align: left">New-API 转接</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">粒度</td>
+          <td style="text-align: left">细</td>
+          <td style="text-align: left">中</td>
+          <td style="text-align: left">粗</td>
+          <td style="text-align: left">中</td>
+          <td style="text-align: left">可调</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Token 消耗</td>
+          <td style="text-align: left">高</td>
+          <td style="text-align: left">高</td>
+          <td style="text-align: left">中</td>
+          <td style="text-align: left">高</td>
+          <td style="text-align: left">可控</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">成本控制</td>
+          <td style="text-align: left">无内置</td>
+          <td style="text-align: left">无内置</td>
+          <td style="text-align: left">无内置</td>
+          <td style="text-align: left">无内置</td>
+          <td style="text-align: left">多层防护</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">免费额度</td>
+          <td style="text-align: left">无</td>
+          <td style="text-align: left">无</td>
+          <td style="text-align: left">有</td>
+          <td style="text-align: left">少</td>
+          <td style="text-align: left">无</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">适合场景</td>
+          <td style="text-align: left">复杂重构</td>
+          <td style="text-align: left">粗粒度任务</td>
+          <td style="text-align: left">补全和小修改</td>
+          <td style="text-align: left">小规模验证</td>
+          <td style="text-align: left">长期开发</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="八工具演进路径">八、工具演进路径</h2>
+<p>团队的使用路径呈现出一条清晰的成本控制演进线：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>Claude Code + Codex（并行）
+</span></span><span style="display:flex;"><span>    ↓ 一天 100 美金，成本失控
+</span></span><span style="display:flex;"><span>Copilot（auto 模式）
+</span></span><span style="display:flex;"><span>    ↓ 需要详细描述，Claude 模型额度用完
+</span></span><span style="display:flex;"><span>Cursor（免费额度）
+</span></span><span style="display:flex;"><span>    ↓ 一个任务就用完，仅够验证
+</span></span><span style="display:flex;"><span>Pi Agent + New-API（多层额度控制）
+</span></span><span style="display:flex;"><span>    ↓ 当前方案
+</span></span></code></pre></div><p>核心转变：从&quot;追求最强模型&quot;到&quot;追求可控成本下的最优配置&quot;。</p>
+<hr>
+<h2 id="九给新人的建议">九、给新人的建议</h2>
+<ol>
+<li><strong>先用有额度限制的网关</strong>，不要直接暴露原始 API Key</li>
+<li><strong>从 Pi Agent 开始</strong>，它的轻量设计能让你看清 AI 工作的每一个环节</li>
+<li><strong>不要并行使用多个 AI 工具</strong>，除非你能清楚知道每个工具的成本</li>
+<li><strong>记录每次任务的 Token 消耗</strong>，建立成本基线，才能判断什么时候该用贵模型</li>
+<li><strong>读代码库之前先侦察</strong>，明确目标再让 AI 读取</li>
+<li><strong>免费额度只做验证</strong>，验证完再决定是否付费</li>
+</ol>
+<hr>
+<h2 id="附当前推荐配置">附：当前推荐配置</h2>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">组件</th>
+          <th style="text-align: left">选择</th>
+          <th style="text-align: left">理由</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">编码 Agent</td>
+          <td style="text-align: left">Pi Agent v0.84.3</td>
+          <td style="text-align: left">轻量、稳定、可控</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">网关</td>
+          <td style="text-align: left">New-API</td>
+          <td style="text-align: left">额度管理、日志、多渠道</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">日常模型</td>
+          <td style="text-align: left">gpt-5.6-luna</td>
+          <td style="text-align: left">便宜且够用</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">复杂模型</td>
+          <td style="text-align: left">gpt-5.6-terra / sol</td>
+          <td style="text-align: left">按需切换</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">额度控制</td>
+          <td style="text-align: left">New-API 令牌 + pi-budget-guard</td>
+          <td style="text-align: left">双层防护</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Token 优化</td>
+          <td style="text-align: left">RTK + DCP + AI Optimizer</td>
+          <td style="text-align: left">压缩输出、清理历史</td>
+      </tr>
+  </tbody>
+</table>
+
+  </article>
+
+  
+  <div class="mt-12 pt-8 border-t border-[var(--border)]">
+    <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--text-soft)] hover:text-[var(--primary)] transition-colors">← 返回博客首页</a>
+  </div>
+
+</div>
+</main>
+
+<button id="scrollTopBtn" class="scroll-top-btn fixed bottom-6 right-6 w-10 h-10 rounded-full bg-[var(--primary)] text-white shadow-md flex items-center justify-center text-lg z-40 hover:opacity-90" data-i18n-aria="back.top" aria-label="回到顶部">↑</button>
+<script src="/assets/js/theme.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/shared.js"></script>
+
+
+</body>
+</html>
