@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="green-purple" data-mode="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Pi 使用框架：AGENTS.md / Skills / 子代理 / MCP · 张阳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'var(--primary)',secondary:'var(--secondary)',bg:'var(--bg)',card:'var(--card)',text:'var(--text)','text-soft':'var(--text-soft)',border:'var(--border)',hover:'var(--hover)'},borderRadius:{DEFAULT:'8px'},fontFamily:{sans:['Inter','Noto Sans SC','system-ui','sans-serif']}}}}</script>
+<link rel="stylesheet" href="/assets/css/base.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<style>.scroll-top-btn{opacity:0;pointer-events:none;transition:opacity .3s}@media(max-width:767px){.mobile-hidden{display:none}}</style>
+
+</head>
+<body data-page="blog" class="min-h-screen flex flex-col">
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[var(--bg)]/90 backdrop-blur-md border-b border-[var(--border)]">
+<div class="max-w-6xl mx-auto flex items-center justify-between px-6 py-3">
+<a href="/" class="text-lg font-bold text-[var(--text)] hover:text-[var(--primary)] transition-colors">Yang Zhang</a>
+<div class="hidden md:flex items-center gap-6 text-sm font-medium">
+<a href="/" class="nav-link" data-nav="home">首页</a>
+<a href="/about/" class="nav-link" data-nav="about">关于我</a>
+<a href="/resume/" class="nav-link" data-nav="resume">简历</a>
+<a href="/works/" class="nav-link" data-nav="works">作品集</a>
+<a href="/blog/" class="nav-link" data-nav="blog">博客</a>
+<a href="/contact/" class="nav-link" data-nav="contact">联系我</a>
+</div>
+<div class="flex items-center gap-3 text-sm">
+<button id="langToggle" class="px-2 py-1 rounded-md border border-[var(--border)] text-[var(--text-soft)] hover:text-[var(--text)] bg-[var(--card)] text-xs font-medium" data-i18n="lang.label">EN</button>
+<button id="modeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Toggle dark mode">🌙</button>
+<div class="relative">
+<button id="themeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Switch theme">🎨</button>
+<div id="themePopover" class="hidden absolute right-0 top-10 bg-[var(--card)] border border-[var(--border)] rounded-lg shadow-md p-3 z-50" style="min-width:160px">
+<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)] mb-1" data-theme="green-purple">🟢🟣 绿紫</button>
+<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)]" data-theme="blue-yellow">🔵🟡 蓝黄</button>
+</div></div>
+<button id="hamburger" class="md:hidden text-xl text-[var(--text)]">☰</button>
+</div></div>
+<div id="mobileMenu" class="hidden md:hidden border-t border-[var(--border)] bg-[var(--card)] px-6 py-3 space-y-2">
+<a href="/" class="block py-2 nav-link" data-nav="home">首页</a>
+<a href="/about/" class="block py-2 nav-link" data-nav="about">关于我</a>
+<a href="/resume/" class="block py-2 nav-link" data-nav="resume">简历</a>
+<a href="/works/" class="block py-2 nav-link" data-nav="works">作品集</a>
+<a href="/blog/" class="block py-2 nav-link" data-nav="blog">博客</a>
+<a href="/contact/" class="block py-2 nav-link" data-nav="contact">联系我</a>
+</div></nav>
+
+
+<main class="flex-1 pt-24 pb-16">
+<div class="max-w-3xl mx-auto px-6">
+
+  
+  <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--text-soft)] hover:text-[var(--primary)] transition-colors mb-8">← 返回博客首页</a>
+
+  
+  <header class="mb-10">
+    <h1 class="text-2xl md:text-3xl font-bold text-[var(--text)] mb-4">Pi 使用框架：AGENTS.md / Skills / 子代理 / MCP</h1>
+    <div class="flex flex-wrap items-center gap-4 text-sm text-[var(--text-soft)]">
+      <span>2026-09-13</span>
+      <span>·</span>
+      <span>预计阅读 10 分钟</span>
+      
+      <span class="px-2 py-0.5 rounded-full bg-[var(--primary-soft)] text-[var(--primary)] text-xs">技术教程</span>
+      
+    </div>
+  </header>
+
+  
+  <article class="prose prose-slate max-w-none text-[var(--text)] leading-relaxed
+    [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:mt-10 [&_h2]:mb-4
+    [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3
+    [&_p]:mb-5 [&_p]:leading-relaxed
+    [&_ul]:mb-5 [&_ol]:mb-5 [&_li]:mb-2
+    [&_code]:bg-[var(--hover)] [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-sm
+    [&_pre]:bg-[var(--hover)] [&_pre]:p-4 [&_pre]:rounded-lg [&_pre]:overflow-x-auto [&_pre]:mb-5
+    [&_pre_code]:bg-transparent [&_pre_code]:p-0
+    [&_table]:w-full [&_table]:border-collapse [&_table]:mb-5
+    [&_th]:border [&_th]:border-[var(--border)] [&_th]:p-2 [&_th]:bg-[var(--hover)] [&_th]:text-sm [&_th]:font-semibold
+    [&_td]:border [&_td]:border-[var(--border)] [&_td]:p-2 [&_td]:text-sm
+    [&_img]:rounded-lg [&_img]:max-w-full [&_img]:h-auto [&_img]:my-4
+    [&_blockquote]:border-l-4 [&_blockquote]:border-[var(--primary)] [&_blockquote]:pl-4 [&_blockquote]:text-[var(--text-soft)] [&_blockquote]:italic [&_blockquote]:mb-5
+    [&_a]:text-[var(--primary)] [&_a]:underline
+  ">
+    <p>配置完成后，下一步就是把它从一个通用的编程助手，变成真正懂你爬虫项目的专属 Agent。这套体系的核心是：用 <strong><code>AGENTS.md</code></strong> 定义“我是谁”，用 <strong>Skills</strong> 定义“我会做什么”，用<strong>子代理（Subagents）</strong> 定义“我的团队有谁”。</p>
+<h3 id="核心文件体系与目录结构">核心文件体系与目录结构</h3>
+<p>Pi 通过自动发现机制加载你的定制配置，所有文件都集中在 <code>~/.pi/agent/</code> 目录下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>~/.pi/agent/
+</span></span><span style="display:flex;"><span>├── AGENTS.md              # 全局项目指令（项目根目录的会覆盖它）
+</span></span><span style="display:flex;"><span>├── skills/                # 技能目录
+</span></span><span style="display:flex;"><span>│   └── &lt;skill-name&gt;/
+</span></span><span style="display:flex;"><span>│       └── SKILL.md       # 技能的完整定义文件
+</span></span><span style="display:flex;"><span>├── agents/                # 子代理定义目录
+</span></span><span style="display:flex;"><span>│   └── &lt;agent-name&gt;.md    # 每个子代理的 Markdown 定义
+</span></span><span style="display:flex;"><span>└── mcp.json               # MCP 服务器配置（用于联网/爬虫能力）
+</span></span></code></pre></div><p>项目级配置放在项目根目录的 <code>.pi/</code> 下，会覆盖全局配置。</p>
+<hr>
+<h3 id="第一步编写-agentsmd--定义你的项目规则">第一步：编写 <code>AGENTS.md</code> — 定义你的项目规则</h3>
+<p><code>AGENTS.md</code> 是 Agent 的“宪法”，Pi 在启动时自动加载。你不需要从零开始写，可以让 Pi 自己生成初稿：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 进入项目目录后，在 Pi 中输入：</span>
+</span></span><span style="display:flex;"><span>给这个爬虫项目写一个 AGENTS.md，包含项目结构、编码规范、常用命令和参考模板
+</span></span></code></pre></div><p>Pi 会用 <code>write</code> 工具生成一份初稿，你再手动补充关键约束。一份适合爬虫重构项目的 <code>AGENTS.md</code> 应包含：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-markdown" data-lang="markdown"><span style="display:flex;"><span># 爬虫系统重构项目
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## 项目结构
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">-</span> src/adapters/     # 数据源适配器（每个源一个文件）
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> src/fetcher/      # HTTP请求模块
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> src/parser/       # HTML/JSON解析模块
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> src/pipeline/     # 数据存储与清洗
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> tests/            # 单元测试
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## 编码规范
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">-</span> Python 3.10+，使用类型注解
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> 适配器必须继承 BaseAdapter 基类
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> 必须实现 parse_list() 和 parse_detail() 方法
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> 使用 pytest + responses 进行测试
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> 所有外部请求必须处理超时和重试
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## 常用命令
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">-</span> 运行测试: <span style="color:#e6db74">`pytest tests/ -v`</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> 代码检查: <span style="color:#e6db74">`ruff check src/`</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> 格式化: <span style="color:#e6db74">`black src/`</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## 参考模板
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">-</span> 新增适配器时，参考 <span style="color:#e6db74">`src/adapters/de_bag_adapter.py`</span> 的完整写法
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## 禁止事项
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">-</span> 禁止修改 .env 文件
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> 禁止在适配器中硬编码 URL 和凭证
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> 禁止直接删除现有适配器，必须先注释再确认
+</span></span></code></pre></div><p><strong>关键原则</strong>：规则要具体、可验证。比如“代码要整洁”不如“适配器必须继承 BaseAdapter”有效。Pi 会逐级向上查找 <code>AGENTS.md</code>，将找到的内容拼接进系统提示中。</p>
+<hr>
+<h3 id="第二步创建-skills--封装领域工作流">第二步：创建 Skills — 封装领域工作流</h3>
+<p>Skills 是<strong>按需加载的自包含能力包</strong>。Pi 启动时只扫描技能的名称和描述，当任务匹配时才加载完整的 <code>SKILL.md</code>，从而节省 Token。</p>
+<p><strong>创建技能目录</strong>：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mkdir -p ~/.pi/agent/skills/spider-adapter-generator
+</span></span></code></pre></div><p>**编写 **<code>SKILL.md</code>（<code>~/.pi/agent/skills/spider-adapter-generator/SKILL.md</code>）：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-markdown" data-lang="markdown"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span>name: spider-adapter-generator
+</span></span><span style="display:flex;"><span>description: 根据目标网站URL和参考模板，生成完整的爬虫适配器代码。适用于新增数据源。
+</span></span><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># 爬虫适配器生成器
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## 何时使用
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>当用户要求为新的网站或数据源生成爬虫适配器时使用。
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## 工作流
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">1.</span> 用 <span style="color:#e6db74">`read`</span> 读取 <span style="color:#e6db74">`src/adapters/de_bag_adapter.py`</span> 作为参考模板
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">2.</span> 用 <span style="color:#e6db74">`read`</span> 读取 <span style="color:#e6db74">`src/adapters/base_adapter.py`</span> 了解基类接口
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">3.</span> 如果用户提供了目标URL，尝试用 <span style="color:#e6db74">`bash`</span> 执行 <span style="color:#e6db74">`curl -s &lt;url&gt; | head -500`</span> 获取页面结构
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">4.</span> 生成新的适配器文件到 <span style="color:#e6db74">`src/adapters/&lt;source_name&gt;_adapter.py`</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">5.</span> 生成对应的测试文件到 <span style="color:#e6db74">`tests/test_&lt;source_name&gt;_adapter.py`</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">6.</span> 运行 <span style="color:#e6db74">`pytest tests/test_&lt;source_name&gt;_adapter.py -v`</span> 验证
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## 输出要求
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">-</span> 适配器必须继承 BaseAdapter
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> 必须处理请求超时（默认10秒）和重试（最多3次）
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> 必须包含完整的 docstring
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> 解析逻辑必须处理空值和异常情况
+</span></span></code></pre></div><p>创建后，在 Pi 中用 <code>/skill:spider-adapter-generator</code> 即可强制触发。你还可以让 Pi 帮你生成更多技能，比如“爬虫调试”、“选择器修复”、“数据管道测试”等。</p>
+<hr>
+<h3 id="第三步配置子代理subagents-组建你的虚拟团队">第三步：配置子代理（Subagents）— 组建你的“虚拟团队”</h3>
+<p>子代理是独立的 Agent 实例，拥有自己的工具集和模型配置，适合处理并行或专业化的子任务。安装 <code>pi-simple-agents</code>：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pi install npm:pi-simple-agents
+</span></span></code></pre></div><p>然后为你的项目定义几个子代理，放入 <code>~/.pi/agent/agents/</code>：</p>
+<p><strong>侦察兵（只读代码分析）</strong> — <code>scout.md</code>：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-markdown" data-lang="markdown"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span>name: scout
+</span></span><span style="display:flex;"><span>description: 只读代码库侦察，用于了解现有适配器模式、发现潜在问题
+</span></span><span style="display:flex;"><span>tools: read, grep, find, ls
+</span></span><span style="display:flex;"><span>model: newapi/gpt-4o-mini
+</span></span><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>你的任务是只读分析代码库，不修改任何文件。
+</span></span><span style="display:flex;"><span>报告发现时，用简洁的列表格式，包含文件路径和行号。
+</span></span><span style="display:flex;"><span>重点关注：现有的适配器模式、重复代码、潜在的异常处理缺失。
+</span></span></code></pre></div><p><strong>网页侦察兵（联网分析目标网站）</strong> — <code>web-scout.md</code>：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-markdown" data-lang="markdown"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span>name: web-scout
+</span></span><span style="display:flex;"><span>description: 抓取目标网站并分析HTML结构，提取CSS选择器和数据模式
+</span></span><span style="display:flex;"><span>tools: read, write, bash
+</span></span><span style="display:flex;"><span>model: newapi/gpt-4o-mini
+</span></span><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>使用 curl 或 MCP 工具获取目标页面，分析并报告：
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">1.</span> 列表页和详情页的 URL 模式
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">2.</span> 标题、价格、描述等字段的 CSS 选择器
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">3.</span> 分页机制（URL参数、下一页按钮等）
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">4.</span> 数据是静态渲染还是 JavaScript 动态加载
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">5.</span> 是否存在反爬机制（Cloudflare、验证码等）
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>将分析结果写入 <span style="color:#e6db74">`docs/&lt;source_name&gt;_analysis.md`</span>。
+</span></span></code></pre></div><p><strong>代码审查员</strong> — <code>reviewer.md</code>：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-markdown" data-lang="markdown"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span>name: reviewer
+</span></span><span style="display:flex;"><span>description: 审查代码质量，检查是否符合项目规范
+</span></span><span style="display:flex;"><span>tools: read, grep, find
+</span></span><span style="display:flex;"><span>model: newapi/gpt-5.6-luna
+</span></span><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>以严格的代码审查者角度，检查：
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">1.</span> 是否继承 BaseAdapter 并实现必要方法
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">2.</span> 异常处理是否完整（超时、重试、空值）
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">3.</span> 是否有硬编码的 URL 或凭证
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">4.</span> 测试覆盖率是否足够
+</span></span><span style="display:flex;"><span>输出格式：按严重程度分级（Critical/Warning/Info）
+</span></span></code></pre></div><p><strong>使用方式</strong>：在 Pi 中直接说“用 scout 分析 src/adapters/ 目录下所有适配器的共性模式”，Pi 会自动调用 <code>subagent</code> 工具。也支持并行调用多个子代理。</p>
+<hr>
+<h3 id="第四步配置-mcp--赋予联网爬取能力">第四步：配置 MCP — 赋予联网爬取能力</h3>
+<p>Pi 默认没有联网能力，需要通过 MCP（Model Context Protocol）连接外部服务。安装适配器：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pi install npm:pi-mcp-adapter
+</span></span></code></pre></div><p>然后创建 <code>~/.pi/agent/mcp.json</code>，配置一个网页抓取 MCP 服务器。以 Scrapeless 为例：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;mcpServers&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;scrapeless&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;command&#34;</span>: <span style="color:#e6db74">&#34;npx&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;args&#34;</span>: [<span style="color:#e6db74">&#34;-y&#34;</span>, <span style="color:#e6db74">&#34;scrapeless-mcp-server&#34;</span>],
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;env&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;SCRAPELESS_API_KEY&#34;</span>: <span style="color:#e6db74">&#34;your-api-key-here&#34;</span>
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>MCP 适配器采用<strong>懒加载</strong>机制——服务器只在 Agent 实际调用其工具时才启动，因此即使配置多个 MCP 服务器，也不会膨胀上下文预算。配置完成后，<code>web-scout</code> 子代理就能真正访问目标网站，而不是依赖训练数据中的过时信息。</p>
+<hr>
+<h3 id="实战工作流用你的-agent-重构爬虫">实战工作流：用你的 Agent 重构爬虫</h3>
+<p>配置完成后，一个完整的爬虫迁移任务可以这样执行：</p>
+<p><strong>场景</strong>：为 <code>example.com</code> 新增爬虫适配器。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>你：为 https://example.com 的新数据源生成适配器
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Pi 的行动链：
+</span></span><span style="display:flex;"><span>1. /skill:spider-adapter-generator 触发技能
+</span></span><span style="display:flex;"><span>2. subagent web-scout → 抓取 example.com，分析 HTML 结构，写入 analysis.md
+</span></span><span style="display:flex;"><span>3. subagent scout → 读取现有适配器模板和基类接口
+</span></span><span style="display:flex;"><span>4. 主 Agent 基于分析结果和模板，生成 example_adapter.py 和 test_example_adapter.py
+</span></span><span style="display:flex;"><span>5. subagent reviewer → 审查生成的代码
+</span></span><span style="display:flex;"><span>6. 运行 pytest 验证
+</span></span><span style="display:flex;"><span>7. 报告结果
+</span></span></code></pre></div><p><strong>批量重构场景</strong>：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>你：分析 src/adapters/ 下所有适配器，找出没有处理超时的，统一修复
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Pi 的行动链：
+</span></span><span style="display:flex;"><span>1. subagent scout → 遍历所有适配器，列出缺少 timeout 处理的文件
+</span></span><span style="display:flex;"><span>2. 主 Agent 逐个修复（用 edit 工具）
+</span></span><span style="display:flex;"><span>3. subagent reviewer → 批量审查修改
+</span></span><span style="display:flex;"><span>4. 运行完整测试套件
+</span></span></code></pre></div><h3 id="核心操作技巧">核心操作技巧</h3>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">操作</th>
+          <th style="text-align: left">命令</th>
+          <th style="text-align: left">用途</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">引用文件</td>
+          <td style="text-align: left"><code>@src/adapters/base.py</code></td>
+          <td style="text-align: left">将文件内容加入上下文</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">执行命令</td>
+          <td style="text-align: left"><code>!pytest tests/ -v</code></td>
+          <td style="text-align: left">运行命令并让 Pi 看到输出</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">静默执行</td>
+          <td style="text-align: left"><code>!!git status</code></td>
+          <td style="text-align: left">仅终端执行，不进入上下文</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">触发技能</td>
+          <td style="text-align: left"><code>/skill:spider-adapter-generator</code></td>
+          <td style="text-align: left">强制加载指定技能</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">切换模型</td>
+          <td style="text-align: left"><code>/model newapi/gpt-5.6-luna</code></td>
+          <td style="text-align: left">会话中动态切换模型</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">调整推理</td>
+          <td style="text-align: left"><code>/thinking none</code></td>
+          <td style="text-align: left">关闭或调整推理强度</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">引用文件分析</td>
+          <td style="text-align: left"><code>@src/adapters/</code> + 指令</td>
+          <td style="text-align: left">批量分析目录</td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Token 优化建议</strong>：日常适配器生成用 <code>gpt-4o-mini</code>（$ 0.15/ $0.60），子代理也用 <code>gpt-4o-mini</code> 以控制成本。只有复杂的架构决策或难以定位的 bug 才切换到 <code>gpt-5.6-luna</code>。子代理的模型可以在其 <code>.md</code> 文件的 frontmatter 中单独指定。</p>
+<hr>
+<h3 id="常见问题">常见问题</h3>
+<p><strong>Q：技能没有被自动触发怎么办？</strong><br>
+用 <code>/skill:&lt;name&gt;</code> 手动触发。Pi 的模型不总是主动去读取技能文件，手动触发可以保证执行。</p>
+<p><strong>Q：子代理修改了我不希望它改的文件？</strong><br>
+在子代理的 frontmatter 中严格限制 <code>tools</code> 字段。比如 <code>scout</code> 只给 <code>read, grep, find, ls</code>，不给 <code>write</code> 和 <code>edit</code>。</p>
+<p><strong>Q：如何让子代理继承主会话的模型选择？</strong><br>
+在子代理 frontmatter 中写 <code>model: inherit</code> 即可。</p>
+<p><strong>Q：MCP 服务器启动失败怎么办？</strong><br>
+先用 <code>bash</code> 手动运行 MCP 服务器的启动命令，确认它能独立工作后再配置到 <code>mcp.json</code> 中。</p>
+
+  </article>
+
+  
+  <div class="mt-12 pt-8 border-t border-[var(--border)]">
+    <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--text-soft)] hover:text-[var(--primary)] transition-colors">← 返回博客首页</a>
+  </div>
+
+</div>
+</main>
+
+<button id="scrollTopBtn" class="scroll-top-btn fixed bottom-6 right-6 w-10 h-10 rounded-full bg-[var(--primary)] text-white shadow-md flex items-center justify-center text-lg z-40 hover:opacity-90" data-i18n-aria="back.top" aria-label="回到顶部">↑</button>
+<script src="/assets/js/theme.js"></script>
+<script src="/assets/js/i18n.js"></script>
+<script src="/assets/js/shared.js"></script>
+
+
+</body>
+</html>
