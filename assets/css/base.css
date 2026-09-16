@@ -85,6 +85,37 @@ a:hover{opacity:0.8}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 ::-webkit-scrollbar-thumb:hover{background:var(--text-soft)}
 
+/* ---------- Sticky nav backdrop ----------
+   Tailwind v3 cannot apply an opacity modifier to an arbitrary
+   var() value (``bg-[var(--bg)]/90`` compiles to nothing), so the
+   translucent nav background is defined here instead. */
+.nav-bg{background-color:var(--bg)}
+@supports (background-color:color-mix(in srgb,red 50%,transparent)){
+  .nav-bg{background-color:color-mix(in srgb,var(--bg) 90%,transparent)}
+}
+
+/* ---------- Page entrance & scroll reveal ---------- */
+@keyframes pageEnter{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:none}
+}
+main{animation:pageEnter 0.4s cubic-bezier(.22,.61,.36,1) both}
+
+/* JS adds .reveal only to elements that are below the fold on load,
+   so above-the-fold content never flashes. If JS is off, nothing hides. */
+.reveal{
+  opacity:0;
+  transform:translateY(18px);
+  transition:opacity 0.55s ease,transform 0.55s cubic-bezier(.22,.61,.36,1);
+}
+.reveal.is-visible{opacity:1;transform:none}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  main{animation:none}
+  .reveal{opacity:1;transform:none;transition:none}
+}
+
 /* ---------- Print ---------- */
 @media print{
   nav,.no-print,.scroll-top-btn{display:none!important}

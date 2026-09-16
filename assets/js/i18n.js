@@ -66,6 +66,7 @@
       'hobby.otaku':'轻度二次元患者',
       'hobby.anime':'动漫',
       'hobby.novels':'小说',
+      'footer.rights':'保留所有权利',
     },
     en: {
       'nav.home':    'Home',
@@ -124,7 +125,9 @@
       'hobby.otaku':'Casual Otaku',
       'hobby.anime':'Anime',
       'hobby.novels':'Novels',
+      'footer.rights':'All rights reserved',
     },
+  }; // end dict
 
   /* ---- Apply translations ---- */
   function apply(lang){

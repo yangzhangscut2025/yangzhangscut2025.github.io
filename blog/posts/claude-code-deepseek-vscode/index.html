@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Claude Code &#43; DeepSeek &#43; VS Code 配置流程 · Kyra</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-<script>tailwind.config={theme:{extend:{colors:{primary:'var(--primary)',secondary:'var(--secondary)',bg:'var(--bg)',card:'var(--card)',text:'var(--text)','text-soft':'var(--text-soft)',border:'var(--border)',hover:'var(--hover)'},borderRadius:{DEFAULT:'8px'},fontFamily:{sans:['Inter','Noto Sans SC','system-ui','sans-serif']}}}}</script>
+<link rel="stylesheet" href="/assets/css/tailwind.min.css">
 <link rel="stylesheet" href="/assets/css/base.css">
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
@@ -18,37 +18,7 @@
 </head>
 <body data-page="blog" class="min-h-screen flex flex-col">
 
-<nav class="fixed top-0 left-0 right-0 z-50 bg-[var(--bg)]/90 backdrop-blur-md border-b border-[var(--border)]">
-<div class="max-w-6xl mx-auto flex items-center justify-between px-6 py-3">
-<a href="/" class="text-lg font-bold text-[var(--text)] hover:text-[var(--primary)] transition-colors">Kyra</a>
-<div class="hidden md:flex items-center gap-6 text-sm font-medium">
-<a href="/" class="nav-link" data-nav="home">首页</a>
-<a href="/about/" class="nav-link" data-nav="about">关于我</a>
-<a href="/resume/" class="nav-link" data-nav="resume">简历</a>
-<a href="/works/" class="nav-link" data-nav="works">作品集</a>
-<a href="/blog/" class="nav-link" data-nav="blog">博客</a>
-<a href="/contact/" class="nav-link" data-nav="contact">联系我</a>
-</div>
-<div class="flex items-center gap-3 text-sm">
-<button id="langToggle" class="px-2 py-1 rounded-md border border-[var(--border)] text-[var(--text-soft)] hover:text-[var(--text)] bg-[var(--card)] text-xs font-medium" data-i18n="lang.label">EN</button>
-<button id="modeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Toggle dark mode">🌙</button>
-<div class="relative">
-<button id="themeToggle" class="w-8 h-8 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--text-soft)]" aria-label="Switch theme">🎨</button>
-<div id="themePopover" class="hidden absolute right-0 top-10 bg-[var(--card)] border border-[var(--border)] rounded-lg shadow-md p-3 z-50" style="min-width:160px">
-<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)] mb-1" data-theme="green-purple">🟢🟣 绿紫</button>
-<button class="theme-option block w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--hover)]" data-theme="blue-yellow">🔵🟡 蓝黄</button>
-</div></div>
-<button id="hamburger" class="md:hidden text-xl text-[var(--text)]">☰</button>
-</div></div>
-<div id="mobileMenu" class="hidden md:hidden border-t border-[var(--border)] bg-[var(--card)] px-6 py-3 space-y-2">
-<a href="/" class="block py-2 nav-link" data-nav="home">首页</a>
-<a href="/about/" class="block py-2 nav-link" data-nav="about">关于我</a>
-<a href="/resume/" class="block py-2 nav-link" data-nav="resume">简历</a>
-<a href="/works/" class="block py-2 nav-link" data-nav="works">作品集</a>
-<a href="/blog/" class="block py-2 nav-link" data-nav="blog">博客</a>
-<a href="/contact/" class="block py-2 nav-link" data-nav="contact">联系我</a>
-</div></nav>
-
+<div id="navbar"></div>
 
 <main class="flex-1 pt-24 pb-16">
 <div class="max-w-3xl mx-auto px-6">
@@ -92,7 +62,7 @@
 <li>我之前安装过 Git,node.js，且 都放在 D 盘，所以只需要找到路径，把这些路径添加进<strong>系统环境变量Path</strong>，实现全局调用<code>node/npm</code>，如下图；</li>
 </ol>
 <!-- 这是一张图片，ocr 内容为： -->
-<p><img src="img01.png" alt=""></p>
+<p><img src="img01.webp" alt="" width="1103" height="707"></p>
 <p>新开终端执行两条命令校验：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>node -v
 </span></span><span style="display:flex;"><span>npm -v
@@ -116,18 +86,18 @@
 <h1 id="1--配置">1- 配置</h1>
 <h2 id="一打开-claude-code">一、打开 claude code</h2>
 <!-- 这是一张图片，ocr 内容为： -->
-<p><img src="img02.png" alt=""></p>
+<p><img src="img02.webp" alt="" width="971" height="1032"></p>
 <h2 id="二找到-json-文件一般在用户那里需要显示隐藏文件夹">二、找到 json 文件，一般在用户那里，需要显示隐藏文件夹。</h2>
 <!-- 这是一张图片，ocr 内容为： -->
-<p><img src="img03.png" alt=""></p>
+<p><img src="img03.webp" alt="" width="851" height="681"></p>
 <p>打开后编辑，在 userID 那行最后加上英文逗号，再加上&quot;hasCompletedOnboarding&quot;: true</p>
 <p>下图是更改后的。</p>
 <!-- 这是一张图片，ocr 内容为： -->
-<p><img src="img04.png" alt=""></p>
+<p><img src="img04.webp" alt="" width="714" height="249"></p>
 <h2 id="三打开-cc-switch">三、打开 cc-switch</h2>
 <p>点击右上角加号，选择 deepseek，填写 api。可选模型，可勾选参数。</p>
 <!-- 这是一张图片，ocr 内容为： -->
-<p><img src="img05.png" alt=""></p>
+<p><img src="img05.webp" alt="" width="896" height="712"></p>
 <h2 id="四检查配置是否成功">四、检查配置是否成功</h2>
 <h3 id="步骤">步骤：</h3>
 <ol>
@@ -142,7 +112,7 @@
 </ol>
 <h3 id="个人操作如下">个人操作如下：</h3>
 <p>重新打开 claude code，输入‘/model’,看到新配置的 deepseek<!-- 这是一张图片，ocr 内容为： -->
-<img src="img06.png" alt=""></p>
+<img src="img06.webp" alt="" width="976" height="707"></p>
 <p>一、当前界面状态</p>
 <p>执行了 <code>/model</code> 进入<strong>模型切换面板</strong>，当前默认选中：<code>deepseek-v4-pro</code>（1M上下文窗口），底层是自定义兼容Opus规格的国产大模型。</p>
 <h6 id="可选模型清单说明">可选模型清单说明</h6>
@@ -226,7 +196,7 @@
 </ul>
 <p>五、按 ESC 退出/model， 输入/doctor 可诊断</p>
 <!-- 这是一张图片，ocr 内容为： -->
-<p><img src="img07.png" alt=""></p>
+<p><img src="img07.webp" alt="" width="978" height="840"></p>
 <p>绝大部分环境正常，仅缺少Claude官网账号登录（非必用，不影响DeepSeek模型正常使用）</p>
 <ol>
 <li>安装信息（全部正常）</li>
@@ -279,7 +249,7 @@
 </ul>
 <h3 id="3提问检验配置是否成功">3.提问检验配置是否成功</h3>
 <h2 id="---这是一张图片ocr-内容为---"><!-- 这是一张图片，ocr 内容为： --></h2>
-<p><img src="img08.png" alt=""></p>
+<p><img src="img08.webp" alt="" width="1400" height="787"></p>
 <h6 id="一个-403-报错">一个 403 报错</h6>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span>[ERROR] 1P event logging: 50 events failed to export (status=403)
 </span></span><span style="display:flex;"><span>OTEL error: Failed to export 50 events
@@ -306,12 +276,12 @@
 
 </div>
 </main>
+<div id="footer"></div>
 
 <button id="scrollTopBtn" class="scroll-top-btn fixed bottom-6 right-6 w-10 h-10 rounded-full bg-[var(--primary)] text-white shadow-md flex items-center justify-center text-lg z-40 hover:opacity-90" data-i18n-aria="back.top" aria-label="回到顶部">↑</button>
 <script src="/assets/js/theme.js"></script>
 <script src="/assets/js/i18n.js"></script>
 <script src="/assets/js/shared.js"></script>
-
 
 </body>
 </html>

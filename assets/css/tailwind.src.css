@@ -1,0 +1,5 @@
+/* Source file for the Tailwind build. Do NOT link this in HTML.
+   Build output: assets/css/tailwind.min.css  (see tailwind.config.js) */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
